@@ -1,0 +1,31 @@
+{
+  "private": true,
+  "version": "0.1.0",
+  "name": "@phasma/handler",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matt-usurp/phasma.git",
+    "directory": "packages/@phasma/handler"
+  },
+  "homepage": "https://github.com/matt-usurp/phasma/tree/main/packages/@phasma/handler#readme",
+  "bugs": {
+    "url": "https://github.com/matt-usurp/phasma/issues"
+  },
+  "engines": {
+    "node": ">=16.13.0",
+    "npm": ">=8.1.0"
+  },
+  "keywords": [
+    "handler",
+    "middleware"
+  ],
+  "contributors": [
+    {
+      "name": "Matthew Rose",
+      "email": "matt.usurp@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "@matt-usurp/grok": "^0.4.0"
+  }
+}
