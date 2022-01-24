@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "version": "0.1.0",
+  "name": "@phasma/project",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matt-usurp/phasma.git"
+  },
+  "homepage": "https://github.com/matt-usurp/phasma#readme",
+  "bugs": {
+    "url": "https://github.com/matt-usurp/phasma/issues"
+  },
+  "engines": {
+    "node": ">=16.13.0",
+    "npm": ">=8.1.0"
+  },
+  "contributors": [
+    {
+      "name": "Matthew Rose",
+      "email": "matt.usurp@gmail.com"
+    }
+  ],
+  "workspaces": [
+    "packages/@phasma/*",
+    "packages/create-phasma",
+    "packages/phasma"
+  ],
+  "devDependencies": {
+    "@commitlint/cli": "^16.1.0",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@tsconfig/node16": "^1.0.2",
+    "@types/jest": "^27.4.0",
+    "@types/node": "^16.11.21",
+    "husky": "^7.0.4",
+    "ts-jest": "^27.1.3"
+  }
+}
