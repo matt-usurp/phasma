@@ -51,7 +51,7 @@ export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerE
  * This produces a function that is compatible with aws lambda.
  */
 export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(composition: LambdaHandlerComposition<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
-  const entrypoint: LambdaHandlerEntrypoint<EventSourceIdentifier> = async (payload, context) => {
+  const fn: LambdaHandlerEntrypoint<EventSourceIdentifier> = async (payload, context) => {
     return composition({
       provider: {
         id,
@@ -75,9 +75,9 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
   };
 
   // @ts-ignore Assignment to read-only property
-  entrypoint.$composition = composition;
+  fn.$composition = composition;
 
-  return entrypoint;
+  return fn;
 }
 
 export type LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (application: LambdaHandlerBuilder<EventSourceIdentifier>) => LambdaHandlerComposition<EventSourceIdentifier>;
