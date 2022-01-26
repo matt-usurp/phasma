@@ -25,7 +25,14 @@ export type HandlerFunctionParametersPayload<
   Provider extends HandlerProviderConstraint,
   Context extends HandlerContextConstraint,
 > = {
+  /**
+   * Metadata about the provider.
+   */
   readonly provider: Provider;
+
+  /**
+   * Contextual information made available through middleware and the base context from the provider.
+   */
   readonly context: Context;
 }
 

@@ -65,6 +65,13 @@ export namespace HandlerMiddlewareFunctionParemeters {
   );
 
   export type WithNextFunction<D extends HandlerMiddlewareDefinitionConstraint> = {
+    /**
+     * A middleware function to invoke the next element in the call chain.
+     * This must take in the given context and the response must be returned within the parent function.
+     *
+     * Note, the inherit symbols are not to be interfaced with in code directly.
+     * These indicate an "unknown" possible element that might be handled in an element next in the chain.
+     */
     readonly next: (
       HandlerMiddlewareNextFunction<
         Grok.Merge<D['HandlerMiddlewareDefinitionContextOutbound'], HandlerMiddlewareValueInheritContext>,
