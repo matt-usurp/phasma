@@ -39,7 +39,12 @@ export type HandlerImplementationWithHandleFunction<Definition extends HandlerDe
    * Handle.
    */
   handle(
-    parameters: HandlerFunctionParameters<Definition>,
+    parameters: (
+      HandlerFunctionParametersPayload<
+        Definition['HandlerDefinitionProvider'],
+        Definition['HandlerDefinitionContext']
+      >
+    ),
   ): Promise<HandlerFunctionResponse<Definition>>
 }
 
