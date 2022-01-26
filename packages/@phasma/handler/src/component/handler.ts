@@ -7,17 +7,17 @@ export type HandlerDefinition<
   Context extends HandlerContextConstraint,
   Response extends HandlerResponseConstraint,
 > = {
-  readonly Provider: Provider;
-  readonly Context: Context;
-  readonly Response: Response;
+  readonly HandlerDefinitionProvider: Provider;
+  readonly HandlerDefinitionContext: Context;
+  readonly HandlerDefinitionResponse: Response;
 }
 
 export type HandlerDefinitionConstraint = HandlerDefinition<any, any, any>;
 
 export type HandlerFunctionParameters<Definition extends HandlerDefinitionConstraint> = (
   HandlerFunctionParametersPayload<
-    Definition['Provider'],
-    Definition['Context']
+    Definition['HandlerDefinitionProvider'],
+    Definition['HandlerDefinitionContext']
   >
 );
 
@@ -29,7 +29,11 @@ export type HandlerFunctionParametersPayload<
   readonly context: Context;
 }
 
-export type HandlerFunctionResponse<Definition extends HandlerDefinitionConstraint> = Definition['Response'];
+export type HandlerFunctionResponse<Definition extends HandlerDefinitionConstraint> = (
+  Definition['HandlerDefinitionResponse'] extends HandlerResponseConstraint
+    ? Definition['HandlerDefinitionResponse']
+    : never
+);
 
 /**
  * An implementation of the handler type.

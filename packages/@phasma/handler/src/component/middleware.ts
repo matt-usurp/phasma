@@ -12,11 +12,11 @@ export type HandlerMiddlewareDefinition<
   ResponseInbound extends HandlerResponseConstraint,
   ResponseOutbound extends HandlerResponseConstraint,
 > = {
-  readonly Provider: Provider,
-  readonly ContextInbound: ContextInbound,
-  readonly ContextOutbound: ContextOutbound,
-  readonly ResponseInbound: ResponseInbound,
-  readonly ResponseOutbound: ResponseOutbound,
+  readonly HandlerMiddlewareDefinitionProvider: Provider,
+  readonly HandlerMiddlewareDefinitionContextInbound: ContextInbound,
+  readonly HandlerMiddlewareDefinitionContextOutbound: ContextOutbound,
+  readonly HandlerMiddlewareDefinitionResponseInbound: ResponseInbound,
+  readonly HandlerMiddlewareDefinitionResponseOutbound: ResponseOutbound,
 }
 
 export namespace HandlerMiddlewareDefinition {
@@ -59,19 +59,19 @@ export type HandlerMiddlewareFunctionParameters<D extends HandlerMiddlewareDefin
 export namespace HandlerMiddlewareFunctionParemeters {
   export type WithParameters<D extends HandlerMiddlewareDefinitionConstraint> = (
     HandlerFunctionParametersPayload<
-      D['Provider'],
-      Grok.Merge<D['ContextInbound'], HandlerMiddlewareValueInheritContext>
+      D['HandlerMiddlewareDefinitionProvider'],
+      Grok.Merge<D['HandlerMiddlewareDefinitionContextInbound'], HandlerMiddlewareValueInheritContext>
     >
   );
 
   export type WithNextFunction<D extends HandlerMiddlewareDefinitionConstraint> = {
     readonly next: (
       HandlerMiddlewareNextFunction<
-        Grok.Merge<D['ContextOutbound'], HandlerMiddlewareValueInheritContext>,
-        Grok.Union<D['ResponseInbound'], HandlerMiddlewareValueInheritResponse>
+        Grok.Merge<D['HandlerMiddlewareDefinitionContextOutbound'], HandlerMiddlewareValueInheritContext>,
+        Grok.Union<D['HandlerMiddlewareDefinitionResponseInbound'], HandlerMiddlewareValueInheritResponse>
       >
     );
   };
 }
 
-export type HandlerMiddlewareFunctionResponse<D extends HandlerMiddlewareDefinitionConstraint> = Grok.Union<D['ResponseOutbound'], HandlerMiddlewareValueInheritResponse>;
+export type HandlerMiddlewareFunctionResponse<D extends HandlerMiddlewareDefinitionConstraint> = Grok.Union<D['HandlerMiddlewareDefinitionResponseOutbound'], HandlerMiddlewareValueInheritResponse>;
