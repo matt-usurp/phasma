@@ -1,11 +1,11 @@
-import { aws } from '@phasma/handler-aws/src';
 import type { LambdaHandlerDefinition } from '@phasma/handler-aws/src/component/handler';
+import { aws } from '@phasma/handler-aws/src/index';
 import type { HandlerFunctionParameters, HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
 
-export type SomeHandler = LambdaHandlerDefinition<'apigw:proxy:v2'>;
+export type SomeHandlerDefinition = LambdaHandlerDefinition<'apigw:proxy:v2'>;
 
-export class SomeHandlerImplementation implements HandlerImplementationWithHandleFunction<SomeHandler> {
-  async handle({ provider, context }: HandlerFunctionParameters<SomeHandler>): Promise<HandlerFunctionResponse<SomeHandler>> {
+export class SomeHandlerImplementation implements HandlerImplementationWithHandleFunction<SomeHandlerDefinition> {
+  async handle({ provider, context }: HandlerFunctionParameters<SomeHandlerDefinition>): Promise<HandlerFunctionResponse<SomeHandlerDefinition>> {
     provider.id;
     provider.payload.headers;
 
