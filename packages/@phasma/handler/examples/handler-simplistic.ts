@@ -5,22 +5,22 @@ import { HandlerResponsePresetNothing } from '@phasma/handler/src/component/resp
 import { HandlerBuilder } from '@phasma/handler/src/core/builder';
 import { nothing } from '@phasma/handler/src/response';
 
-export type SomeProvider = HandlerProvider<'provider:foo'>;
+export type ExampleProvider = HandlerProvider<'provider:foo'>;
 
-export type SomeHandler = HandlerDefinition<SomeProvider, HandlerContextBase, HandlerResponsePresetNothing>;
+export type ExampleHandler = HandlerDefinition<ExampleProvider, HandlerContextBase, HandlerResponsePresetNothing>;
 
-export class SomeHandlerImplementation implements HandlerImplementationWithHandleFunction<SomeHandler> {
-  async handle({ provider, context }: HandlerFunctionParameters<SomeHandler>): Promise<HandlerFunctionResponse<SomeHandler>> {
-    provider.id;
-    context.request.id;
+export class ExampleHandlerImplementation implements HandlerImplementationWithHandleFunction<ExampleHandler> {
+  async handle({ provider, context }: HandlerFunctionParameters<ExampleHandler>): Promise<HandlerFunctionResponse<ExampleHandler>> {
+    provider.id; // "provider:foo"
+    context.request.id; // "some-id"
 
     return nothing();
   }
 }
 
-declare const builder: HandlerBuilder<SomeProvider, HandlerContextBase, HandlerResponsePresetNothing>;
+declare const builder: HandlerBuilder<ExampleProvider, HandlerContextBase, HandlerResponsePresetNothing>;
 
-const handler = builder.handle(new SomeHandlerImplementation());
+const handler = builder.handle(new ExampleHandlerImplementation());
 
 handler({
   provider: {
