@@ -49,7 +49,7 @@ export type HandlerMiddlewareImplementationWithInvokeFunction<D extends HandlerM
 export type HandlerMiddlewareNextFunction<
   Context extends HandlerContextConstraint,
   Response extends HandlerResponseConstraint
-> = (context: Context) => Response;
+> = (context: Context) => Promise<Response>;
 
 export type HandlerMiddlewareFunctionParameters<D extends HandlerMiddlewareDefinitionConstraint> = (
   & HandlerMiddlewareFunctionParemeters.WithParameters<D>
