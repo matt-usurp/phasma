@@ -1,3 +1,4 @@
+import { HandlerDefinition, HandlerFunctionParameters, HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '../component/handler';
 import { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '../component/middleware';
 import { HandlerProvider } from '../component/provider';
 import { HandlerResponse, HandlerResponseIdentifier } from '../component/response';
@@ -129,7 +130,7 @@ type MiddlewareResponseAdditional = HandlerMiddlewareDefinition<Provider, any, a
 
 class WithResponseAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseAdditional> {
   async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseAdditional>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareResponseAdditional>> {
-    const response = next({
+    const response = await next({
       ...context,
     });
 
@@ -152,7 +153,7 @@ type MiddlewareResponseUsage = HandlerMiddlewareDefinition<Provider, { age: numb
 
 class WithResponseUsage implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseUsage> {
   async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseUsage>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareResponseUsage>> {
-    const response = next({
+    const response = await next({
       ...context,
     });
 
@@ -171,3 +172,17 @@ class WithResponseUsage implements HandlerMiddlewareImplementationWithInvokeFunc
 
 
 const b7 = b6.use(new WithResponseUsage());
+
+// --
+// --
+// --
+
+type ExampleHandlerDefinition = HandlerDefinition<any, { age: number }, NewResponse>;
+
+class Handler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
+  public async handle(parameters: HandlerFunctionParameters<ExampleHandlerDefinition>): Promise<HandlerFunctionResponse<ExampleHandlerDefinition>> {
+    throw 123; // w/e
+  }
+}
+
+b7.handle(new Handler());
