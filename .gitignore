@@ -1,4 +1,6 @@
 build/coverage
 build/workspace
 
+examples
+
 node_modules
