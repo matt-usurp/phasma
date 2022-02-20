@@ -5,7 +5,7 @@ import { LambdaHandlerEventSourceFromIdentifier } from '../../component/event';
 
 type ProxyResponse = LambdaHandlerEventSourceFromIdentifier<'apigw:proxy:v2'>['EventSourceResponse'];
 
-export type HttpTransformerProxyResponseTransport = HttpResponseTransport<number, Record<string, string | number>, string>;
+export type HttpTransformerProxyResponseTransport = HttpResponseTransport<number, string>;
 
 export type HttpTransformerMiddlewareDefinition<R extends HttpResponseTransportKind> = (
   HandlerMiddlewareDefinition<

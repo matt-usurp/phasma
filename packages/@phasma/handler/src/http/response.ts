@@ -6,13 +6,13 @@ export type HttpResponseHeaderMapping = Record<string, HttpResponseHeaderValue>;
 
 export type HttpResponseTransport<
   S extends number,
-  H extends HttpResponseHeaderMapping,
   B,
+  H extends HttpResponseHeaderMapping = HttpResponseHeaderMapping,
 > = {
   readonly status: S;
   readonly headers?: H;
-  readonly body?: B;
-}
+  readonly body: B;
+};
 
 export type HttpResponseTransportKind = HttpResponseTransport<any, any, any>;
 

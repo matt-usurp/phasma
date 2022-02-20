@@ -11,6 +11,7 @@ export class ExampleHandler implements HandlerImplementationWithHandleFunction<E
   async handle(): Promise<HandlerFunctionResponse<ExampleHandlerDefinition>> {
     return http({
       status: 200,
+      body: undefined,
     })
   }
 }
