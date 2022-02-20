@@ -4,7 +4,7 @@ import type { HandlerFunctionParameters, HandlerFunctionResponse, HandlerImpleme
 
 export type SomeHandlerDefinition = LambdaHandlerDefinition<'apigw:proxy:v2'>;
 
-export class SomeHandlerImplementation implements HandlerImplementationWithHandleFunction<SomeHandlerDefinition> {
+export class SomeHandler implements HandlerImplementationWithHandleFunction<SomeHandlerDefinition> {
   async handle({ provider, context }: HandlerFunctionParameters<SomeHandlerDefinition>): Promise<HandlerFunctionResponse<SomeHandlerDefinition>> {
     provider.id;
     provider.payload.headers;
@@ -16,7 +16,7 @@ export class SomeHandlerImplementation implements HandlerImplementationWithHandl
 }
 
 export const target = aws<'apigw:proxy:v2'>((lambda) => (
-  lambda.handle(new SomeHandlerImplementation())
+  lambda.handle(new SomeHandler())
 ));
 
 // target(

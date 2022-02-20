@@ -7,7 +7,7 @@ import { HttpTransformerMiddleware } from '../src/http/middlware/http-transforme
 
 export type ExampleHandlerDefinition = LambdaHandlerDefinition<'apigw:proxy:v2', HandlerContextBase, HttpResponse>;
 
-export class ExampleHandlerImplementation implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
+export class ExampleHandler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
   async handle(): Promise<HandlerFunctionResponse<ExampleHandlerDefinition>> {
     return http({
       status: 200,
@@ -18,7 +18,7 @@ export class ExampleHandlerImplementation implements HandlerImplementationWithHa
 export const target = aws<'apigw:proxy:v2'>((lambda) => (
   lambda
     .use(new HttpTransformerMiddleware())
-    .handle(new ExampleHandlerImplementation())
+    .handle(new ExampleHandler())
 ));
 
 // target(

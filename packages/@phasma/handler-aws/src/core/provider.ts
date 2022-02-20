@@ -20,7 +20,7 @@ export type LambdaHandlerComposition<EventSourceIdentifier extends LambdaHandler
     LambdaHandlerContextBase,
     LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']
   >
-)
+);
 
 /**
  * The aws provider identifier.
