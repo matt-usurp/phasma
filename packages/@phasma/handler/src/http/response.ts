@@ -1,8 +1,6 @@
-import { HandlerResponse, HandlerResponseIdentifier } from '../component/response';
+import type { HandlerResponse, HandlerResponseIdentifier } from '../component/response';
 import { create } from '../response';
-
-export type HttpResponseHeaderValue = string | number;
-export type HttpResponseHeaderMapping = Record<string, HttpResponseHeaderValue>;
+import type { HttpResponseHeaderMapping } from './header';
 
 export type HttpResponseTransport<
   S extends number,

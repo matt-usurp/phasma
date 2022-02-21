@@ -1,23 +1,32 @@
-import { json } from './body';
+import { HttpBodyTransformerResult, json } from './body';
 
 describe('http/body', (): void => {
   describe('json()', (): void => {
     it('with empty value, undefined, return empty string', (): void => {
       expect(
         json(undefined),
-      ).toStrictEqual('');
+      ).toStrictEqual<HttpBodyTransformerResult>({
+        mime: 'application/json',
+        value: '',
+      });
     });
 
     it('with empty value, null, return empty string', (): void => {
       expect(
         json(null),
-      ).toStrictEqual('');
+      ).toStrictEqual<HttpBodyTransformerResult>({
+        mime: 'application/json',
+        value: '',
+      });
     });
 
     it('with empty value, empty string, return empty string', (): void => {
       expect(
         json(''),
-      ).toStrictEqual('');
+      ).toStrictEqual<HttpBodyTransformerResult>({
+        mime: 'application/json',
+        value: '',
+      });
     });
 
     it('with value, return value as json encoded string', (): void => {
@@ -25,7 +34,10 @@ describe('http/body', (): void => {
         json({
           name: 'jane',
         }),
-      ).toStrictEqual('{"name":"jane"}');
+      ).toStrictEqual<HttpBodyTransformerResult>({
+        mime: 'application/json',
+        value: '{"name":"jane"}',
+      });
     });
   });
 });

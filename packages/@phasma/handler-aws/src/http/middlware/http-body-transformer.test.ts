@@ -38,7 +38,12 @@ describe('http/middleware/http-body-transformer', (): void => {
         type: 'response:http',
         value: {
           status: 200,
-          headers: undefined,
+
+          headers: {
+            'content-type': 'application/json',
+            'content-length': 43,
+          },
+
           body: JSON.stringify({
             song: '1985',
             artist: 'Bowling For Soup',

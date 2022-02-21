@@ -1,5 +1,6 @@
 import { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
-import { HttpBodyTransformerEncoder } from '@phasma/handler/src/http/body';
+import { HttpBodyTransformer } from '@phasma/handler/src/http/body';
+import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { unwrap } from '@phasma/handler/src/response';
 import { HttpEncodedTransport } from './http-transformer';
@@ -18,7 +19,7 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTranspor
 
 export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> implements HandlerMiddlewareImplementationWithInvokeFunction<HttpTransformerMiddlewareDefinition<R>> {
   public constructor(
-    public readonly encoder: HttpBodyTransformerEncoder
+    public readonly encoder: HttpBodyTransformer
   ) {}
 
   public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<HttpTransformerMiddlewareDefinition<R>>): Promise<HandlerMiddlewareFunctionResponse<HttpTransformerMiddlewareDefinition<R>>> {
@@ -26,11 +27,19 @@ export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> im
 
     if (result.type === 'response:http') {
       const value = unwrap(result);
+      const encoded = this.encoder(value.body);
 
       return http<HttpEncodedTransport>({
         status: value.status,
-        headers: value.headers,
-        body: this.encoder(value.body),
+
+        headers: {
+          ...ensure(value.headers),
+
+          'content-type': 'application/json',
+          'content-length': encoded.value.length,
+        },
+
+        body: encoded.value,
       });
     }
 
