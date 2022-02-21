@@ -3,7 +3,7 @@ import { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/re
 import { create } from '@phasma/handler/src/response';
 import { LambdaHandlerEventSourceFromIdentifier } from '../../component/event';
 
-type ProxyResponse = LambdaHandlerEventSourceFromIdentifier<'apigw:proxy:v2'>['EventSourceResponse'];
+export type HttpResponseLambdaProxy = LambdaHandlerEventSourceFromIdentifier<'apigw:proxy:v2'>['EventSourceResponse'];
 
 export type HttpEncodedTransport = HttpResponseTransport<number, string>;
 
@@ -13,7 +13,7 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpEncodedTransport> 
     HandlerMiddlewareDefinition.SomeContextInbound,
     HandlerMiddlewareDefinition.SomeContextOutbound,
     HttpResponse<R>,
-    ProxyResponse
+    HttpResponseLambdaProxy
   >
 );
 
@@ -22,7 +22,7 @@ export class HttpTransformerMiddleware<R extends HttpEncodedTransport> implement
     const result = await next(context);
 
     if (result.type === 'response:http') {
-      return create<ProxyResponse>('response:aws', {
+      return create<HttpResponseLambdaProxy>('response:aws', {
         statusCode: result.value.status,
         headers: result.value.headers ?? {},
         body: result.value.body,
