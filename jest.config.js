@@ -24,6 +24,10 @@ module.exports = {
 
   coveragePathIgnorePatterns: [
     'examples',
+
+    // Proof files are used for testing type use cases and not functionality.
+    // These can be ignored from coverage as they are pseudo code.
+    '\.proof\.ts$',
   ],
 
   coverageReporters: [
