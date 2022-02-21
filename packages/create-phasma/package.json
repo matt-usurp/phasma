@@ -16,7 +16,10 @@
     "npm": ">=8.1.0"
   },
   "keywords": [
-    "handler"
+    "phasma",
+    "ecosystem",
+    "creation",
+    "template"
   ],
   "contributors": [
     {

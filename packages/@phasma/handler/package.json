@@ -17,6 +17,7 @@
     "npm": ">=8.1.0"
   },
   "keywords": [
+    "phasma",
     "handler",
     "middleware"
   ],
