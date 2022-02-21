@@ -1,12 +1,12 @@
 import { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
 import { HttpBodyTransformerEncoder } from '@phasma/handler/src/http/body';
-import { http, HttpResponse, HttpResponseTransport, HttpResponseTransportKind } from '@phasma/handler/src/http/response';
+import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { unwrap } from '@phasma/handler/src/response';
 import { HttpEncodedTransport } from './http-transformer';
 
 export type HttpBodyObjectTransport = HttpResponseTransport<number, any>;
 
-export type HttpTransformerMiddlewareDefinition<R extends HttpResponseTransportKind> = (
+export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTransport> = (
   HandlerMiddlewareDefinition<
     HandlerMiddlewareDefinition.SomeProvider,
     HandlerMiddlewareDefinition.SomeContextInbound,
