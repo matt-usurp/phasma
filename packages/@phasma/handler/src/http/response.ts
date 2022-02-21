@@ -14,7 +14,7 @@ export type HttpResponseTransport<
   readonly body: B;
 };
 
-export type HttpResponseTransportKind = HttpResponseTransport<any, any, any>;
+export type HttpResponseTransportKind = HttpResponseTransport<number, any, any>;
 
 export type HttpResponseIdentifer = HandlerResponseIdentifier<'http'>;
 export type HttpResponse<M extends HttpResponseTransportKind = HttpResponseTransportKind> = HandlerResponse<HttpResponseIdentifer, M>;
