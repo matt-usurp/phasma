@@ -1,6 +1,6 @@
-# `@phasma/handler`
+# `create-phasma`
 
-An agnostic handler and middleware implementation.
+New project creation template for the `phasma` ecosystem.
 
 > Create simplistic and maintainable entrypoints and applications.
 

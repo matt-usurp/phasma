@@ -1,6 +1,4 @@
-# `@phasma/handler`
-
-An agnostic handler and middleware implementation.
+# `phasma`
 
 > Create simplistic and maintainable entrypoints and applications.
 

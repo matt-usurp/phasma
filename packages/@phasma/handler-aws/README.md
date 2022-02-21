@@ -1,3 +1,7 @@
-# Phasma: Handler AWS
+# `@phasma/handler-aws`
 
-> A function handler implementation that provides middleware capabilities for working with AWS Lambda.
+Focused tooling to provide a guided experience when working with `@phasma/handler` and **Amazon Web Services**.
+
+> Create simplistic and maintainable entrypoints and applications.
+
+For more information see the main [phasma](https://github.com/matt-usurp/phasma) repository on GitHub.
