@@ -1,13 +1,13 @@
 import { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
-import { HttpResponse, HttpResponseTransport, HttpResponseTransportKind } from '@phasma/handler/src/http/response';
+import { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { create } from '@phasma/handler/src/response';
 import { LambdaHandlerEventSourceFromIdentifier } from '../../component/event';
 
 type ProxyResponse = LambdaHandlerEventSourceFromIdentifier<'apigw:proxy:v2'>['EventSourceResponse'];
 
-export type HttpTransformerProxyResponseTransport = HttpResponseTransport<number, string>;
+export type HttpEncodedTransport = HttpResponseTransport<number, string>;
 
-export type HttpTransformerMiddlewareDefinition<R extends HttpResponseTransportKind> = (
+export type HttpTransformerMiddlewareDefinition<R extends HttpEncodedTransport> = (
   HandlerMiddlewareDefinition<
     HandlerMiddlewareDefinition.SomeProvider,
     HandlerMiddlewareDefinition.SomeContextInbound,
@@ -17,7 +17,7 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpResponseTransportK
   >
 );
 
-export class HttpTransformerMiddleware<R extends HttpTransformerProxyResponseTransport> implements HandlerMiddlewareImplementationWithInvokeFunction<HttpTransformerMiddlewareDefinition<R>> {
+export class HttpTransformerMiddleware<R extends HttpEncodedTransport> implements HandlerMiddlewareImplementationWithInvokeFunction<HttpTransformerMiddlewareDefinition<R>> {
   public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<HttpTransformerMiddlewareDefinition<R>>): Promise<HandlerMiddlewareFunctionResponse<HttpTransformerMiddlewareDefinition<R>>> {
     const result = await next(context);
 
@@ -25,7 +25,7 @@ export class HttpTransformerMiddleware<R extends HttpTransformerProxyResponseTra
       return create<ProxyResponse>('response:aws', {
         statusCode: result.value.status,
         headers: result.value.headers ?? {},
-        body: result.value.body ?? '',
+        body: result.value.body,
       });
     }
 

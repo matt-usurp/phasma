@@ -1,8 +1,10 @@
+export type HttpBodyTransformerEncoder = (value: unknown) => string;
+
 /**
  * Helper function to encode json values for use with http responses.
  * This will ignore all values that could mean "empty response".
  */
-export const encode = (value: unknown): string => {
+export const json: HttpBodyTransformerEncoder = (value) => {
   if (value === undefined || value === null || value === '') {
     return '';
   }

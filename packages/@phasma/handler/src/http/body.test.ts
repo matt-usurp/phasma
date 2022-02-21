@@ -1,28 +1,28 @@
-import { encode } from './json';
+import { json } from './body';
 
-describe('http/encoding/json', (): void => {
-  describe('encode()', (): void => {
+describe('http/body', (): void => {
+  describe('json()', (): void => {
     it('with empty value, undefined, return empty string', (): void => {
       expect(
-        encode(undefined),
+        json(undefined),
       ).toStrictEqual('');
     });
 
     it('with empty value, null, return empty string', (): void => {
       expect(
-        encode(null),
+        json(null),
       ).toStrictEqual('');
     });
 
     it('with empty value, empty string, return empty string', (): void => {
       expect(
-        encode(''),
+        json(''),
       ).toStrictEqual('');
     });
 
     it('with value, return value as json encoded string', (): void => {
       expect(
-        encode({
+        json({
           name: 'jane',
         }),
       ).toStrictEqual('{"name":"jane"}');
