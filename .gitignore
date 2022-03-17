@@ -1,5 +1,6 @@
 build/coverage
 build/workspace
+build/package
 
 examples
 

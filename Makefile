@@ -1,7 +1,6 @@
 export DIR_PACKAGES := packages
-export DIR_WORKSPACE := build/workspace
-export DIR_WORKSPACE_COMPILED := build/workspace/compiled
-export DIR_WORKSPACE_PACKAGES := build/workspace/packages
+export DIR_BUILD_WORKSPACE := build/workspace
+export DIR_BUILD_PACKAGE := build/package
 
 .PHONY: default
 default:
@@ -25,7 +24,7 @@ test.coverage.open:
 # Assumes the dependencies have been installed or placed before running.
 # This will require that the workspaces are linked so cross-package references work.
 test.build:
-	cd ${DIR_WORKSPACE} && npx jest  --verbose --colors --no-watchman
+	cd ./${DIR_BUILD_WORKSPACE} && npx jest  --verbose --colors --no-watchman
 
 # --
 # -- Package Build
@@ -38,60 +37,46 @@ test.build:
 	build.compile \
 	build.compile.clean \
 	build.compile.packages \
-	build.compile.verify \
-	build.root \
-	build.root.verify \
-	build.root.install
+	build.compile.verify
 
 build: \
 	build.clean \
 	build.setup \
 	build.compile \
 	build.compile.clean \
-	build.compile.verify \
-	build.root \
-	build.root.verify \
-
+	build.compile.verify
 
 build.clean:
-	rm -rf ${DIR_WORKSPACE}/*
+	rm -rf ./${DIR_BUILD_WORKSPACE}/*
 
 build.setup:
-	mkdir -p ${DIR_WORKSPACE}
+	mkdir -p ./${DIR_BUILD_WORKSPACE}
 
 build.compile:
 	npx tsc -p build/tsconfig.json
 
 build.compile.clean:
-	rm -rf ${DIR_WORKSPACE_COMPILED}/index.js
-	rm -rf ${DIR_WORKSPACE_COMPILED}/index.d.ts
+	rm -rf ./${DIR_BUILD_WORKSPACE}/index.js
+	rm -rf ./${DIR_BUILD_WORKSPACE}/index.d.ts
 
-	find ${DIR_WORKSPACE_COMPILED} -type f -name "*.test.js" -delete
-	find ${DIR_WORKSPACE_COMPILED} -type f -name "*.test.d.ts" -delete
+	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.test.js" -delete
+	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.test.d.ts" -delete
 
-	find ${DIR_WORKSPACE_COMPILED} -type f -name "*.proof.js" -delete
-	find ${DIR_WORKSPACE_COMPILED} -type f -name "*.proof.d.ts" -delete
+	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.proof.js" -delete
+	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.proof.d.ts" -delete
 
-	find ${DIR_WORKSPACE_COMPILED} -type f -name "examples/*" -delete
-	find ${DIR_WORKSPACE_COMPILED} -type d -name "examples" -delete
+	find ./${DIR_BUILD_WORKSPACE} -type f -name "examples/*" -delete
+	find ./${DIR_BUILD_WORKSPACE} -type d -name "examples" -delete
 
 build.compile.verify:
-	test -d ${DIR_WORKSPACE_COMPILED}
-	test -d ${DIR_WORKSPACE_COMPILED}/@phasma/handler
-	test -d ${DIR_WORKSPACE_COMPILED}/@phasma/handler-aws
-
-build.root:
-	cp package.json ${DIR_WORKSPACE}/package.json
-	cp package-lock.json ${DIR_WORKSPACE}/package-lock.json
-
-build.root.verify:
-	test -f ${DIR_WORKSPACE}/package.json
-	test -f ${DIR_WORKSPACE}/package-lock.json
+	test -d ./${DIR_BUILD_WORKSPACE}
+	test -d ./${DIR_BUILD_WORKSPACE}/@phasma/handler
+	test -d ./${DIR_BUILD_WORKSPACE}/@phasma/handler-aws
 
 # This is an isolated target from main process that needs running manually in some cases.
 # Will prepare the build directory by installing dependencies.
 build.root.install:
-	cd ${DIR_WORKSPACE} && npm ci --ignore-scripts
+	cd ./${DIR_BUILD_WORKSPACE} && npm ci --ignore-scripts
 
 # --
 # -- Package Build
@@ -99,7 +84,8 @@ build.root.install:
 
 .PHONY: \
 	package \
-	package.variable \
+	package.assert \
+  package.clean \
 	package.prepare \
 	package.prepare.source \
 	package.prepare.metadata \
@@ -107,33 +93,38 @@ build.root.install:
 	package.preview
 
 package: \
-	package.variable \
+	package.assert \
+  package.clean \
 	package.prepare \
 	package.prepare.source \
 	package.prepare.metadata \
 	package.prepare.imports \
 	package.preview
 
-package.variable:
+package.assert:
 	test ! -z "${PACKAGE_NAME}"
+	test -d ./${DIR_BUILD_WORKSPACE}/${PACKAGE_NAME}
+
+package.clean:
+	rm -rf ./${DIR_BUILD_PACKAGE}/*
 
 package.prepare:
-	mkdir -p ${DIR_WORKSPACE_PACKAGES}/${PACKAGE_NAME}
+	mkdir -p ./${DIR_BUILD_PACKAGE}
 
 package.prepare.source:
-	cp -R ${DIR_WORKSPACE_COMPILED}/${PACKAGE_NAME}/src/* ${DIR_WORKSPACE_PACKAGES}/${PACKAGE_NAME}
+	cp -R ./${DIR_BUILD_WORKSPACE}/${PACKAGE_NAME}/src/* ./${DIR_BUILD_PACKAGE}
 
 package.prepare.metadata:
-	cp -R ${DIR_PACKAGES}/${PACKAGE_NAME}/package.json ${DIR_WORKSPACE_PACKAGES}/${PACKAGE_NAME}/package.json
-	cp -R ${DIR_PACKAGES}/${PACKAGE_NAME}/README.md ${DIR_WORKSPACE_PACKAGES}/${PACKAGE_NAME}/README.md
+	cp ./${DIR_PACKAGES}/${PACKAGE_NAME}/package.json ./${DIR_BUILD_PACKAGE}/package.json
+	cp ./${DIR_PACKAGES}/${PACKAGE_NAME}/README.md ./${DIR_BUILD_PACKAGE}/README.md
 
 package.prepare.imports:
-	find ${DIR_WORKSPACE_PACKAGES} -type f \( -name '*.js' -o -name '*.ts' \) \
+	find ${DIR_BUILD_PACKAGE} -type f \( -name '*.js' -o -name '*.ts' \) \
 		-exec $(if $(shell which gsed),gsed,sed) -i -E 's|\/src\/index||g' {} \; \
 		-exec $(if $(shell which gsed),gsed,sed) -i -E 's|\/src||g' {} \;
 
 package.preview:
-	npm publish --dry-run ${DIR_WORKSPACE_PACKAGES}/${PACKAGE_NAME}
+	npm publish --dry-run ./${DIR_BUILD_PACKAGE}
 
 # --
 # -- Versioning
@@ -145,13 +136,35 @@ package.preview:
 	version.patch
 
 version.major:
-	test ! -z "${${DIR_PACKAGES}}"
+	test ! -z "${DIR_PACKAGES}"
 	npm version --no-git-tag-version -w ${DIR_PACKAGES}/${PACKAGE_NAME} major
 
 version.minor:
-	test ! -z "${${DIR_PACKAGES}}"
+	test ! -z "${DIR_PACKAGES}"
 	npm version --no-git-tag-version -w ${DIR_PACKAGES}/${PACKAGE_NAME} minor
 
 version.patch:
-	test ! -z "${${DIR_PACKAGES}}"
+	test ! -z "${DIR_PACKAGES}"
 	npm version --no-git-tag-version -w ${DIR_PACKAGES}/${PACKAGE_NAME} patch
+
+# --
+# -- Packages
+# --
+
+.PHONY: \
+  phasma \
+  create-phasma \
+  @phasma/handler \
+  @phasma/handler-aws
+
+phasma:
+	$(MAKE) build package PACKAGE_NAME=$@
+
+create-phasma:
+	$(MAKE) build package PACKAGE_NAME=$@
+
+@phasma/handler:
+	$(MAKE) build package PACKAGE_NAME=$@
+
+@phasma/handler-aws:
+	$(MAKE) build package PACKAGE_NAME=$@
