@@ -11,9 +11,10 @@
   "bugs": {
     "url": "https://github.com/matt-usurp/phasma/issues"
   },
+  "type": "module",
   "engines": {
-    "node": ">=16.13.0",
-    "npm": ">=8.1.0"
+    "node": ">=14.18.12",
+    "npm": ">=8.4.0"
   },
   "keywords": [
     "phasma",
