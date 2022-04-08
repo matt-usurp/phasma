@@ -30,6 +30,9 @@
       "email": "matt.usurp@gmail.com"
     }
   ],
+  "dependencies": {
+    "@matt-usurp/grok": "^0.4.2"
+  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.91"
   }
