@@ -5,3 +5,5 @@ build/package
 examples
 
 node_modules
+
+.eslintcache

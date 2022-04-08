@@ -29,7 +29,7 @@
     }
   ],
   "dependencies": {
-    "@matt-usurp/grok": "^0.4.1",
+    "@matt-usurp/grok": "^0.4.2",
     "@types/aws-lambda": "^8.10.93"
   }
 }

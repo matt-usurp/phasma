@@ -7,6 +7,29 @@ default:
 	#
 
 # --
+# -- Code Formatting
+# --
+
+.PHONY: \
+	code \
+	code.fix
+
+code:
+	npx eslint \
+		--cache \
+		--cache-location .eslintcache \
+		--format codeframe \
+			./packages
+
+code.fix:
+	npx eslint \
+		--cache \
+		--cache-location .eslintcache \
+		--fix \
+		--format codeframe \
+			./packages
+
+# --
 # -- Testing
 # --
 
