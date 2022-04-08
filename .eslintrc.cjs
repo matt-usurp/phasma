@@ -25,5 +25,11 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
   ],
 
-  rules: {},
+  rules: {
+    /**
+     * Disabled due to controlled usage of `namespace` blocks only used for type information.
+     * This is still true for cases where code exists but we are using ESM style imports/exports.
+     */
+    '@typescript-eslint/no-namespace': 'off',
+  },
 };
