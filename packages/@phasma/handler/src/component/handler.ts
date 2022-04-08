@@ -1,6 +1,7 @@
-import { HandlerContextConstraint } from './context';
-import { HandlerProviderConstraint } from './provider';
-import { HandlerResponseConstraint } from './response';
+import type { Grok } from '@matt-usurp/grok';
+import type { HandlerContextConstraint } from './context';
+import type { HandlerProviderConstraint } from './provider';
+import type { HandlerResponseConstraint } from './response';
 
 export type HandlerDefinition<
   Provider extends HandlerProviderConstraint,
@@ -12,7 +13,19 @@ export type HandlerDefinition<
   readonly HandlerDefinitionResponse: Response;
 }
 
-export type HandlerDefinitionConstraint = HandlerDefinition<any, any, any>;
+export namespace HandlerDefinition {
+  export type SomeProvider = Grok.Constraint.Anything;
+  export type SomeContext = Grok.Constraint.Anything;
+  export type SomeResponse = Grok.Constraint.Anything;
+}
+
+export type HandlerDefinitionConstraint = (
+  HandlerDefinition<
+    Grok.Constraint.Anything,
+    Grok.Constraint.Anything,
+    Grok.Constraint.Anything
+  >
+);
 
 export type HandlerFunctionParameters<Definition extends HandlerDefinitionConstraint> = (
   HandlerFunctionParametersPayload<
@@ -72,7 +85,7 @@ export type HandlerComposition<
 
 export type HandlerEntrypoint<
   BuilderComposite,
-  EntrypointArguments extends any[],
+  EntrypointArguments extends Grok.Constraint.Anything[],
   EntrypointResponse
 > = {
   readonly $composition?: BuilderComposite;

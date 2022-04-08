@@ -1,5 +1,5 @@
-import { HandlerProvider, HandlerProviderIdentifier, HandlerProviderWithPayload } from '@phasma/handler/src/component/provider';
-import { LambdaHandlerEventSourceConstraint, LambdaHandlerEventSourceFromIdentifier, LambdaHandlerEventSourceIdentifiers } from './event';
+import type { HandlerProvider, HandlerProviderIdentifier, HandlerProviderWithPayload } from '@phasma/handler/src/component/provider';
+import type { LambdaHandlerEventSourceConstraint, LambdaHandlerEventSourceFromIdentifier, LambdaHandlerEventSourceIdentifiers } from './event';
 
 export type LambdaHandlerProviderIdentifier = HandlerProviderIdentifier<'aws'>;
 

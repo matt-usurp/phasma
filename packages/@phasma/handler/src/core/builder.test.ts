@@ -1,8 +1,8 @@
-import { HandlerContextBase } from '../component/context';
-import { HandlerDefinition, HandlerFunctionParameters, HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '../component/handler';
-import { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '../component/middleware';
-import { HandlerProviderWithPayload } from '../component/provider';
-import { HandlerResponse } from '../component/response';
+import type { HandlerContextBase } from '../component/context';
+import type { HandlerDefinition, HandlerFunctionParameters, HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '../component/handler';
+import type { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '../component/middleware';
+import type { HandlerProviderWithPayload } from '../component/provider';
+import type { HandlerResponse } from '../component/response';
 import { HandlerBuilder } from './builder';
 
 type TestProvider = HandlerProviderWithPayload<'provider:test', {
@@ -160,7 +160,7 @@ describe('core/builder', (): void => {
               middleware: {
                 name,
                 names: [
-                  ...(context as any).middleware?.names ?? [],
+                  ...(context as any).middleware?.names ?? [], // eslint-disable-line @typescript-eslint/no-explicit-any
                   name,
                 ],
               },

@@ -1,4 +1,4 @@
-import { HandlerResponse } from '@phasma/handler/src/component/response';
+import type { HandlerResponse } from '@phasma/handler/src/component/response';
 import { http, HttpResponse } from '@phasma/handler/src/http/response';
 import { HttpResponseLambdaProxy, HttpTransformerMiddleware } from './http-transformer';
 
@@ -22,7 +22,7 @@ describe('http/middleware/http-trnsformer', (): void => {
           provider: 'given-provider',
 
           // Context is ignored for this middleware
-          context: 'given-context' as any,
+          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
       ).toStrictEqual<HttpResponseLambdaProxy>({
@@ -54,7 +54,7 @@ describe('http/middleware/http-trnsformer', (): void => {
           provider: 'given-provider',
 
           // Context is ignored for this middleware
-          context: 'given-context' as any,
+          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
       ).toStrictEqual<HandlerResponse<'response:unknown', 1000>>({

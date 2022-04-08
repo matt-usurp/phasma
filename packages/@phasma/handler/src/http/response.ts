@@ -1,3 +1,4 @@
+import type { Grok } from '@matt-usurp/grok';
 import type { HandlerResponse, HandlerResponseIdentifier } from '../component/response';
 import { create } from '../response';
 import type { HttpResponseHeaderMapping } from './header';
@@ -12,7 +13,7 @@ export type HttpResponseTransport<
   readonly body: B;
 };
 
-export type HttpResponseTransportKind = HttpResponseTransport<number, any, any>;
+export type HttpResponseTransportKind = HttpResponseTransport<number, Grok.Constraint.Anything, Grok.Constraint.Anything>;
 
 export type HttpResponseIdentifer = HandlerResponseIdentifier<'http'>;
 export type HttpResponse<M extends HttpResponseTransportKind = HttpResponseTransportKind> = HandlerResponse<HttpResponseIdentifer, M>;

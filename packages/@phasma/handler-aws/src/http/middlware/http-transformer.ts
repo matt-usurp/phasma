@@ -1,7 +1,7 @@
-import { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
-import { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
+import type { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
+import type { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { create } from '@phasma/handler/src/response';
-import { LambdaHandlerEventSourceFromIdentifier } from '../../component/event';
+import type { LambdaHandlerEventSourceFromIdentifier } from '../../component/event';
 
 export type HttpResponseLambdaProxy = LambdaHandlerEventSourceFromIdentifier<'apigw:proxy:v2'>['EventSourceResponse'];
 

@@ -1,4 +1,4 @@
-import { HandlerContextBase } from '@phasma/handler/src/component/context';
+import type { HandlerContextBase } from '@phasma/handler/src/component/context';
 
 export type LambdaHandlerContextBase = (
   & HandlerContextBase

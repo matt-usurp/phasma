@@ -1,4 +1,4 @@
-import { HandlerResponse } from '@phasma/handler/src/component/response';
+import type { HandlerResponse } from '@phasma/handler/src/component/response';
 import * as body from '@phasma/handler/src/http/body';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { HttpBodyObjectTransport, HttpBodyTransformerMiddleware } from './http-body-transformer';
@@ -31,7 +31,7 @@ describe('http/middleware/http-body-transformer', (): void => {
           provider: 'given-provider',
 
           // Context is ignored for this middleware
-          context: 'given-context' as any,
+          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
       ).toStrictEqual<HttpResponse<HttpBodyObjectTransport>>({
@@ -71,7 +71,7 @@ describe('http/middleware/http-body-transformer', (): void => {
           provider: 'given-provider',
 
           // Context is ignored for this middleware
-          context: 'given-context' as any,
+          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
       ).toStrictEqual<HandlerResponse<'response:unknown', 1000>>({

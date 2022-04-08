@@ -1,4 +1,4 @@
-import { HandlerResponseConstraint, HandlerResponsePresetNothing } from './component/response';
+import type { HandlerResponseConstraint, HandlerResponsePresetNothing } from './component/response';
 
 /**
  * Unwrap the response and return its containedd value.

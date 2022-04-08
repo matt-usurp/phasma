@@ -1,7 +1,7 @@
-import { HandlerResponsePresetNothing } from '@phasma/handler/src/component/response';
+import type { HandlerResponsePresetNothing } from '@phasma/handler/src/component/response';
 import type * as AwsLambda from 'aws-lambda';
-import { LambdaHandlerEventSource } from '../component/event';
-import { LambdaHandlerResponse } from '../component/response';
+import type { LambdaHandlerEventSource } from '../component/event';
+import type { LambdaHandlerResponse } from '../component/response';
 
 export interface LambdaHandlerEventSources {
   readonly 'alb:request': (

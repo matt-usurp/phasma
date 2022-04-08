@@ -1,9 +1,10 @@
-import { HandlerComposition, HandlerEntrypoint, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
+import type { Grok } from '@matt-usurp/grok';
+import type { HandlerComposition, HandlerEntrypoint, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
 import { HandlerBuilder } from '@phasma/handler/src/core/builder';
 import type { Context as AwsLambdaFunctionContext } from 'aws-lambda';
-import { LambdaHandlerContextBase } from '../component/context';
-import { LambdaHandlerEventSourceFromIdentifier, LambdaHandlerEventSourceIdentifiers } from '../component/event';
-import { LambdaHandlerProviderFromEventSourceIdentifier, LambdaHandlerProviderIdentifier } from '../component/provider';
+import type { LambdaHandlerContextBase } from '../component/context';
+import type { LambdaHandlerEventSourceFromIdentifier, LambdaHandlerEventSourceIdentifiers } from '../component/event';
+import type { LambdaHandlerProviderFromEventSourceIdentifier, LambdaHandlerProviderIdentifier } from '../component/provider';
 
 export type LambdaHandlerBuilder<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
   HandlerBuilder<
@@ -15,7 +16,7 @@ export type LambdaHandlerBuilder<EventSourceIdentifier extends LambdaHandlerEven
 
 export type LambdaHandlerComposition<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
   HandlerComposition<
-    HandlerImplementationWithHandleFunction<any>,
+    HandlerImplementationWithHandleFunction<Grok.Constraint.Anything>,
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     LambdaHandlerContextBase,
     LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']
@@ -74,6 +75,7 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore Assignment to read-only property
   fn.$composition = composition;
 

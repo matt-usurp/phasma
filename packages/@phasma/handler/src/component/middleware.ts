@@ -1,9 +1,9 @@
 import type { Grok } from '@matt-usurp/grok';
-import { HandlerContextConstraint } from './context';
-import { HandlerFunctionParametersPayload } from './handler';
-import { HandlerMiddlewareValueInheritContext, HandlerMiddlewareValueInheritResponse } from './middleware/inherit';
-import { HandlerProviderConstraint } from './provider';
-import { HandlerResponseConstraint } from './response';
+import type { HandlerContextConstraint } from './context';
+import type { HandlerFunctionParametersPayload } from './handler';
+import type { HandlerMiddlewareValueInheritContext, HandlerMiddlewareValueInheritResponse } from './middleware/inherit';
+import type { HandlerProviderConstraint } from './provider';
+import type { HandlerResponseConstraint } from './response';
 
 export type HandlerMiddlewareDefinition<
   Provider extends HandlerProviderConstraint,
@@ -20,11 +20,11 @@ export type HandlerMiddlewareDefinition<
 }
 
 export namespace HandlerMiddlewareDefinition {
-  export type SomeProvider = any;
-  export type SomeContextInbound = any;
-  export type SomeContextOutbound = any;
-  export type SomeResponseInbound = any;
-  export type SomeResponseOutbound = any;
+  export type SomeProvider = Grok.Constraint.Anything;
+  export type SomeContextInbound = Grok.Constraint.Anything;
+  export type SomeContextOutbound = Grok.Constraint.Anything;
+  export type SomeResponseInbound = Grok.Constraint.Anything;
+  export type SomeResponseOutbound = Grok.Constraint.Anything;
 }
 
 export type HandlerMiddlewareDefinitionConstraint = (

@@ -1,4 +1,4 @@
-import { HandlerResponse, HandlerResponsePresetNothing } from './component/response';
+import type { HandlerResponse, HandlerResponsePresetNothing } from './component/response';
 import { create, nothing, unwrap } from './response';
 
 type TestResponseOne = HandlerResponse<'response:test:one', boolean>;

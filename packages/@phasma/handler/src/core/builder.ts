@@ -1,10 +1,10 @@
 import type { Grok } from '@matt-usurp/grok';
-import { HandlerContextConstraint } from '../component/context';
-import { HandlerComposition, HandlerDefinition, HandlerImplementationWithHandleFunction } from '../component/handler';
-import { HandlerMiddlewareDefinition, HandlerMiddlewareImplementationWithInvokeFunction, HandlerMiddlewareNextFunction } from '../component/middleware';
-import { HandlerMiddlewareValueInheritResponse } from '../component/middleware/inherit';
-import { HandlerProviderConstraint } from '../component/provider';
-import { HandlerResponseConstraint } from '../component/response';
+import type { HandlerContextConstraint } from '../component/context';
+import type { HandlerComposition, HandlerDefinition, HandlerImplementationWithHandleFunction } from '../component/handler';
+import type { HandlerMiddlewareDefinition, HandlerMiddlewareImplementationWithInvokeFunction, HandlerMiddlewareNextFunction } from '../component/middleware';
+import type { HandlerMiddlewareValueInheritResponse } from '../component/middleware/inherit';
+import type { HandlerProviderConstraint } from '../component/provider';
+import type { HandlerResponseConstraint } from '../component/response';
 
 type ErrorInferMiddlewareDefinition = 'ErrorInferMiddlewareDefinition';
 type ErrorInferContextOutbound = 'ErrorInferContextOutbound';
@@ -14,7 +14,7 @@ type ErrorInferResponseInbound = 'ErrorInferResponseInbound';
  * An internal type that is used to create type free next functions.
  * These are used when building the composite function returned by the builder.
  */
-type HandlerBuilderPassThroughFunction = HandlerMiddlewareNextFunction<any, any>;
+type HandlerBuilderPassThroughFunction = HandlerMiddlewareNextFunction<Grok.Constraint.Anything, Grok.Constraint.Anything>;
 
 /**
  * A handler builder for composing handlers and middleware.
@@ -31,7 +31,7 @@ export class HandlerBuilder<
    * The types bound to the middleware is not important here, its important that the handlers type mutates.
    * With the type safety we can only assume these handlers are going to work.
    */
-  protected readonly middlewares: HandlerMiddlewareImplementationWithInvokeFunction<any>[] = [];
+  protected readonly middlewares: HandlerMiddlewareImplementationWithInvokeFunction<Grok.Constraint.Anything>[] = [];
 
   /**
    * Use a middleware at this position in the call stack.
@@ -87,7 +87,7 @@ export class HandlerBuilder<
   ) {
     this.middlewares.push(middleware);
 
-    return this as any;
+    return this as any; // eslint-disable-line @typescript-eslint/no-explicit-any
   }
 
   /**
@@ -111,7 +111,7 @@ export class HandlerBuilder<
       if (this.middlewares.length === 0) {
         return handler.handle({
           provider,
-          context: context as any,
+          context: context as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         });
       }
 
@@ -143,6 +143,7 @@ export class HandlerBuilder<
       return stack(context);
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore Assignment to read-only property
     composite.$handler = handler;
 

@@ -1,3 +1,5 @@
+import type { Grok } from '@matt-usurp/grok';
+
 /**
  * A handler provider identity factory.
  * The given format is used to differentiate between providers and other objects.
@@ -9,7 +11,7 @@ export type HandlerProvider<Identifier extends HandlerProviderIdentifierConstrai
   readonly id: Identifier;
 };
 
-export type HandlerProviderConstraint = HandlerProvider<any>;
+export type HandlerProviderConstraint = HandlerProvider<Grok.Constraint.Anything>;
 
 export type HandlerProviderWithPayload<
   Identifier extends HandlerProviderIdentifierConstraint,

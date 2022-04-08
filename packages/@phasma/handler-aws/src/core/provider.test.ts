@@ -1,9 +1,10 @@
+import type { Grok } from '@matt-usurp/grok';
 import * as AwsLambda from 'aws-lambda';
-import { HandlerFunctionParametersPayload } from '../../../handler/src/component/handler';
-import { HandlerResponsePresetNothing } from '../../../handler/src/component/response';
+import type { HandlerFunctionParametersPayload } from '../../../handler/src/component/handler';
+import type { HandlerResponsePresetNothing } from '../../../handler/src/component/response';
 import { nothing } from '../../../handler/src/response';
-import { LambdaHandlerContextBase } from '../component/context';
-import { LambdaHandlerProviderFromEventSourceIdentifier } from '../component/provider';
+import type { LambdaHandlerContextBase } from '../component/context';
+import type { LambdaHandlerProviderFromEventSourceIdentifier } from '../component/provider';
 import { entrypoint, factory } from './provider';
 
 type TestContext = (
@@ -30,7 +31,7 @@ describe('core/provider', (): void => {
 
       expect(handler).toBeCalledTimes(0);
 
-      handler.mockImplementationOnce((input: HandlerFunctionParametersPayload<any, LambdaHandlerContextBase>) => {
+      handler.mockImplementationOnce((input: HandlerFunctionParametersPayload<Grok.Constraint.Anything, LambdaHandlerContextBase>) => {
         expect(input.provider.id).toStrictEqual('provider:aws');
         expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
         expect(input.context.function.ttl()).toStrictEqual(3002);
@@ -85,7 +86,7 @@ describe('core/provider', (): void => {
 
       expect(handler).toBeCalledTimes(0);
 
-      handler.mockImplementationOnce((input: HandlerFunctionParametersPayload<any, LambdaHandlerContextBase>) => {
+      handler.mockImplementationOnce((input: HandlerFunctionParametersPayload<Grok.Constraint.Anything, LambdaHandlerContextBase>) => {
         expect(input.provider.id).toStrictEqual('provider:aws');
         expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
         expect(input.context.function.ttl()).toStrictEqual(3002);

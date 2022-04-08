@@ -1,11 +1,12 @@
-import { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
+import { Grok } from '@matt-usurp/grok';
+import type { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
 import { HttpBodyTransformer } from '@phasma/handler/src/http/body';
 import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { unwrap } from '@phasma/handler/src/response';
-import { HttpEncodedTransport } from './http-transformer';
+import type { HttpEncodedTransport } from './http-transformer';
 
-export type HttpBodyObjectTransport = HttpResponseTransport<number, any>;
+export type HttpBodyObjectTransport = HttpResponseTransport<number, Grok.Constraint.Anything>;
 
 export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTransport> = (
   HandlerMiddlewareDefinition<
