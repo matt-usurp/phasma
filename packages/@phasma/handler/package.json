@@ -1,5 +1,4 @@
 {
-  "private": true,
   "version": "0.1.0",
   "name": "@phasma/handler",
   "description": "A function handler implementation that provides middleware capabilities for working with cloud based architecture",
