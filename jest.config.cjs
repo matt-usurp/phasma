@@ -13,6 +13,7 @@ module.exports = {
   ],
 
   modulePathIgnorePatterns: [
+    '<rootDir>/build/package',
     '<rootDir>/build/workspace',
   ],
 
