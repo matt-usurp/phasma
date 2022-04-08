@@ -150,7 +150,7 @@ package.preview:
 	npm publish --dry-run ./${DIR_BUILD_PACKAGE}
 
 package.publish:
-	npm publish --access restricted ./${DIR_BUILD_PACKAGE}
+	npm publish --access public ./${DIR_BUILD_PACKAGE}
 
 # --
 # -- Versioning
