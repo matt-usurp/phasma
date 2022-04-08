@@ -131,20 +131,21 @@ package.preview:
 # --
 
 .PHONY: \
+  version.assert \
 	version.major \
 	version.minor \
 	version.patch
 
-version.major:
+version.assert:
 	test ! -z "${DIR_PACKAGES}"
+
+version.major: version.assert
 	npm version --no-git-tag-version -w ${DIR_PACKAGES}/${PACKAGE_NAME} major
 
-version.minor:
-	test ! -z "${DIR_PACKAGES}"
+version.minor: version.assert
 	npm version --no-git-tag-version -w ${DIR_PACKAGES}/${PACKAGE_NAME} minor
 
-version.patch:
-	test ! -z "${DIR_PACKAGES}"
+version.patch: version.assert
 	npm version --no-git-tag-version -w ${DIR_PACKAGES}/${PACKAGE_NAME} patch
 
 # --
