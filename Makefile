@@ -126,6 +126,9 @@ package.prepare.imports:
 package.preview:
 	npm publish --dry-run ./${DIR_BUILD_PACKAGE}
 
+package.publish:
+	npm publish --access restricted ./${DIR_BUILD_PACKAGE}
+
 # --
 # -- Versioning
 # --
