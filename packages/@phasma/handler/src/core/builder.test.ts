@@ -23,7 +23,7 @@ type TestHandlerDefinition = (
 );
 
 const handler = new class Handler implements HandlerImplementationWithHandleFunction<TestHandlerDefinition> {
-  public async handle({ provider, context }: HandlerFunctionParameters<TestHandlerDefinition>): Promise<HandlerFunctionResponse<TestHandlerDefinition>> {
+  public async handle({ provider, context }: HandlerFunctionParameters<TestHandlerDefinition>): HandlerFunctionResponse<TestHandlerDefinition> {
     return {
       type: 'response:test',
       value: {
@@ -88,7 +88,7 @@ describe('core/builder', (): void => {
       );
 
       const middleware = new class Middleware implements HandlerMiddlewareImplementationWithInvokeFunction<TestMiddleware> {
-        public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<TestMiddleware>): Promise<HandlerMiddlewareFunctionResponse<TestMiddleware>> {
+        public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<TestMiddleware>): HandlerMiddlewareFunctionResponse<TestMiddleware> {
           return next({
             ...context,
 
@@ -153,7 +153,7 @@ describe('core/builder', (): void => {
 
       const middleware = (name: string) => {
         return new class Middleware implements HandlerMiddlewareImplementationWithInvokeFunction<TestMiddleware> {
-          public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<TestMiddleware>): Promise<HandlerMiddlewareFunctionResponse<TestMiddleware>> {
+          public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<TestMiddleware>): HandlerMiddlewareFunctionResponse<TestMiddleware> {
             return next({
               ...context,
 

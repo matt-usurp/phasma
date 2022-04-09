@@ -43,7 +43,7 @@ export type HandlerMiddlewareImplementationWithInvokeFunction<D extends HandlerM
    */
   invoke(
     input: HandlerMiddlewareFunctionParameters<D>,
-  ): Promise<HandlerMiddlewareFunctionResponse<D>>;
+  ): HandlerMiddlewareFunctionResponse<D>;
 };
 
 export type HandlerMiddlewareNextFunction<
@@ -81,4 +81,4 @@ export namespace HandlerMiddlewareFunctionParemeters {
   };
 }
 
-export type HandlerMiddlewareFunctionResponse<D extends HandlerMiddlewareDefinitionConstraint> = Grok.Union<D['HandlerMiddlewareDefinitionResponseOutbound'], HandlerMiddlewareResponsePassThrough>;
+export type HandlerMiddlewareFunctionResponse<D extends HandlerMiddlewareDefinitionConstraint> = Promise<Grok.Union<D['HandlerMiddlewareDefinitionResponseOutbound'], HandlerMiddlewareResponsePassThrough>>;

@@ -5,7 +5,7 @@ import type { HandlerFunctionParameters, HandlerFunctionResponse, HandlerImpleme
 export type SomeHandlerDefinition = LambdaHandlerDefinition<'apigw:proxy:v2'>;
 
 export class SomeHandler implements HandlerImplementationWithHandleFunction<SomeHandlerDefinition> {
-  async handle({ provider, context }: HandlerFunctionParameters<SomeHandlerDefinition>): Promise<HandlerFunctionResponse<SomeHandlerDefinition>> {
+  public async handle({ provider, context }: HandlerFunctionParameters<SomeHandlerDefinition>): HandlerFunctionResponse<SomeHandlerDefinition> {
     provider.id;
     provider.payload.headers;
 

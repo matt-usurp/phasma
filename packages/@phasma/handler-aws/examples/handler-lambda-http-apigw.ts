@@ -14,7 +14,7 @@ export type ExampleHandlerResponse = HttpResponseTransport<200, {
 export type ExampleHandlerDefinition = LambdaHandlerDefinition<'apigw:proxy:v2', HandlerContextBase, HttpResponse<ExampleHandlerResponse>>;
 
 export class ExampleHandler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
-  async handle(): Promise<HandlerFunctionResponse<ExampleHandlerDefinition>> {
+  public async handle(): HandlerFunctionResponse<ExampleHandlerDefinition> {
     return http<ExampleHandlerResponse>({
       status: 200,
       body: {

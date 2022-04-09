@@ -51,7 +51,7 @@ export type HandlerFunctionParametersPayload<
 
 export type HandlerFunctionResponse<Definition extends HandlerDefinitionConstraint> = (
   Definition['HandlerDefinitionResponse'] extends HandlerResponseConstraint
-    ? Definition['HandlerDefinitionResponse']
+    ? Promise<Definition['HandlerDefinitionResponse']>
     : never
 );
 
@@ -69,7 +69,7 @@ export type HandlerImplementationWithHandleFunction<Definition extends HandlerDe
         Definition['HandlerDefinitionContext']
       >
     ),
-  ): Promise<HandlerFunctionResponse<Definition>>
+  ): HandlerFunctionResponse<Definition>
 }
 
 export type HandlerComposition<

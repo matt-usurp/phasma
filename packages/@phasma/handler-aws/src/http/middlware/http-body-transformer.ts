@@ -1,5 +1,5 @@
-import { Grok } from '@matt-usurp/grok';
-import type { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '@phasma/handler/src/component/middleware';
+import type { Grok } from '@matt-usurp/grok';
+import type { Middleware } from '@phasma/handler/src';
 import { HttpBodyTransformer } from '@phasma/handler/src/http/body';
 import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
@@ -9,21 +9,21 @@ import type { HttpEncodedTransport } from './http-transformer';
 export type HttpBodyObjectTransport = HttpResponseTransport<number, Grok.Constraint.Anything>;
 
 export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTransport> = (
-  HandlerMiddlewareDefinition<
-    HandlerMiddlewareDefinition.SomeProvider,
-    HandlerMiddlewareDefinition.SomeContextInbound,
-    HandlerMiddlewareDefinition.SomeContextOutbound,
+  Middleware.Definition<
+    Middleware.Definition.SomeProvider,
+    Middleware.Definition.SomeContextInbound,
+    Middleware.Definition.SomeContextOutbound,
     HttpResponse<R>,
     HttpResponse<HttpEncodedTransport>
   >
 );
 
-export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> implements HandlerMiddlewareImplementationWithInvokeFunction<HttpTransformerMiddlewareDefinition<R>> {
+export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
   public constructor(
     public readonly encoder: HttpBodyTransformer
   ) {}
 
-  public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<HttpTransformerMiddlewareDefinition<R>>): Promise<HandlerMiddlewareFunctionResponse<HttpTransformerMiddlewareDefinition<R>>> {
+  public async invoke({ context, next }: Middleware.Fn.Parameters<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpTransformerMiddlewareDefinition<R>> {
     const result = await next(context);
 
     if (result.type === 'response:http') {

@@ -1,16 +1,14 @@
-import type { HandlerContextBase } from '@phasma/handler/src/component/context';
-import type { HandlerDefinition, HandlerFunctionParameters, HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
 import type { HandlerProvider } from '@phasma/handler/src/component/provider';
-import type { HandlerResponsePresetNothing } from '@phasma/handler/src/component/response';
 import type { HandlerBuilder } from '@phasma/handler/src/core/builder';
 import { nothing } from '@phasma/handler/src/response';
+import type { Handler } from '../src/index';
 
 export type ExampleProvider = HandlerProvider<'provider:foo'>;
 
-export type ExampleHandlerDefinition = HandlerDefinition<ExampleProvider, HandlerContextBase, HandlerResponsePresetNothing>;
+export type ExampleHandlerDefinition = Handler.Definition<ExampleProvider, Handler.Context, Handler.Response.Nothing>;
 
-export class ExampleHandler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
-  async handle({ provider, context }: HandlerFunctionParameters<ExampleHandlerDefinition>): Promise<HandlerFunctionResponse<ExampleHandlerDefinition>> {
+export class ExampleHandler implements Handler.Implementation<ExampleHandlerDefinition> {
+  public async handle({ provider, context }: Handler.Fn.Parameters<ExampleHandlerDefinition>): Handler.Fn.Response<ExampleHandlerDefinition> {
     provider.id; // "provider:foo"
     context.request.id; // "some-id"
 
@@ -18,7 +16,7 @@ export class ExampleHandler implements HandlerImplementationWithHandleFunction<E
   }
 }
 
-declare const builder: HandlerBuilder<ExampleProvider, HandlerContextBase, HandlerResponsePresetNothing>;
+declare const builder: HandlerBuilder<ExampleProvider, Handler.Context, Handler.Response.Nothing>;
 
 const handler = builder.handle(new ExampleHandler());
 

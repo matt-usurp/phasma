@@ -29,6 +29,10 @@ module.exports = {
     // Proof files are used for testing type use cases and not functionality.
     // These can be ignored from coverage as they are pseudo code.
     '\.proof\.ts$',
+
+    // The main export for the @phasma/handler package is just types.
+    // However it uses namespaces which trigger as code branches within coverage.
+    'packages/@phasma/handler/src/index.ts',
   ],
 
   coverageReporters: [

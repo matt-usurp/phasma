@@ -38,7 +38,7 @@ type MiddlewarePassThrough = (
 );
 
 class WithPassThrough implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewarePassThrough> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewarePassThrough>): Promise<HandlerMiddlewareFunctionResponse<MiddlewarePassThrough>> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewarePassThrough>): HandlerMiddlewareFunctionResponse<MiddlewarePassThrough> {
     const response = next({
       ...context,
     });
@@ -64,7 +64,7 @@ type MiddlewareKnownInputContext = (
 );
 
 class WithKnownInputContext implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareKnownInputContext> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareKnownInputContext>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareKnownInputContext>> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareKnownInputContext>): HandlerMiddlewareFunctionResponse<MiddlewareKnownInputContext> {
     const response = next({
       ...context,
     });
@@ -90,7 +90,7 @@ type MiddlewareContextSubset = (
 );
 
 class WithContextSubset implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextSubset> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextSubset>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareContextSubset>> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextSubset>): HandlerMiddlewareFunctionResponse<MiddlewareContextSubset> {
     const response = next({
       ...context,
     });
@@ -117,7 +117,7 @@ type MiddlewareContextAdditional = (
 );
 
 class WithContextAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextAdditional> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextAdditional>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareContextAdditional>> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextAdditional>): HandlerMiddlewareFunctionResponse<MiddlewareContextAdditional> {
     const response = next({
       ...context,
 
@@ -146,7 +146,7 @@ type MiddlewareContextUsingAdditional = (
 );
 
 class WithContextUsingAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextUsingAdditional> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextUsingAdditional>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareContextUsingAdditional>> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextUsingAdditional>): HandlerMiddlewareFunctionResponse<MiddlewareContextUsingAdditional> {
     const response = next({
       ...context,
     });
@@ -177,7 +177,7 @@ type MiddlewareResponseAdditional = (
 );
 
 class WithResponseAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseAdditional> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseAdditional>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareResponseAdditional>> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseAdditional>): HandlerMiddlewareFunctionResponse<MiddlewareResponseAdditional> {
     const response = await next({
       ...context,
     });
@@ -208,7 +208,7 @@ type MiddlewareResponseUsage = (
 );
 
 class WithResponseUsage implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseUsage> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseUsage>): Promise<HandlerMiddlewareFunctionResponse<MiddlewareResponseUsage>> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseUsage>): HandlerMiddlewareFunctionResponse<MiddlewareResponseUsage> {
     const response = await next({
       ...context,
     });
@@ -241,10 +241,10 @@ type ExampleHandlerDefinition = (
   >
 );
 
-class Handler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
-  public async handle(): Promise<HandlerFunctionResponse<ExampleHandlerDefinition>> {
+class ExampleHandler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
+  public async handle(): HandlerFunctionResponse<ExampleHandlerDefinition> {
     throw 123; // w/e
   }
 }
 
-b7.handle(new Handler());
+b7.handle(new ExampleHandler());
