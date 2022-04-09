@@ -2,7 +2,7 @@ import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextConstraint } from '../component/context';
 import type { HandlerComposition, HandlerDefinition, HandlerImplementationWithHandleFunction } from '../component/handler';
 import type { HandlerMiddlewareDefinition, HandlerMiddlewareImplementationWithInvokeFunction, HandlerMiddlewareNextFunction } from '../component/middleware';
-import type { HandlerMiddlewareValueInheritResponse } from '../component/middleware/inherit';
+import type { HandlerMiddlewareResponsePassThrough } from '../component/middleware/inherit';
 import type { HandlerProviderConstraint } from '../component/provider';
 import type { HandlerResponseConstraint } from '../component/response';
 
@@ -45,7 +45,7 @@ export class HandlerBuilder<
         CurrentContext,
         HandlerMiddlewareDefinition.SomeContextOutbound,
         HandlerMiddlewareDefinition.SomeResponseInbound,
-        CurrentResponse | HandlerMiddlewareValueInheritResponse
+        CurrentResponse | HandlerMiddlewareResponsePassThrough
       >
     >
   >(middleware: M): (

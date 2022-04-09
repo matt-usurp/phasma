@@ -1,7 +1,7 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextConstraint } from './context';
 import type { HandlerFunctionParametersPayload } from './handler';
-import type { HandlerMiddlewareValueInheritContext, HandlerMiddlewareValueInheritResponse } from './middleware/inherit';
+import type { HandlerMiddlewareContextPassThrough, HandlerMiddlewareResponsePassThrough } from './middleware/inherit';
 import type { HandlerProviderConstraint } from './provider';
 import type { HandlerResponseConstraint } from './response';
 
@@ -60,7 +60,7 @@ export namespace HandlerMiddlewareFunctionParemeters {
   export type WithParameters<D extends HandlerMiddlewareDefinitionConstraint> = (
     HandlerFunctionParametersPayload<
       D['HandlerMiddlewareDefinitionProvider'],
-      Grok.Merge<D['HandlerMiddlewareDefinitionContextInbound'], HandlerMiddlewareValueInheritContext>
+      Grok.Merge<D['HandlerMiddlewareDefinitionContextInbound'], HandlerMiddlewareContextPassThrough>
     >
   );
 
@@ -74,11 +74,11 @@ export namespace HandlerMiddlewareFunctionParemeters {
      */
     readonly next: (
       HandlerMiddlewareNextFunction<
-        Grok.Merge<D['HandlerMiddlewareDefinitionContextOutbound'], HandlerMiddlewareValueInheritContext>,
-        Grok.Union<D['HandlerMiddlewareDefinitionResponseInbound'], HandlerMiddlewareValueInheritResponse>
+        Grok.Merge<D['HandlerMiddlewareDefinitionContextOutbound'], HandlerMiddlewareContextPassThrough>,
+        Grok.Union<D['HandlerMiddlewareDefinitionResponseInbound'], HandlerMiddlewareResponsePassThrough>
       >
     );
   };
 }
 
-export type HandlerMiddlewareFunctionResponse<D extends HandlerMiddlewareDefinitionConstraint> = Grok.Union<D['HandlerMiddlewareDefinitionResponseOutbound'], HandlerMiddlewareValueInheritResponse>;
+export type HandlerMiddlewareFunctionResponse<D extends HandlerMiddlewareDefinitionConstraint> = Grok.Union<D['HandlerMiddlewareDefinitionResponseOutbound'], HandlerMiddlewareResponsePassThrough>;

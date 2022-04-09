@@ -14,11 +14,21 @@ import { HandlerResponse, HandlerResponseIdentifier } from '../response';
 
 /* istanbul ignore next */ const HandlerInheritSomeResponse = Symbol();
 
-export type HandlerMiddlewareValueInheritContext = {
+/**
+ * A type that represents possible context values that should be bubbled up the call stack.
+ *
+ * @todo docs
+ */
+export type HandlerMiddlewareContextPassThrough = {
   readonly [HandlerInheritMarker]: typeof HandlerInheritSomeContext;
 };
 
-export type HandlerMiddlewareValueInheritResponse = (
+/**
+ * A type that represents possible return values that should be bubbled down the call stack.
+ *
+ * @todo docs
+ */
+export type HandlerMiddlewareResponsePassThrough = (
   & { readonly [HandlerInheritMarker]: typeof HandlerInheritSomeResponse }
   & HandlerResponse<HandlerResponseIdentifier<'@inherit'>, never>
 );
