@@ -1,6 +1,6 @@
 import * as response from '@phasma/handler-aws/src/response';
 import type { LambdaHandlerEventSourceResultFromIdentifier } from './component/event';
-import { LambdaHandlerResponse } from './component/response';
+import type { LambdaHandlerResponse } from './component/response';
 import { nothing, result, unwrap } from './response';
 
 describe('nothing()', (): void => {

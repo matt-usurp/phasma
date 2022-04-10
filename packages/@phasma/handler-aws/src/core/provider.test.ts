@@ -8,10 +8,12 @@ import type { LambdaHandlerProviderFromEventSourceIdentifier } from '../componen
 import { entrypoint, factory } from './provider';
 
 type TestContext = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerFunctionParametersPayload<
     LambdaHandlerProviderFromEventSourceIdentifier<'cloudwatch:log'>,
     LambdaHandlerContextBase
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 const context: AwsLambda.Context = {

@@ -3,7 +3,7 @@ import { LambdaHandlerResponse } from './component/response';
 
 export {
   nothing,
-  unwrap
+  unwrap,
 } from '@phasma/handler/src/response';
 
 

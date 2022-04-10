@@ -12,12 +12,12 @@ export type HandlerMiddlewareDefinition<
   ResponseInbound extends HandlerResponseConstraint,
   ResponseOutbound extends HandlerResponseConstraint,
 > = {
-  readonly HandlerMiddlewareDefinitionProvider: Provider,
-  readonly HandlerMiddlewareDefinitionContextInbound: ContextInbound,
-  readonly HandlerMiddlewareDefinitionContextOutbound: ContextOutbound,
-  readonly HandlerMiddlewareDefinitionResponseInbound: ResponseInbound,
-  readonly HandlerMiddlewareDefinitionResponseOutbound: ResponseOutbound,
-}
+  readonly HandlerMiddlewareDefinitionProvider: Provider;
+  readonly HandlerMiddlewareDefinitionContextInbound: ContextInbound;
+  readonly HandlerMiddlewareDefinitionContextOutbound: ContextOutbound;
+  readonly HandlerMiddlewareDefinitionResponseInbound: ResponseInbound;
+  readonly HandlerMiddlewareDefinitionResponseOutbound: ResponseOutbound;
+};
 
 export namespace HandlerMiddlewareDefinition {
   export type SomeProvider = Grok.Constraint.Anything;
@@ -28,6 +28,7 @@ export namespace HandlerMiddlewareDefinition {
 }
 
 export type HandlerMiddlewareDefinitionConstraint = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     HandlerMiddlewareDefinition.SomeProvider,
     HandlerMiddlewareDefinition.SomeContextInbound,
@@ -35,6 +36,7 @@ export type HandlerMiddlewareDefinitionConstraint = (
     HandlerMiddlewareDefinition.SomeResponseInbound,
     HandlerMiddlewareDefinition.SomeResponseOutbound
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export type HandlerMiddlewareImplementationWithInvokeFunction<D extends HandlerMiddlewareDefinitionConstraint> = {
@@ -48,7 +50,7 @@ export type HandlerMiddlewareImplementationWithInvokeFunction<D extends HandlerM
 
 export type HandlerMiddlewareNextFunction<
   Context extends HandlerContextConstraint,
-  Response extends HandlerResponseConstraint
+  Response extends HandlerResponseConstraint,
 > = (context: Context) => Promise<Response>;
 
 export type HandlerMiddlewareFunctionParameters<D extends HandlerMiddlewareDefinitionConstraint> = (
@@ -58,10 +60,12 @@ export type HandlerMiddlewareFunctionParameters<D extends HandlerMiddlewareDefin
 
 export namespace HandlerMiddlewareFunctionParemeters {
   export type WithParameters<D extends HandlerMiddlewareDefinitionConstraint> = (
+  /* eslint-disable @typescript-eslint/indent */
     HandlerFunctionParametersPayload<
       D['HandlerMiddlewareDefinitionProvider'],
       Grok.Merge<D['HandlerMiddlewareDefinitionContextInbound'], HandlerMiddlewareContextPassThrough>
     >
+  /* eslint-enable @typescript-eslint/indent */
   );
 
   export type WithNextFunction<D extends HandlerMiddlewareDefinitionConstraint> = {
@@ -73,10 +77,12 @@ export namespace HandlerMiddlewareFunctionParemeters {
      * These indicate an "unknown" possible element that might be handled in an element next in the chain.
      */
     readonly next: (
+    /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareNextFunction<
         Grok.Merge<D['HandlerMiddlewareDefinitionContextOutbound'], HandlerMiddlewareContextPassThrough>,
         Grok.Union<D['HandlerMiddlewareDefinitionResponseInbound'], HandlerMiddlewareResponsePassThrough>
       >
+    /* eslint-enable @typescript-eslint/indent */
     );
   };
 }

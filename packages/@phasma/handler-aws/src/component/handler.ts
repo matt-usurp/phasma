@@ -9,9 +9,11 @@ export type LambdaHandlerDefinition<
   Context extends HandlerContextConstraint = HandlerContextBase,
   Response extends HandlerResponseConstraint = LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse'],
 > = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     Context,
     Response
   >
+/* eslint-enable @typescript-eslint/indent */
 );

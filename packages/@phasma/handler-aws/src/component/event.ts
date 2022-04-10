@@ -13,11 +13,13 @@ export type LambdaHandlerEventSource<
 };
 
 export type LambdaHandlerEventSourceConstraint = (
+/* eslint-disable @typescript-eslint/indent */
   LambdaHandlerEventSource<
     string,
     Grok.Constraint.Anything,
     Grok.Constraint.Anything
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export type LambdaHandlerEventSourceIdentifiers = keyof LambdaHandlerEventSources;

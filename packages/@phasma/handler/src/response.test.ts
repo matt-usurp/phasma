@@ -31,7 +31,7 @@ describe('unwrap()', (): void => {
     ).toStrictEqual<TestResponseTwoBody>({
       foo: 'foobar',
       bar: 'barfoo',
-    })
+    });
   });
 });
 
@@ -70,4 +70,4 @@ describe('nothing()', () => {
       value: undefined,
     });
   });
-  });
+});

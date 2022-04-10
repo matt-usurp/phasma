@@ -12,14 +12,16 @@ type TestProvider = HandlerProviderWithPayload<'provider:test', {
 type TestResponse = HandlerResponse<'response:test', {
   state: boolean;
   body: unknown;
-}>
+}>;
 
 type TestHandlerDefinition = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
     TestProvider,
     HandlerContextBase,
     TestResponse
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 const handler = new class Handler implements HandlerImplementationWithHandleFunction<TestHandlerDefinition> {
@@ -32,11 +34,11 @@ const handler = new class Handler implements HandlerImplementationWithHandleFunc
           pid: provider.id,
           pin: provider.payload.input,
           ctx: context,
-        }
+        },
       },
     };
   }
-}
+};
 
 describe('HandlerBuilder', (): void => {
   it('with handler, returns composite', async (): Promise<void> => {
@@ -77,6 +79,7 @@ describe('HandlerBuilder', (): void => {
 
   it('with middleware, with handler, returns composite', async (): Promise<void> => {
     type TestMiddleware = (
+    /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
         HandlerMiddlewareDefinition.SomeProvider,
         HandlerContextBase,
@@ -84,6 +87,7 @@ describe('HandlerBuilder', (): void => {
         HandlerMiddlewareDefinition.SomeResponseInbound,
         HandlerMiddlewareDefinition.SomeResponseOutbound
       >
+    /* eslint-enable @typescript-eslint/indent */
     );
 
     const middleware = new class Middleware implements HandlerMiddlewareImplementationWithInvokeFunction<TestMiddleware> {
@@ -96,7 +100,7 @@ describe('HandlerBuilder', (): void => {
           },
         });
       }
-    }
+    };
 
     const builder = new HandlerBuilder<TestProvider, HandlerContextBase, TestResponse>();
     const composite = builder
@@ -141,6 +145,7 @@ describe('HandlerBuilder', (): void => {
 
   it('with middleware, multiple, with handler, middleware are executed in correct order', async (): Promise<void> => {
     type TestMiddleware = (
+    /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
         HandlerMiddlewareDefinition.SomeProvider,
         HandlerContextBase,
@@ -148,6 +153,7 @@ describe('HandlerBuilder', (): void => {
         HandlerMiddlewareDefinition.SomeResponseInbound,
         HandlerMiddlewareDefinition.SomeResponseOutbound
       >
+    /* eslint-enable @typescript-eslint/indent */
     );
 
     const middleware = (name: string) => {
@@ -215,4 +221,4 @@ describe('HandlerBuilder', (): void => {
       },
     });
   });
-  });
+});

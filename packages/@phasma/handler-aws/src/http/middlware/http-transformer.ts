@@ -8,6 +8,7 @@ export type HttpResponseLambdaProxy = LambdaHandlerEventSourceFromIdentifier<'ap
 export type HttpEncodedTransport = HttpResponseTransport<number, string>;
 
 export type HttpTransformerMiddlewareDefinition<R extends HttpEncodedTransport> = (
+/* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Middleware.Definition.SomeProvider,
     Middleware.Definition.SomeContextInbound,
@@ -15,6 +16,7 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpEncodedTransport> 
     HttpResponse<R>,
     HttpResponseLambdaProxy
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export class HttpTransformerMiddleware<R extends HttpEncodedTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {

@@ -11,7 +11,7 @@ export type HandlerDefinition<
   readonly HandlerDefinitionProvider: Provider;
   readonly HandlerDefinitionContext: Context;
   readonly HandlerDefinitionResponse: Response;
-}
+};
 
 export namespace HandlerDefinition {
   export type SomeProvider = Grok.Constraint.Anything;
@@ -20,18 +20,22 @@ export namespace HandlerDefinition {
 }
 
 export type HandlerDefinitionConstraint = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
     Grok.Constraint.Anything,
     Grok.Constraint.Anything,
     Grok.Constraint.Anything
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export type HandlerFunctionParameters<Definition extends HandlerDefinitionConstraint> = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerFunctionParametersPayload<
     Definition['HandlerDefinitionProvider'],
     Definition['HandlerDefinitionContext']
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export type HandlerFunctionParametersPayload<
@@ -47,7 +51,7 @@ export type HandlerFunctionParametersPayload<
    * Contextual information made available through middleware and the base context from the provider.
    */
   readonly context: Context;
-}
+};
 
 export type HandlerFunctionResponse<Definition extends HandlerDefinitionConstraint> = (
   Definition['HandlerDefinitionResponse'] extends HandlerResponseConstraint
@@ -64,13 +68,15 @@ export type HandlerImplementationWithHandleFunction<Definition extends HandlerDe
    */
   handle(
     parameters: (
+    /* eslint-disable @typescript-eslint/indent */
       HandlerFunctionParametersPayload<
         Definition['HandlerDefinitionProvider'],
         Definition['HandlerDefinitionContext']
       >
+    /* eslint-enable @typescript-eslint/indent */
     ),
-  ): HandlerFunctionResponse<Definition>
-}
+  ): HandlerFunctionResponse<Definition>;
+};
 
 export type HandlerComposition<
   HandlerInstance,
@@ -80,13 +86,13 @@ export type HandlerComposition<
 > = {
   readonly $handler?: HandlerInstance;
 
-  (input: HandlerFunctionParametersPayload<Provider, Context>): Promise<Response>
+  (input: HandlerFunctionParametersPayload<Provider, Context>): Promise<Response>;
 };
 
 export type HandlerEntrypoint<
   BuilderComposite,
   EntrypointArguments extends Grok.Constraint.Anything[],
-  EntrypointResponse
+  EntrypointResponse,
 > = {
   readonly $composition?: BuilderComposite;
 

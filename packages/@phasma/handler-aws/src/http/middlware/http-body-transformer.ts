@@ -9,6 +9,7 @@ import type { HttpEncodedTransport } from './http-transformer';
 export type HttpBodyObjectTransport = HttpResponseTransport<number, Grok.Constraint.Anything>;
 
 export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTransport> = (
+/* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Middleware.Definition.SomeProvider,
     Middleware.Definition.SomeContextInbound,
@@ -16,11 +17,12 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTranspor
     HttpResponse<R>,
     HttpResponse<HttpEncodedTransport>
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
   public constructor(
-    public readonly encoder: HttpBodyTransformer
+    public readonly encoder: HttpBodyTransformer,
   ) {}
 
   public async invoke({ context, next }: Middleware.Fn.Parameters<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpTransformerMiddlewareDefinition<R>> {

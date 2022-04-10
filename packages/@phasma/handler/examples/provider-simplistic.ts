@@ -31,7 +31,7 @@ export type ExampleHandlerContextBase = (
   & {
     readonly request: {
       readonly timestamp: number;
-    }
+    };
   }
 );
 
@@ -49,20 +49,24 @@ export type ExampleHandlerResponse = HandlerResponse<ExampleHandlerResponseIdent
 // --
 
 export type ExampleHandlerBuilder = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerBuilder<
     ExampleProviderWithPayload,
     ExampleHandlerContextBase,
     ExampleHandlerResponse
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export type ExampleHandlerComposition = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerComposition<
     HandlerImplementationWithHandleFunction<Grok.Constraint.Anything>,
     ExampleProviderWithPayload,
     ExampleHandlerContextBase,
     ExampleHandlerResponse
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export type ExampleHandlerEntrypointArguments = [
@@ -70,11 +74,13 @@ export type ExampleHandlerEntrypointArguments = [
 ];
 
 export type ExampleHandlerEntrypoint = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerEntrypoint<
     ExampleHandlerComposition,
     ExampleHandlerEntrypointArguments,
     Promise<string | undefined>
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export const entrypoint = (composition: ExampleHandlerComposition): ExampleHandlerEntrypoint => async (payload) => {
@@ -97,4 +103,4 @@ export const entrypoint = (composition: ExampleHandlerComposition): ExampleHandl
   }
 
   return undefined;
-}
+};

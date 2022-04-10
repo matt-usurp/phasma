@@ -7,20 +7,24 @@ import type { LambdaHandlerEventSourceFromIdentifier, LambdaHandlerEventSourceId
 import type { LambdaHandlerProviderFromEventSourceIdentifier, LambdaHandlerProviderIdentifier } from '../component/provider';
 
 export type LambdaHandlerBuilder<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerBuilder<
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     LambdaHandlerContextBase,
     LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 export type LambdaHandlerComposition<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerComposition<
     HandlerImplementationWithHandleFunction<Grok.Constraint.Anything>,
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     LambdaHandlerContextBase,
     LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 /**
@@ -40,11 +44,13 @@ export type LambdaHandlerEntrypointArguments<EventSourceIdentifier extends Lambd
  * An entrypoint function that is compatible with aws lambda.
  */
 export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerEntrypoint<
     LambdaHandlerComposition<EventSourceIdentifier>,
     LambdaHandlerEntrypointArguments<EventSourceIdentifier>,
     Promise<LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']>
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 /**
@@ -80,7 +86,7 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
   fn.$composition = composition;
 
   return fn;
-}
+};
 
 export type LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (application: LambdaHandlerBuilder<EventSourceIdentifier>) => LambdaHandlerComposition<EventSourceIdentifier>;
 

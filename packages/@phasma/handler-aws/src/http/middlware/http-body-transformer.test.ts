@@ -81,4 +81,4 @@ describe('HttpBodyTransformerMiddleware', (): void => {
     expect(next).toBeCalledTimes(1);
     expect(next).toBeCalledWith('given-context');
   });
-  });
+});

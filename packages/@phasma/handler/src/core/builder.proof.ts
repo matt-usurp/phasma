@@ -28,6 +28,7 @@ declare const b0: HandlerBuilder<Provider, BaseContext, BaseResponse>;
 // --
 
 type MiddlewarePassThrough = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
     HandlerMiddlewareDefinition.SomeContextInbound,
@@ -35,6 +36,7 @@ type MiddlewarePassThrough = (
     HandlerMiddlewareDefinition.SomeResponseInbound,
     HandlerMiddlewareDefinition.SomeResponseOutbound
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class WithPassThrough implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewarePassThrough> {
@@ -54,6 +56,7 @@ const b1 = b0.use(new WithPassThrough());
 // --
 
 type MiddlewareKnownInputContext = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
     BaseContext,
@@ -61,6 +64,7 @@ type MiddlewareKnownInputContext = (
     HandlerMiddlewareDefinition.SomeResponseInbound,
     HandlerMiddlewareDefinition.SomeResponseOutbound
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class WithKnownInputContext implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareKnownInputContext> {
@@ -80,6 +84,7 @@ const b2 = b1.use(new WithKnownInputContext());
 // --
 
 type MiddlewareContextSubset = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
     Pick<BaseContext, 'age'>,
@@ -87,6 +92,7 @@ type MiddlewareContextSubset = (
     HandlerMiddlewareDefinition.SomeResponseInbound,
     HandlerMiddlewareDefinition.SomeResponseOutbound
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class WithContextSubset implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextSubset> {
@@ -107,6 +113,7 @@ const b3 = b2.use(new WithContextSubset());
 // --
 
 type MiddlewareContextAdditional = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
     Pick<BaseContext, 'age'>,
@@ -114,6 +121,7 @@ type MiddlewareContextAdditional = (
     HandlerMiddlewareDefinition.SomeResponseInbound,
     HandlerMiddlewareDefinition.SomeResponseOutbound
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class WithContextAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextAdditional> {
@@ -136,6 +144,7 @@ const b4 = b3.use(new WithContextAdditional());
 // --
 
 type MiddlewareContextUsingAdditional = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
     { born: Date },
@@ -143,6 +152,7 @@ type MiddlewareContextUsingAdditional = (
     HandlerMiddlewareDefinition.SomeResponseInbound,
     HandlerMiddlewareDefinition.SomeResponseOutbound
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class WithContextUsingAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextUsingAdditional> {
@@ -167,6 +177,7 @@ type NewResponse = HandlerResponse<HandlerResponseIdentifier<'new'>, {
 }>;
 
 type MiddlewareResponseAdditional = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
     HandlerMiddlewareDefinition.SomeContextInbound,
@@ -174,6 +185,7 @@ type MiddlewareResponseAdditional = (
     NewResponse,
     BaseResponse
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class WithResponseAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseAdditional> {
@@ -198,6 +210,7 @@ const b6 = b5.use(new WithResponseAdditional());
 // --
 
 type MiddlewareResponseUsage = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
     { age: number },
@@ -205,6 +218,7 @@ type MiddlewareResponseUsage = (
     HandlerMiddlewareDefinition.SomeResponseInbound,
     NewResponse
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class WithResponseUsage implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseUsage> {
@@ -218,8 +232,8 @@ class WithResponseUsage implements HandlerMiddlewareImplementationWithInvokeFunc
         type: 'response:new',
         value: {
           message: 'denied, too young',
-        }
-      }
+        },
+      };
     }
 
     return response;
@@ -234,11 +248,13 @@ const b7 = b6.use(new WithResponseUsage());
 // --
 
 type ExampleHandlerDefinition = (
+/* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
     HandlerDefinition.SomeProvider,
     { age: number },
     NewResponse
   >
+/* eslint-enable @typescript-eslint/indent */
 );
 
 class ExampleHandler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {

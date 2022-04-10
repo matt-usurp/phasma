@@ -20,6 +20,7 @@ declare const builder: HandlerBuilder<ExampleProvider, Handler.Context, Handler.
 
 const handler = builder.handle(new ExampleHandler());
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 handler({
   provider: {
     id: 'provider:foo',

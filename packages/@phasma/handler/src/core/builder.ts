@@ -24,7 +24,7 @@ export class HandlerBuilder<
   CurrentContext extends HandlerContextConstraint,
   CurrentResponse extends HandlerResponseConstraint,
   OriginContext extends HandlerContextConstraint = CurrentContext,
-  OriginResponse extends HandlerResponseConstraint = CurrentResponse
+  OriginResponse extends HandlerResponseConstraint = CurrentResponse,
 > {
   /**
    * All middleware in order of execution.
@@ -39,6 +39,7 @@ export class HandlerBuilder<
    * Changes to the context and response will bubble between them as expected.
    */
   public use<
+    /* eslint-disable @typescript-eslint/indent */
     M extends HandlerMiddlewareImplementationWithInvokeFunction<
       HandlerMiddlewareDefinition<
         HandlerMiddlewareDefinition.SomeProvider,
@@ -47,8 +48,10 @@ export class HandlerBuilder<
         HandlerMiddlewareDefinition.SomeResponseInbound,
         CurrentResponse | HandlerMiddlewareResponsePassThrough
       >
-    >
+    >,
+    /* eslint-enable @typescript-eslint/indent */
   >(middleware: M): (
+  /* eslint-disable @typescript-eslint/indent */
     HandlerBuilder<
       Provider,
       (
@@ -84,6 +87,7 @@ export class HandlerBuilder<
       OriginContext,
       OriginResponse
     >
+  /* eslint-enable @typescript-eslint/indent */
   ) {
     this.middlewares.push(middleware);
 
@@ -95,6 +99,7 @@ export class HandlerBuilder<
    * This function can be passed to a provider or executed manually.
    */
   public handle<
+    /* eslint-disable @typescript-eslint/indent */
     H extends HandlerImplementationWithHandleFunction<
       HandlerDefinition<
         HandlerMiddlewareDefinition.SomeProvider,
@@ -102,6 +107,7 @@ export class HandlerBuilder<
         HandlerResponse
       >
     >,
+    /* eslint-enable @typescript-eslint/indent */
     HandlerContext extends CurrentContext,
     HandlerResponse extends CurrentResponse,
   >(handler: H): HandlerComposition<H, Provider, OriginContext, OriginResponse> {

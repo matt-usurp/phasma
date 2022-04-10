@@ -37,6 +37,10 @@
   },
 
   "include": [
+    ".eslintrc.cjs",
+    "commitlint.config.cjs",
+    "jest.config.cjs",
+
     "packages",
   ],
 }
