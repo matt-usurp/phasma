@@ -21,4 +21,9 @@ export type LambdaHandlerEventSourceConstraint = (
 );
 
 export type LambdaHandlerEventSourceIdentifiers = keyof LambdaHandlerEventSources;
+export type LambdaHandlerEventSourceIdentifierVerifier<Identifier extends LambdaHandlerEventSourceIdentifiers> = Identifier;
 export type LambdaHandlerEventSourceFromIdentifier<Identifier extends LambdaHandlerEventSourceIdentifiers> = LambdaHandlerEventSources[Identifier];
+
+export type LambdaHandlerEventSourceResultFromIdentifier<Identifier extends LambdaHandlerEventSourceIdentifiers> = (
+  LambdaHandlerEventSourceFromIdentifier<Identifier>['EventSourceResponse']['value']
+);

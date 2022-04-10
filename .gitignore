@@ -2,8 +2,6 @@ build/coverage
 build/workspace
 build/package
 
-examples
-
 node_modules
 
 .eslintcache

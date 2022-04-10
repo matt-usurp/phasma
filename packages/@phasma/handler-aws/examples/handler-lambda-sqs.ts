@@ -1,17 +1,16 @@
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
+import { nothing } from '@phasma/handler/src/response';
 
-export type EventSource = Event.Source<'apigw:proxy:v2'>;
+export type EventSource = Event.Source<'sqs'>;
 
 export type SomeHandlerDefinition = Handler.Definition<EventSource>;
 
 export class SomeHandler implements Handler.Implementation<SomeHandlerDefinition> {
-  public async handle({ provider, context }: Handler.Fn.Parameters<SomeHandlerDefinition>): Handler.Fn.Response<SomeHandlerDefinition> {
-    provider.id;
-    provider.payload.headers;
+  public async handle({ provider }: Handler.Fn.Parameters<SomeHandlerDefinition>): Handler.Fn.Response<SomeHandlerDefinition> {
+    provider.id; // "provider:aws"
+    provider.payload.Records; // SQSRecord[]
 
-    context.request.id;
-
-    throw undefined;
+    return nothing();
   }
 }
 
@@ -21,6 +20,6 @@ export const target = aws<EventSource>((inbound) => (
 ));
 
 // target(
-//   {} // as require('aws-lambda').APIGatewayProxyEventV2,
+//   {} // as require('aws-lambda').SQSEvent,
 //   {} // as require('aws-lambda').Context,
 // );

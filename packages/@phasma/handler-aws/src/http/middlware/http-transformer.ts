@@ -22,7 +22,7 @@ export class HttpTransformerMiddleware<R extends HttpEncodedTransport> implement
     const result = await next(context);
 
     if (result.type === 'response:http') {
-      return create<HttpResponseLambdaProxy>('response:aws', {
+      return create<HttpResponseLambdaProxy>('response:aws:result', {
         statusCode: result.value.status,
         headers: result.value.headers ?? {},
         body: result.value.body,

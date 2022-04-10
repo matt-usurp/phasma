@@ -26,7 +26,7 @@ describe('http/middleware/http-trnsformer', (): void => {
           next,
         }),
       ).toStrictEqual<HttpResponseLambdaProxy>({
-        type: 'response:aws',
+        type: 'response:aws:result',
         value: {
           statusCode: 204,
           headers: {},

@@ -1,31 +1,30 @@
-import type { LambdaHandlerDefinition } from '@phasma/handler-aws/src/component/handler';
-import { aws } from '@phasma/handler-aws/src/index';
-import type { HandlerContextBase } from '@phasma/handler/src/component/context';
-import type { HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
+import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import { json } from '@phasma/handler/src/http/body';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { HttpBodyTransformerMiddleware } from '../src/http/middlware/http-body-transformer';
 import { HttpTransformerMiddleware } from '../src/http/middlware/http-transformer';
 
+export type EventSource = Event.Source<'apigw:proxy:v2'>;
+
 export type ExampleHandlerResponse = HttpResponseTransport<200, {
   name: string;
 }>;
 
-export type ExampleHandlerDefinition = LambdaHandlerDefinition<'apigw:proxy:v2', HandlerContextBase, HttpResponse<ExampleHandlerResponse>>;
+export type ExampleHandlerDefinition = Handler.Definition<EventSource, Handler.Context, HttpResponse<ExampleHandlerResponse>>;
 
-export class ExampleHandler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
-  public async handle(): HandlerFunctionResponse<ExampleHandlerDefinition> {
+export class ExampleHandler implements Handler.Implementation<ExampleHandlerDefinition> {
+  public async handle(): Handler.Fn.Response<ExampleHandlerDefinition> {
     return http<ExampleHandlerResponse>({
       status: 200,
       body: {
         name: 'bob',
       },
-    })
+    });
   }
 }
 
-export const target = aws<'apigw:proxy:v2'>((lambda) => (
-  lambda
+export const target = aws<EventSource>((inbound) => (
+  inbound
     .use(new HttpTransformerMiddleware())
     .use(new HttpBodyTransformerMiddleware(json))
     .handle(new ExampleHandler())

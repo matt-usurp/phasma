@@ -1,5 +1,5 @@
 import type { Grok } from '@matt-usurp/grok';
-import type { Middleware } from '@phasma/handler/src';
+import type { Middleware } from '@phasma/handler-aws/src/index';
 import { HttpBodyTransformer } from '@phasma/handler/src/http/body';
 import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
