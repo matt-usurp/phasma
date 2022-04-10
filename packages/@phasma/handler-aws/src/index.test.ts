@@ -1,11 +1,14 @@
 import { entrypoint, factory, id } from './core/provider';
 import * as index from './index';
 
-describe('index', (): void => {
-  describe('exports', (): void => {
-    // core/provider
-    it('exports id', () => expect(index.id).toStrictEqual(id));
-    it('exports factory, as aws', () => expect(index.aws).toStrictEqual(factory));
-    it('exports entrypoint, as awse', () => expect(index.awse).toStrictEqual(entrypoint));
-  });
+describe('.id', (): void => {
+  it('is forwarded export', () => expect(index.id).toStrictEqual(id));
+});
+
+describe('factory()', (): void => {
+  it('is forwarded export', () => expect(index.aws).toStrictEqual(factory));
+});
+
+describe('entrypoint()', (): void => {
+  it('is forward export', () => expect(index.awse).toStrictEqual(entrypoint));
 });
