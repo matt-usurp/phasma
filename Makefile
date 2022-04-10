@@ -163,7 +163,7 @@ package.publish:
 	version.patch
 
 version.assert:
-	test ! -z "${DIR_PACKAGES}"
+	test ! -z "${PACKAGE_NAME}"
 
 version.major: version.assert
 	npm version --no-git-tag-version -w ${DIR_PACKAGES}/${PACKAGE_NAME} major
