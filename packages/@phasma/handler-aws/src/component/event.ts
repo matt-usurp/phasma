@@ -1,5 +1,5 @@
 import type { Grok } from '@matt-usurp/grok';
-import type { HandlerResponseConstraint } from '@phasma/handler/src/component/response';
+import type { HandlerResponseConstraint, HandlerResponseUnwrapped } from '@phasma/handler/src/component/response';
 import type { LambdaHandlerEventSources } from '../definition/events';
 
 export type LambdaHandlerEventSource<
@@ -27,5 +27,5 @@ export type LambdaHandlerEventSourceIdentifierVerifier<Identifier extends Lambda
 export type LambdaHandlerEventSourceFromIdentifier<Identifier extends LambdaHandlerEventSourceIdentifiers> = LambdaHandlerEventSources[Identifier];
 
 export type LambdaHandlerEventSourceResultFromIdentifier<Identifier extends LambdaHandlerEventSourceIdentifiers> = (
-  LambdaHandlerEventSourceFromIdentifier<Identifier>['EventSourceResponse']['value']
+  HandlerResponseUnwrapped<LambdaHandlerEventSourceFromIdentifier<Identifier>['EventSourceResponse']>
 );
