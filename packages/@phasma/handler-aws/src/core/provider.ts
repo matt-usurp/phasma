@@ -1,10 +1,12 @@
-import type { Grok } from '@matt-usurp/grok';
+import { Grok, never } from '@matt-usurp/grok';
 import type { HandlerComposition, HandlerEntrypoint, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
+import { HandlerResponseUnwrapped } from '@phasma/handler/src/component/response';
 import { HandlerBuilder } from '@phasma/handler/src/core/builder';
 import type { Context as AwsLambdaFunctionContext } from 'aws-lambda';
 import type { LambdaHandlerContextBase } from '../component/context';
 import type { LambdaHandlerEventSourceFromIdentifier, LambdaHandlerEventSourceIdentifiers } from '../component/event';
 import type { LambdaHandlerProviderFromEventSourceIdentifier, LambdaHandlerProviderIdentifier } from '../component/provider';
+import { unwrap } from '../response';
 
 export type LambdaHandlerBuilder<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
 /* eslint-disable @typescript-eslint/indent */
@@ -48,7 +50,7 @@ export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerE
   HandlerEntrypoint<
     LambdaHandlerComposition<EventSourceIdentifier>,
     LambdaHandlerEntrypointArguments<EventSourceIdentifier>,
-    Promise<LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']>
+    Promise<HandlerResponseUnwrapped<LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']>>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -59,7 +61,7 @@ export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerE
  */
 export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(composition: Promise<LambdaHandlerComposition<EventSourceIdentifier>>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
   const fn: LambdaHandlerEntrypoint<EventSourceIdentifier> = async (payload, context) => {
-    return (await composition)({
+    const result = await (await composition)({
       provider: {
         id,
         payload,
@@ -79,6 +81,16 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
         },
       },
     });
+
+    if (result.type === 'response:aws:result') {
+      return unwrap(result);
+    }
+
+    if (result.type === 'response:nothing') {
+      return;
+    }
+
+    throw never(result);
   };
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
