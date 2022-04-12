@@ -94,8 +94,8 @@ export type LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier extends
  * A factory that can create handler compositions using the builder functionality provided.
  * This is the recommended entrypoint for building aws handlers.
  */
-export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(factory: LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
-  const builder: LambdaHandlerBuilder<EventSourceIdentifier> = new HandlerBuilder();
+export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(builder: LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
+  const hb: LambdaHandlerBuilder<EventSourceIdentifier> = new HandlerBuilder();
 
-  return entrypoint(factory(builder));
+  return entrypoint(builder(hb));
 };

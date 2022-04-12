@@ -133,4 +133,26 @@ describe('factory()', (): void => {
       value: undefined,
     });
   });
+
+  it('with handler, providing build compisition, composition invoked instantly, only once', async (): Promise<void> => {
+    const instrument = jest.fn();
+
+    const wrapper = factory<'cloudwatch:log'>(async (inbound) => {
+      instrument();
+
+      return inbound.handle({
+        handle: async () => nothing(),
+      });
+    });
+
+    expect(instrument).toBeCalledTimes(1);
+
+    await wrapper({
+      awslogs: {
+        data: 'here-log',
+      },
+    }, context);
+
+    expect(instrument).toBeCalledTimes(1);
+  });
 });
