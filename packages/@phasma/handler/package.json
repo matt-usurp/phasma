@@ -1,5 +1,5 @@
 {
-  "version": "0.1.1",
+  "version": "0.2.0",
   "name": "@phasma/handler",
   "description": "A function handler implementation that provides middleware capabilities for working with cloud based architecture",
   "repository": {
