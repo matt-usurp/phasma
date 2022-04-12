@@ -14,7 +14,7 @@ export class SomeHandler implements Handler.Implementation<SomeHandlerDefinition
   }
 }
 
-export const target = aws<EventSource>((inbound) => (
+export const target = aws<EventSource>(async (inbound) => (
   inbound
     .handle(new SomeHandler())
 ));

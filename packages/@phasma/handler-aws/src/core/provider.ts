@@ -57,9 +57,9 @@ export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerE
  * An entrypoint function that can be used to wrap the given composition from the builder.
  * This produces a function that is compatible with aws lambda.
  */
-export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(composition: LambdaHandlerComposition<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
+export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(composition: Promise<LambdaHandlerComposition<EventSourceIdentifier>>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
   const fn: LambdaHandlerEntrypoint<EventSourceIdentifier> = async (payload, context) => {
-    return composition({
+    return (await composition)({
       provider: {
         id,
         payload,
@@ -88,7 +88,7 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
   return fn;
 };
 
-export type LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (application: LambdaHandlerBuilder<EventSourceIdentifier>) => LambdaHandlerComposition<EventSourceIdentifier>;
+export type LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (application: LambdaHandlerBuilder<EventSourceIdentifier>) => Promise<LambdaHandlerComposition<EventSourceIdentifier>>;
 
 /**
  * A factory that can create handler compositions using the builder functionality provided.

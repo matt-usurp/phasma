@@ -28,7 +28,7 @@ const context: AwsLambda.Context = {
 describe('entrypoint()', (): void => {
   it('with handler, creates entrypoint, executes as expected', async (): Promise<void> => {
     const handler = jest.fn();
-    const wrapper = entrypoint(handler);
+    const wrapper = entrypoint(Promise.resolve(handler));
 
     expect(handler).toBeCalledTimes(0);
 
@@ -83,7 +83,7 @@ describe('entrypoint()', (): void => {
 describe('factory()', (): void => {
   it('with handler, providing builder composition, creates entrypoint, executes as expected', async (): Promise<void> => {
     const handler = jest.fn();
-    const wrapper = factory<'cloudwatch:log'>(() => handler);
+    const wrapper = factory<'cloudwatch:log'>(async () => handler);
 
     expect(handler).toBeCalledTimes(0);
 

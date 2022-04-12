@@ -23,7 +23,7 @@ export class ExampleHandler implements Handler.Implementation<ExampleHandlerDefi
   }
 }
 
-export const target = aws<EventSource>((inbound) => (
+export const target = aws<EventSource>(async (inbound) => (
   inbound
     .use(new HttpTransformerMiddleware())
     .use(new HttpBodyTransformerMiddleware(json))
