@@ -4,10 +4,17 @@ import { Handler as CoreHandler, Middleware as CoreMiddleware } from '@phasma/ha
 import * as context from './component/context';
 import * as event from './component/event';
 import * as handler from './component/handler';
+import * as provider from './component/provider';
 
 export namespace Event {
   export import Source = event.LambdaHandlerEventSourceIdentifierVerifier;
   export import Result = event.LambdaHandlerEventSourceResultFromIdentifier;
+}
+
+export namespace Provider {
+  export import Base = provider.LambdaHandlerProvider;
+
+  export import WithEventSource = provider.LambdaHandlerProviderFromEventSourceIdentifier;
 }
 
 export namespace Handler {
