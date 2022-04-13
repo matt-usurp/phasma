@@ -4,7 +4,6 @@ import type { Event, Response } from '../../index';
 import { result } from '../../response';
 
 export type HttpResponseLambdaProxy = Event.ResultRaw<'apigw:proxy:v2'>;
-export type HttpResponseLambdaProxyResult = Response.Unwrapped<HttpResponseLambdaProxy>;
 
 export type HttpEncodedTransport = HttpResponseTransport<number, string>;
 
@@ -25,7 +24,7 @@ export class HttpTransformerMiddleware<R extends HttpEncodedTransport> implement
     const value = await next(context);
 
     if (value.type === 'response:http') {
-      return result<HttpResponseLambdaProxyResult>({
+      return result<Response.Unwrapped<HttpResponseLambdaProxy>>({
         statusCode: value.value.status,
         headers: value.value.headers ?? {},
         body: value.value.body,

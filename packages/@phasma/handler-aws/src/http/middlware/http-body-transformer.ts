@@ -26,17 +26,17 @@ export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> im
   ) {}
 
   public async invoke({ context, next }: Middleware.Fn.Parameters<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpTransformerMiddlewareDefinition<R>> {
-    const result = await next(context);
+    const value = await next(context);
 
-    if (result.type === 'response:http') {
-      const value = unwrap(result);
-      const encoded = this.encoder(value.body);
+    if (value.type === 'response:http') {
+      const transport = unwrap(value);
+      const encoded = this.encoder(transport.body);
 
       return http<HttpEncodedTransport>({
-        status: value.status,
+        status: transport.status,
 
         headers: {
-          ...ensure(value.headers),
+          ...ensure(transport.headers),
 
           'content-type': 'application/json',
           'content-length': encoded.value.length,
@@ -46,6 +46,6 @@ export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> im
       });
     }
 
-    return result;
+    return value;
   }
 }
