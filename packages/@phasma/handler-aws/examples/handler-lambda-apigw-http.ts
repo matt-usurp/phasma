@@ -1,8 +1,8 @@
+import { HttpBodyTransformerMiddleware } from '@phasma/handler-aws/src/http/middlware/http-body-transformer';
+import { HttpTransformerMiddleware } from '@phasma/handler-aws/src/http/middlware/http-transformer';
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import { json } from '@phasma/handler/src/http/body';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
-import { HttpBodyTransformerMiddleware } from '../src/http/middlware/http-body-transformer';
-import { HttpTransformerMiddleware } from '../src/http/middlware/http-transformer';
 
 export type EventSource = Event.Source<'apigw:proxy:v2'>;
 
