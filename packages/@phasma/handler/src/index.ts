@@ -4,6 +4,10 @@ import * as handler from './component/handler';
 import * as middleware from './component/middleware';
 import * as response from './component/response';
 
+export namespace Response {
+  export import Unwrapped = response.HandlerResponseUnwrapped;
+}
+
 export namespace Handler {
   export import Definition = handler.HandlerDefinition;
   export import Implementation = handler.HandlerImplementationWithHandleFunction;

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export { entrypoint as awse, factory as aws, id } from './core/provider';
-import { Handler as CoreHandler, Middleware as CoreMiddleware } from '@phasma/handler/src/index';
+import { Handler as CoreHandler, Middleware as CoreMiddleware, Response as CoreResponse } from '@phasma/handler/src/index';
 import * as context from './component/context';
 import * as event from './component/event';
 import * as handler from './component/handler';
@@ -15,6 +15,10 @@ export namespace Provider {
   export import Base = provider.LambdaHandlerProvider;
 
   export import WithEventSource = provider.LambdaHandlerProviderFromEventSourceIdentifier;
+}
+
+export namespace Response {
+  export import Unwrapped = CoreResponse.Unwrapped;
 }
 
 export namespace Handler {
