@@ -1,9 +1,10 @@
 import type { Middleware } from '@phasma/handler/src';
 import type { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
-import { create } from '@phasma/handler/src/response';
-import type { LambdaHandlerEventSourceFromIdentifier } from '../../component/event';
+import type { Event, Response } from '../../index';
+import { result } from '../../response';
 
-export type HttpResponseLambdaProxy = LambdaHandlerEventSourceFromIdentifier<'apigw:proxy:v2'>['EventSourceResponse'];
+export type HttpResponseLambdaProxy = Event.ResultRaw<'apigw:proxy:v2'>;
+export type HttpResponseLambdaProxyResult = Response.Unwrapped<HttpResponseLambdaProxy>;
 
 export type HttpEncodedTransport = HttpResponseTransport<number, string>;
 
@@ -21,16 +22,16 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpEncodedTransport> 
 
 export class HttpTransformerMiddleware<R extends HttpEncodedTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
   public async invoke({ context, next }: Middleware.Fn.Parameters<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpTransformerMiddlewareDefinition<R>> {
-    const result = await next(context);
+    const value = await next(context);
 
-    if (result.type === 'response:http') {
-      return create<HttpResponseLambdaProxy>('response:aws:result', {
-        statusCode: result.value.status,
-        headers: result.value.headers ?? {},
-        body: result.value.body,
+    if (value.type === 'response:http') {
+      return result<HttpResponseLambdaProxyResult>({
+        statusCode: value.value.status,
+        headers: value.value.headers ?? {},
+        body: value.value.body,
       });
     }
 
-    return result;
+    return value;
   }
 }

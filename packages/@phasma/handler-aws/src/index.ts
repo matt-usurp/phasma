@@ -8,7 +8,11 @@ import * as provider from './component/provider';
 
 export namespace Event {
   export import Source = event.LambdaHandlerEventSourceIdentifierVerifier;
+
+  export import Payload = event.LambdaHandlerEventSourcePayloadFromIdentifier;
+
   export import Result = event.LambdaHandlerEventSourceResultFromIdentifier;
+  export import ResultRaw = event.LambdaHandlerEventSourceResponseFromIdentifier;
 }
 
 export namespace Provider {

@@ -1,10 +1,9 @@
 import { Grok, never } from '@matt-usurp/grok';
 import type { HandlerComposition, HandlerEntrypoint, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
-import { HandlerResponseUnwrapped } from '@phasma/handler/src/component/response';
 import { HandlerBuilder } from '@phasma/handler/src/core/builder';
 import type { Context as AwsLambdaFunctionContext } from 'aws-lambda';
 import type { LambdaHandlerContextBase } from '../component/context';
-import type { LambdaHandlerEventSourceFromIdentifier, LambdaHandlerEventSourceIdentifiers } from '../component/event';
+import type { LambdaHandlerEventSourceIdentifiers, LambdaHandlerEventSourcePayloadFromIdentifier, LambdaHandlerEventSourceResponseFromIdentifier, LambdaHandlerEventSourceResultFromIdentifier } from '../component/event';
 import type { LambdaHandlerProviderFromEventSourceIdentifier, LambdaHandlerProviderIdentifier } from '../component/provider';
 import { unwrap } from '../response';
 
@@ -13,7 +12,7 @@ export type LambdaHandlerBuilder<EventSourceIdentifier extends LambdaHandlerEven
   HandlerBuilder<
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     LambdaHandlerContextBase,
-    LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']
+    LambdaHandlerEventSourceResponseFromIdentifier<EventSourceIdentifier>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -24,7 +23,7 @@ export type LambdaHandlerComposition<EventSourceIdentifier extends LambdaHandler
     HandlerImplementationWithHandleFunction<Grok.Constraint.Anything>,
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     LambdaHandlerContextBase,
-    LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']
+    LambdaHandlerEventSourceResponseFromIdentifier<EventSourceIdentifier>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -38,7 +37,7 @@ export const id: LambdaHandlerProviderIdentifier = 'provider:aws';
  * Arguments provided to an entrypoint function via aws lambda.
  */
 export type LambdaHandlerEntrypointArguments<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = [
-  payload: LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourcePayload'],
+  payload: LambdaHandlerEventSourcePayloadFromIdentifier<EventSourceIdentifier>,
   context: AwsLambdaFunctionContext,
 ];
 
@@ -50,7 +49,7 @@ export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerE
   HandlerEntrypoint<
     LambdaHandlerComposition<EventSourceIdentifier>,
     LambdaHandlerEntrypointArguments<EventSourceIdentifier>,
-    Promise<HandlerResponseUnwrapped<LambdaHandlerEventSourceFromIdentifier<EventSourceIdentifier>['EventSourceResponse']>>
+    Promise<LambdaHandlerEventSourceResultFromIdentifier<EventSourceIdentifier>>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
