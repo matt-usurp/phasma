@@ -1,12 +1,12 @@
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import { nothing } from '@phasma/handler/src/response';
 
-export type EventSource = Event.Source<'sqs'>;
+type EventSourceIdentifier = Event.Source<'sqs'>;
 
-export type SomeHandlerDefinition = Handler.Definition<EventSource>;
+type Definition = Handler.Definition<EventSourceIdentifier>;
 
-export class SomeHandler implements Handler.Implementation<SomeHandlerDefinition> {
-  public async handle({ provider }: Handler.Fn.Parameters<SomeHandlerDefinition>): Handler.Fn.Response<SomeHandlerDefinition> {
+export class SomeHandler implements Handler.Implementation<Definition> {
+  public async handle({ provider }: Handler.Fn.Parameters<Definition>): Handler.Fn.Response<Definition> {
     provider.id; // "provider:aws"
     provider.payload.Records; // SQSRecord[]
 
@@ -14,8 +14,8 @@ export class SomeHandler implements Handler.Implementation<SomeHandlerDefinition
   }
 }
 
-export const target = aws<EventSource>(async (inbound) => (
-  inbound
+export const target = aws<EventSourceIdentifier>(async (application) => (
+  application
     .handle(new SomeHandler())
 ));
 

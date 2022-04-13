@@ -1,11 +1,11 @@
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 
-export type EventSource = Event.Source<'apigw:proxy:v2'>;
+type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
 
-export type SomeHandlerDefinition = Handler.Definition<EventSource>;
+type Definition = Handler.Definition<EventSourceIdentifier>;
 
-export class SomeHandler implements Handler.Implementation<SomeHandlerDefinition> {
-  public async handle({ provider, context }: Handler.Fn.Parameters<SomeHandlerDefinition>): Handler.Fn.Response<SomeHandlerDefinition> {
+export class SomeHandler implements Handler.Implementation<Definition> {
+  public async handle({ provider, context }: Handler.Fn.Parameters<Definition>): Handler.Fn.Response<Definition> {
     provider.id;
     provider.payload.headers;
 
@@ -15,8 +15,8 @@ export class SomeHandler implements Handler.Implementation<SomeHandlerDefinition
   }
 }
 
-export const target = aws<EventSource>(async (inbound) => (
-  inbound
+export const target = aws<EventSourceIdentifier>(async (application) => (
+  application
     .handle(new SomeHandler())
 ));
 
