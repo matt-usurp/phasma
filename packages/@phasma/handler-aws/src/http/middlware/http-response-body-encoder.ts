@@ -1,9 +1,9 @@
 import type { Grok } from '@matt-usurp/grok';
-import type { Middleware } from '@phasma/handler-aws/src/index';
 import { HttpBodyEncoder, json } from '@phasma/handler/src/http/body';
 import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { unwrap } from '@phasma/handler/src/response';
+import type { Middleware } from '../../index';
 import type { HttpResponseEncodedTransport } from './http-response-transformer';
 
 export type HttpBodyObjectTransport = HttpResponseTransport<number, Grok.Constraint.Anything>;

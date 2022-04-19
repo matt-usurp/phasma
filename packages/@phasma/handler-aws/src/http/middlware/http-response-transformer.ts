@@ -1,5 +1,5 @@
-import type { Middleware } from '@phasma/handler/src';
 import type { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
+import type { Middleware } from '@phasma/handler/src/index';
 import type { Event, Response } from '../../index';
 import { result } from '../../response';
 
