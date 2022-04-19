@@ -1,10 +1,10 @@
-import { HttpBodyTransformerResult, json } from './body';
+import { HttpBodyEncoderResult, json } from './body';
 
 describe('json()', (): void => {
   it('with empty value, undefined, return empty string', (): void => {
     expect(
       json(undefined),
-    ).toStrictEqual<HttpBodyTransformerResult>({
+    ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '',
     });
@@ -13,7 +13,7 @@ describe('json()', (): void => {
   it('with empty value, null, return empty string', (): void => {
     expect(
       json(null),
-    ).toStrictEqual<HttpBodyTransformerResult>({
+    ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '',
     });
@@ -22,7 +22,7 @@ describe('json()', (): void => {
   it('with empty value, empty string, return empty string', (): void => {
     expect(
       json(''),
-    ).toStrictEqual<HttpBodyTransformerResult>({
+    ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '',
     });
@@ -33,7 +33,7 @@ describe('json()', (): void => {
       json({
         name: 'jane',
       }),
-    ).toStrictEqual<HttpBodyTransformerResult>({
+    ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '{"name":"jane"}',
     });
