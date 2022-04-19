@@ -15,6 +15,8 @@ export type HttpResponseTransport<
 
 export type HttpResponseTransportKind = HttpResponseTransport<number, Grok.Constraint.Anything, Grok.Constraint.Anything>;
 
+export type HttpResponseEncodedTransport = HttpResponseTransport<number, string>;
+
 export type HttpResponseIdentifer = HandlerResponseIdentifier<'http'>;
 export type HttpResponse<M extends HttpResponseTransportKind = HttpResponseTransportKind> = HandlerResponse<HttpResponseIdentifer, M>;
 
