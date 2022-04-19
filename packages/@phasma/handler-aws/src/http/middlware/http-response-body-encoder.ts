@@ -20,12 +20,12 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTranspor
 /* eslint-enable @typescript-eslint/indent */
 );
 
-export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
+export class HttpResponseBodyEncoderMiddleware<R extends HttpBodyObjectTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
   /**
    * Create a HTTP body transformer with the JSON encoding.
    */
-  public static json<R extends HttpBodyObjectTransport>(): HttpBodyTransformerMiddleware<R> {
-    return new HttpBodyTransformerMiddleware(json);
+  public static json<R extends HttpBodyObjectTransport>(): HttpResponseBodyEncoderMiddleware<R> {
+    return new HttpResponseBodyEncoderMiddleware(json);
   }
 
   public constructor(

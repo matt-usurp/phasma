@@ -1,16 +1,16 @@
 import type { HandlerResponse } from '@phasma/handler/src/component/response';
 import * as body from '@phasma/handler/src/http/body';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
-import { HttpBodyObjectTransport, HttpBodyTransformerMiddleware } from './http-body-transformer';
+import { HttpBodyObjectTransport, HttpResponseBodyEncoderMiddleware } from './http-response-body-encoder';
 
 type TestJsonResponseTransport = {
   song: string;
   artist: string;
 };
 
-describe('HttpBodyTransformerMiddleware', (): void => {
+describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
   it('using static factory, json, returns middleware with json encoding', (): void => {
-    const middleware = HttpBodyTransformerMiddleware.json();
+    const middleware = HttpResponseBodyEncoderMiddleware.json();
 
     expect(middleware.encoder).toStrictEqual(body.json);
   });
@@ -28,7 +28,7 @@ describe('HttpBodyTransformerMiddleware', (): void => {
       });
     });
 
-    const json = new HttpBodyTransformerMiddleware(body.json);
+    const json = new HttpResponseBodyEncoderMiddleware(body.json);
 
     expect(
       await json.invoke({
@@ -70,7 +70,7 @@ describe('HttpBodyTransformerMiddleware', (): void => {
       };
     });
 
-    const json = new HttpBodyTransformerMiddleware(body.json);
+    const json = new HttpResponseBodyEncoderMiddleware(body.json);
 
     expect(
       await json.invoke({
