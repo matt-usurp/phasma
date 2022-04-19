@@ -1,10 +1,10 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { Middleware } from '@phasma/handler-aws/src/index';
-import { HttpBodyTransformer } from '@phasma/handler/src/http/body';
+import { HttpBodyEncoder, json } from '@phasma/handler/src/http/body';
 import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { unwrap } from '@phasma/handler/src/response';
-import type { HttpEncodedTransport } from './http-transformer';
+import { HttpEncodedTransport } from './http-transformer';
 
 export type HttpBodyObjectTransport = HttpResponseTransport<number, Grok.Constraint.Anything>;
 
@@ -21,8 +21,15 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTranspor
 );
 
 export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
+  /**
+   * Create a HTTP body transformer with the JSON encoding.
+   */
+  public static json<R extends HttpBodyObjectTransport>(): HttpBodyTransformerMiddleware<R> {
+    return new HttpBodyTransformerMiddleware(json);
+  }
+
   public constructor(
-    public readonly encoder: HttpBodyTransformer,
+    public readonly encoder: HttpBodyEncoder,
   ) {}
 
   public async invoke({ context, next }: Middleware.Fn.Parameters<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpTransformerMiddlewareDefinition<R>> {
