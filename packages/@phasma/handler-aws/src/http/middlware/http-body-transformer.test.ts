@@ -3,14 +3,18 @@ import * as body from '@phasma/handler/src/http/body';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { HttpBodyObjectTransport, HttpBodyTransformerMiddleware } from './http-body-transformer';
 
-const json = new HttpBodyTransformerMiddleware(body.json);
-
 type TestJsonResponseTransport = {
   song: string;
   artist: string;
 };
 
 describe('HttpBodyTransformerMiddleware', (): void => {
+  it('using static factory, json, returns middleware with json encoding', (): void => {
+    const middleware = HttpBodyTransformerMiddleware.json();
+
+    expect(middleware.encoder).toStrictEqual(body.json);
+  });
+
   it('using json transformer, given object, return json encoded http response', async (): Promise<void> => {
     const next = jest.fn();
 
@@ -23,6 +27,8 @@ describe('HttpBodyTransformerMiddleware', (): void => {
         },
       });
     });
+
+    const json = new HttpBodyTransformerMiddleware(body.json);
 
     expect(
       await json.invoke({
@@ -63,6 +69,8 @@ describe('HttpBodyTransformerMiddleware', (): void => {
         value: 1000,
       };
     });
+
+    const json = new HttpBodyTransformerMiddleware(body.json);
 
     expect(
       await json.invoke({
