@@ -4,7 +4,7 @@ import { HttpBodyEncoder, json } from '@phasma/handler/src/http/body';
 import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { unwrap } from '@phasma/handler/src/response';
-import { HttpEncodedTransport } from './http-transformer';
+import type { HttpResponseEncodedTransport } from './http-response-transformer';
 
 export type HttpBodyObjectTransport = HttpResponseTransport<number, Grok.Constraint.Anything>;
 
@@ -15,7 +15,7 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTranspor
     Middleware.Definition.SomeContextInbound,
     Middleware.Definition.SomeContextOutbound,
     HttpResponse<R>,
-    HttpResponse<HttpEncodedTransport>
+    HttpResponse<HttpResponseEncodedTransport>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -39,7 +39,7 @@ export class HttpBodyTransformerMiddleware<R extends HttpBodyObjectTransport> im
       const transport = unwrap(value);
       const encoded = this.encoder(transport.body);
 
-      return http<HttpEncodedTransport>({
+      return http<HttpResponseEncodedTransport>({
         status: transport.status,
 
         headers: {

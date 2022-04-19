@@ -1,8 +1,8 @@
 import type { HandlerResponse } from '@phasma/handler/src/component/response';
 import { http, HttpResponse } from '@phasma/handler/src/http/response';
-import { HttpResponseLambdaProxy, HttpTransformerMiddleware } from './http-transformer';
+import { HttpResponseLambdaProxy, HttpResponseTransformerMiddleware } from './http-response-transformer';
 
-const middleware = new HttpTransformerMiddleware();
+const middleware = new HttpResponseTransformerMiddleware();
 
 describe('HttpTransformerMiddleware', (): void => {
   it('with http response, returns lambda response response', async (): Promise<void> => {

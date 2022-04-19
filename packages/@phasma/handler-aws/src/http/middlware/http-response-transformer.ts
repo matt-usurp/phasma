@@ -5,9 +5,9 @@ import { result } from '../../response';
 
 export type HttpResponseLambdaProxy = Event.ResultRaw<'apigw:proxy:v2'>;
 
-export type HttpEncodedTransport = HttpResponseTransport<number, string>;
+export type HttpResponseEncodedTransport = HttpResponseTransport<number, string>;
 
-export type HttpTransformerMiddlewareDefinition<R extends HttpEncodedTransport> = (
+export type HttpResponseTransformerMiddlewareDefinition<R extends HttpResponseEncodedTransport> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Middleware.Definition.SomeProvider,
@@ -19,8 +19,8 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpEncodedTransport> 
 /* eslint-enable @typescript-eslint/indent */
 );
 
-export class HttpTransformerMiddleware<R extends HttpEncodedTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
-  public async invoke({ context, next }: Middleware.Fn.Parameters<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpTransformerMiddlewareDefinition<R>> {
+export class HttpResponseTransformerMiddleware<R extends HttpResponseEncodedTransport> implements Middleware.Implementation<HttpResponseTransformerMiddlewareDefinition<R>> {
+  public async invoke({ context, next }: Middleware.Fn.Parameters<HttpResponseTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpResponseTransformerMiddlewareDefinition<R>> {
     const value = await next(context);
 
     if (value.type === 'response:http') {
