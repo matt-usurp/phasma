@@ -2,9 +2,7 @@ import type { HandlerResponse } from '@phasma/handler/src/component/response';
 import { http, HttpResponse } from '@phasma/handler/src/http/response';
 import { HttpResponseLambdaProxy, HttpResponseTransformerMiddleware } from './http-response-transformer';
 
-const middleware = new HttpResponseTransformerMiddleware();
-
-describe('HttpTransformerMiddleware', (): void => {
+describe(HttpResponseTransformerMiddleware.name, (): void => {
   it('with http response, returns lambda response response', async (): Promise<void> => {
     const next = jest.fn();
 
@@ -14,6 +12,8 @@ describe('HttpTransformerMiddleware', (): void => {
         body: undefined,
       });
     });
+
+    const middleware = new HttpResponseTransformerMiddleware();
 
     expect(
       await middleware.invoke({
@@ -46,6 +46,8 @@ describe('HttpTransformerMiddleware', (): void => {
         value: 1000,
       };
     });
+
+    const middleware = new HttpResponseTransformerMiddleware();
 
     expect(
       await middleware.invoke({
