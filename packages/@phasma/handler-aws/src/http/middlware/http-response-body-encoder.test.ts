@@ -16,6 +16,8 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
   });
 
   it('using json transformer, given object, return json encoded http response', async (): Promise<void> => {
+    const middleware = new HttpResponseBodyEncoderMiddleware(body.json);
+
     const next = jest.fn();
 
     next.mockImplementationOnce(async (): Promise<HttpResponse<HttpResponseTransport<200, TestJsonResponseTransport>>> => {
@@ -28,10 +30,8 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
       });
     });
 
-    const json = new HttpResponseBodyEncoderMiddleware(body.json);
-
     expect(
-      await json.invoke({
+      await middleware.invoke({
         // Provider is ignore for this middleware
         provider: 'given-provider',
 
@@ -61,6 +61,8 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
   });
 
   it('with unknown response, returns unknown response', async (): Promise<void> => {
+    const middleware = new HttpResponseBodyEncoderMiddleware(body.json);
+
     const next = jest.fn();
 
     next.mockImplementationOnce(async (): Promise<HandlerResponse<'response:unknown', 1000>> => {
@@ -70,10 +72,8 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
       };
     });
 
-    const json = new HttpResponseBodyEncoderMiddleware(body.json);
-
     expect(
-      await json.invoke({
+      await middleware.invoke({
         // Provider is ignore for this middleware
         provider: 'given-provider',
 

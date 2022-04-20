@@ -4,6 +4,8 @@ import { HttpResponseLambdaProxy, HttpResponseTransformerMiddleware } from './ht
 
 describe(HttpResponseTransformerMiddleware.name, (): void => {
   it('with http response, returns lambda response response', async (): Promise<void> => {
+    const middleware = new HttpResponseTransformerMiddleware();
+
     const next = jest.fn();
 
     next.mockImplementationOnce(async (): Promise<HttpResponse> => {
@@ -12,8 +14,6 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
         body: undefined,
       });
     });
-
-    const middleware = new HttpResponseTransformerMiddleware();
 
     expect(
       await middleware.invoke({
@@ -38,6 +38,8 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
   });
 
   it('with unknown response, returns unknown response', async (): Promise<void> => {
+    const middleware = new HttpResponseTransformerMiddleware();
+
     const next = jest.fn();
 
     next.mockImplementationOnce(async (): Promise<HandlerResponse<'response:unknown', 1000>> => {
@@ -46,8 +48,6 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
         value: 1000,
       };
     });
-
-    const middleware = new HttpResponseTransformerMiddleware();
 
     expect(
       await middleware.invoke({
