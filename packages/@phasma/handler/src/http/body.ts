@@ -4,6 +4,7 @@ export type HttpBodyEncoderResult = {
 };
 
 export type HttpBodyEncoder = (value: unknown) => HttpBodyEncoderResult;
+export type HttpBodyDecoder<T> = (value: string) => T | undefined;
 
 /**
  * Helper function to encode json values for use with http responses.
