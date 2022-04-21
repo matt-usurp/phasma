@@ -1,11 +1,12 @@
 import { z, ZodIssue } from 'zod';
-import { HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess, zod } from './validator';
+import type { HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '../validator';
+import { validate } from './zod';
 
-describe('zod()', (): void => {
+describe('validate()', (): void => {
   it('with schema, simple string, valid, return string', (): void => {
     const schema = z.string();
 
-    const parsed = zod(schema)('something');
+    const parsed = validate(schema)('something');
 
     expect(parsed).toStrictEqual<HttpValidatorFunctionResultSuccess<string>>({
       success: true,
@@ -19,7 +20,7 @@ describe('zod()', (): void => {
       age: z.number(),
     });
 
-    const parsed = zod(schema)({
+    const parsed = validate(schema)({
       name: 'foobar',
       age: 300,
     });
@@ -36,7 +37,7 @@ describe('zod()', (): void => {
   it('with schema, string, given number, return error', (): void => {
     const schema = z.string();
 
-    const parsed = zod(schema)(123 as unknown as string);
+    const parsed = validate(schema)(123 as unknown as string);
 
     expect(parsed).toStrictEqual<HttpValidatorFunctionResultFailure<ZodIssue[]>>({
       success: false,
@@ -54,7 +55,7 @@ describe('zod()', (): void => {
       age: z.number().max(30),
     });
 
-    const parsed = zod(schema)({
+    const parsed = validate(schema)({
       name: '',
       age: 31,
     });
