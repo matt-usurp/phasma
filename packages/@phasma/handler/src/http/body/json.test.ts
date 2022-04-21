@@ -1,9 +1,10 @@
-import { HttpBodyEncoderResult, json } from './body';
+import type { HttpBodyEncoderResult } from '../body';
+import { decode, encode } from './json';
 
-describe('json()', (): void => {
+describe('encode()', (): void => {
   it('with empty value, undefined, return empty string', (): void => {
     expect(
-      json(undefined),
+      encode(undefined),
     ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '',
@@ -12,7 +13,7 @@ describe('json()', (): void => {
 
   it('with empty value, null, return empty string', (): void => {
     expect(
-      json(null),
+      encode(null),
     ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '',
@@ -21,7 +22,7 @@ describe('json()', (): void => {
 
   it('with empty value, empty string, return empty string', (): void => {
     expect(
-      json(''),
+      encode(''),
     ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '',
@@ -30,12 +31,34 @@ describe('json()', (): void => {
 
   it('with value, return value as json encoded string', (): void => {
     expect(
-      json({
+      encode({
         name: 'jane',
       }),
     ).toStrictEqual<HttpBodyEncoderResult>({
       mime: 'application/json',
       value: '{"name":"jane"}',
+    });
+  });
+});
+
+describe('decode()', (): void => {
+  it('with string, empty, return undefined', (): void => {
+    expect(
+      decode(''),
+    ).toStrictEqual(undefined);
+  });
+
+  it('with string, malformed, return undefined', (): void => {
+    expect(
+      decode('{;'),
+    ).toStrictEqual(undefined);
+  });
+
+  it('with string, json, return decoded object', (): void => {
+    expect(
+      decode('{"name":"foo"}'),
+    ).toStrictEqual({
+      name: 'foo',
     });
   });
 });

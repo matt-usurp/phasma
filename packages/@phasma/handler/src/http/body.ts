@@ -5,21 +5,3 @@ export type HttpBodyEncoderResult = {
 
 export type HttpBodyEncoder = (value: unknown) => HttpBodyEncoderResult;
 export type HttpBodyDecoder<T> = (value: string) => T | undefined;
-
-/**
- * Helper function to encode json values for use with http responses.
- * This will ignore all values that could mean "empty response".
- */
-export const json: HttpBodyEncoder = (value) => {
-  if (value === undefined || value === null || value === '') {
-    return {
-      mime: 'application/json',
-      value: '',
-    };
-  }
-
-  return {
-    mime: 'application/json',
-    value: JSON.stringify(value),
-  };
-};
