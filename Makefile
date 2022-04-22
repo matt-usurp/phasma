@@ -88,9 +88,6 @@ build.compile.clean:
 	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.proof.js" -delete
 	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.proof.d.ts" -delete
 
-	find ./${DIR_BUILD_WORKSPACE} -type f -name "examples/*" -delete
-	find ./${DIR_BUILD_WORKSPACE} -type d -name "examples" -delete
-
 build.compile.verify:
 	test -d ./${DIR_BUILD_WORKSPACE}
 	test -d ./${DIR_BUILD_WORKSPACE}/@phasma/handler
