@@ -1,7 +1,7 @@
-import { HttpBodyTransformerMiddleware } from '@phasma/handler-aws/src/http/middlware/http-body-transformer';
-import { HttpTransformerMiddleware } from '@phasma/handler-aws/src/http/middlware/http-transformer';
+import { HttpResponseBodyEncoderMiddleware } from '@phasma/handler-aws/src/http/middlware/http-response-body-encoder';
+import { HttpResponseTransformerMiddleware } from '@phasma/handler-aws/src/http/middlware/http-response-transformer';
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
-import { json } from '@phasma/handler/src/http/body';
+import * as json from '@phasma/handler/src/http/body/json';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 
 type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
@@ -25,8 +25,8 @@ export class ExampleHandler implements Handler.Implementation<Definition> {
 
 export const target = aws<EventSourceIdentifier>(async (application) => (
   application
-    .use(new HttpTransformerMiddleware())
-    .use(new HttpBodyTransformerMiddleware(json))
+    .use(HttpResponseTransformerMiddleware.create())
+    .use(HttpResponseBodyEncoderMiddleware.create(json.encode))
     .handle(new ExampleHandler())
 ));
 
