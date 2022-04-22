@@ -1,5 +1,6 @@
 import type { Grok } from '@matt-usurp/grok';
-import { HttpBodyEncoder, json } from '@phasma/handler/src/http/body';
+import type { HttpBodyEncoder } from '@phasma/handler/src/http/body';
+import { encode as json } from '@phasma/handler/src/http/body/json';
 import { ensure } from '@phasma/handler/src/http/header';
 import { http, HttpResponse, HttpResponseEncodedTransport, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import { unwrap } from '@phasma/handler/src/response';
@@ -20,14 +21,15 @@ export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTranspor
 );
 
 export class HttpResponseBodyEncoderMiddleware<R extends HttpBodyObjectTransport> implements Middleware.Implementation<HttpTransformerMiddlewareDefinition<R>> {
-  /**
-   * Create a HTTP body transformer with the JSON encoding.
-   */
   public static json<R extends HttpBodyObjectTransport>(): HttpResponseBodyEncoderMiddleware<R> {
     return new HttpResponseBodyEncoderMiddleware(json);
   }
 
-  public constructor(
+  public static create<R extends HttpBodyObjectTransport>(encoder: HttpBodyEncoder): HttpResponseBodyEncoderMiddleware<R> {
+    return new HttpResponseBodyEncoderMiddleware(encoder);
+  }
+
+  protected constructor(
     public readonly encoder: HttpBodyEncoder,
   ) {}
 

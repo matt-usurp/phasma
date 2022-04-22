@@ -20,6 +20,13 @@ export type HttpResponseTransformerMiddlewareDefinition<R extends HttpResponseEn
 );
 
 export class HttpResponseTransformerMiddleware<R extends HttpResponseEncodedTransport> implements Middleware.Implementation<HttpResponseTransformerMiddlewareDefinition<R>> {
+  public static create<R extends HttpResponseEncodedTransport>(): HttpResponseTransformerMiddleware<R> {
+    return new HttpResponseTransformerMiddleware();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  protected constructor() {}
+
   public async invoke({ context, next }: Middleware.Fn.Parameters<HttpResponseTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpResponseTransformerMiddlewareDefinition<R>> {
     const value = await next(context);
 
