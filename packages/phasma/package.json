@@ -25,5 +25,11 @@
       "name": "Matthew Rose",
       "email": "matt.usurp@gmail.com"
     }
-  ]
+  ],
+  "dependencies": {
+    "@matt-usurp/grok": "^0.6.1"
+  },
+  "peerDependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
 }

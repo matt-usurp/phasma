@@ -26,6 +26,9 @@
 
     "keyofStringsOnly": true,
 
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+
     "baseUrl": "packages",
     "paths": {
       "@phasma/handler/*": ["handler/*"],
