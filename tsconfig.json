@@ -1,7 +1,11 @@
 {
-  "extends": "@tsconfig/node14/tsconfig.json",
+  "extends": "@tsconfig/node16/tsconfig.json",
 
   "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "es2020",
+    "target": "es2021",
+
     "strict": true,
     "alwaysStrict": false,
 

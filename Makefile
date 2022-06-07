@@ -110,7 +110,9 @@ build.root.install:
 	package.prepare.source \
 	package.prepare.metadata \
 	package.prepare.imports \
-	package.preview
+	package.preview \
+	package.publish \
+	package.publish.next
 
 package: \
 	package.assert \
@@ -147,7 +149,10 @@ package.preview:
 	npm publish --dry-run ./${DIR_BUILD_PACKAGE}
 
 package.publish:
-	npm publish --access public ./${DIR_BUILD_PACKAGE}
+	npm publish --access public --tag latest ./${DIR_BUILD_PACKAGE}
+
+package.publish.next:
+	npm publish --access public --tag next ./${DIR_BUILD_PACKAGE}
 
 # --
 # -- Versioning
