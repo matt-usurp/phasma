@@ -28,12 +28,11 @@
     }
   ],
   "dependencies": {
-    "@matt-usurp/grok": "^0.6.1",
-    "@types/aws-lambda": "^8.10.93"
+    "@matt-usurp/grok": "^0.7.1"
   },
   "peerDependencies": {
-    "qs": "^6.10.3",
-    "zod": "^3.14.4"
+    "qs": "^6.10.5",
+    "zod": "^3.17.3"
   },
   "devDependencies": {
     "@types/qs": "^6.9.7"
