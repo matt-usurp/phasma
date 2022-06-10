@@ -1,6 +1,7 @@
 {
   "version": "0.1.0",
   "name": "phasma",
+  "type": "commonjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/matt-usurp/phasma.git",
@@ -10,7 +11,6 @@
   "bugs": {
     "url": "https://github.com/matt-usurp/phasma/issues"
   },
-  "type": "commonjs",
   "engines": {
     "node": "^12.20.0 || ^14.13.1 || >=16.0.0",
     "npm": ">=8.1.0"
