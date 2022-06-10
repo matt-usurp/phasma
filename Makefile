@@ -82,19 +82,19 @@ build.compile:
 	npx tsc -p build/tsconfig.json
 
 build.compile.clean:
-	rm -rf ./${DIR_BUILD_WORKSPACE}/index.js
-	rm -rf ./${DIR_BUILD_WORKSPACE}/index.d.ts
+	rm -rf ./${DIR_BUILD_WORKSPACE}/packages/index.js
+	rm -rf ./${DIR_BUILD_WORKSPACE}/packages/index.d.ts
 
-	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.test.js" -delete
-	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.test.d.ts" -delete
+	find ./${DIR_BUILD_WORKSPACE}/packages -type f -name "*.test.js" -delete
+	find ./${DIR_BUILD_WORKSPACE}/packages -type f -name "*.test.d.ts" -delete
 
-	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.proof.js" -delete
-	find ./${DIR_BUILD_WORKSPACE} -type f -name "*.proof.d.ts" -delete
+	find ./${DIR_BUILD_WORKSPACE}/packages -type f -name "*.proof.js" -delete
+	find ./${DIR_BUILD_WORKSPACE}/packages -type f -name "*.proof.d.ts" -delete
 
 build.compile.verify:
-	test -d ./${DIR_BUILD_WORKSPACE}
-	test -d ./${DIR_BUILD_WORKSPACE}/@phasma/handler
-	test -d ./${DIR_BUILD_WORKSPACE}/@phasma/handler-aws
+	test -d ./${DIR_BUILD_WORKSPACE}/packages
+	test -d ./${DIR_BUILD_WORKSPACE}/packages/@phasma/handler
+	test -d ./${DIR_BUILD_WORKSPACE}/packages/@phasma/handler-aws
 
 # This is an isolated target from main process that needs running manually in some cases.
 # Will prepare the build directory by installing dependencies.
@@ -126,7 +126,7 @@ package: \
 
 package.assert:
 	test ! -z "${PACKAGE_NAME}"
-	test -d ./${DIR_BUILD_WORKSPACE}/${PACKAGE_NAME}
+	test -d ./${DIR_BUILD_WORKSPACE}/packages/${PACKAGE_NAME}
 
 package.clean:
 	rm -rf ./${DIR_BUILD_PACKAGE}/*
@@ -135,7 +135,7 @@ package.prepare:
 	mkdir -p ./${DIR_BUILD_PACKAGE}
 
 package.prepare.source:
-	cp -R ./${DIR_BUILD_WORKSPACE}/${PACKAGE_NAME}/src/* ./${DIR_BUILD_PACKAGE}
+	cp -R ./${DIR_BUILD_WORKSPACE}/packages/${PACKAGE_NAME}/src/* ./${DIR_BUILD_PACKAGE}
 
 package.prepare.metadata:
 	cp ./${DIR_PACKAGES}/${PACKAGE_NAME}/package.json ./${DIR_BUILD_PACKAGE}/package.json
