@@ -34,6 +34,10 @@
       "@phasma/handler/*": ["handler/*"],
       "@phasma/handler-aws/*": ["handler-aws/*"],
     },
+
+    "types": [
+      "vitest/globals",
+    ],
   },
 
   "include": [
