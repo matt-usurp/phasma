@@ -13,7 +13,7 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
     it('using json transformer, given object, return json encoded http response', async (): Promise<void> => {
       const middleware = HttpResponseBodyEncoderMiddleware.create(json);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (): Promise<HttpResponse<HttpResponseTransport<200, TestJsonResponseTransport>>> => {
         return http({
@@ -58,7 +58,7 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
     it('with unknown response, returns unknown response', async (): Promise<void> => {
       const middleware = HttpResponseBodyEncoderMiddleware.create(json);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (): Promise<HandlerResponse<'response:unknown', 1000>> => {
         return {

@@ -28,7 +28,7 @@ const context: AwsLambda.Context = {
 
 describe('entrypoint()', (): void => {
   it('with handler, creates entrypoint, executes as expected, returns nothing', async (): Promise<void> => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const wrapper = entrypoint(Promise.resolve(handler));
 
     expect(handler).toBeCalledTimes(0);
@@ -78,7 +78,7 @@ describe('entrypoint()', (): void => {
   });
 
   it('with handler, creates entrypoint, executes as expected, returns result', async (): Promise<void> => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const wrapper = entrypoint(Promise.resolve(handler));
 
     expect(handler).toBeCalledTimes(0);
@@ -132,7 +132,7 @@ describe('entrypoint()', (): void => {
   });
 
   it('with handler, creates entrypoint, executes as expected, returns unexpected result, throws never', async (): Promise<void> => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const wrapper = entrypoint(Promise.resolve(handler));
 
     expect(handler).toBeCalledTimes(0);
@@ -165,7 +165,7 @@ describe('entrypoint()', (): void => {
 
 describe('factory()', (): void => {
   it('with handler, providing builder composition, creates entrypoint, executes as expected', async (): Promise<void> => {
-    const handler = jest.fn();
+    const handler = vi.fn();
     const wrapper = factory<'cloudwatch:log'>(async () => handler);
 
     expect(handler).toBeCalledTimes(0);
@@ -215,7 +215,7 @@ describe('factory()', (): void => {
   });
 
   it('with handler, providing build compisition, composition invoked instantly, only once', async (): Promise<void> => {
-    const instrument = jest.fn();
+    const instrument = vi.fn();
 
     const wrapper = factory<'cloudwatch:log'>(async (application) => {
       instrument();

@@ -42,7 +42,7 @@ describe('validate()', (): void => {
     expect(parsed).toStrictEqual<HttpValidatorFunctionResultFailure<ZodIssue[]>>({
       success: false,
       errors: [
-        expect.objectContaining<Partial<ZodIssue>>({
+        expect.objectContaining({
           code: 'invalid_type',
         }),
       ],
@@ -63,11 +63,11 @@ describe('validate()', (): void => {
     expect(parsed).toStrictEqual<HttpValidatorFunctionResultFailure<ZodIssue[]>>({
       success: false,
       errors: [
-        expect.objectContaining<Partial<ZodIssue>>({
+        expect.objectContaining({
           code: 'too_small',
           path: ['name'],
         }),
-        expect.objectContaining<Partial<ZodIssue>>({
+        expect.objectContaining({
           code: 'too_big',
           path: ['age'],
         }),

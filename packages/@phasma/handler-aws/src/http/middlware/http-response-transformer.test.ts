@@ -7,7 +7,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
     it('with http response, returns lambda response response', async (): Promise<void> => {
       const middleware = HttpResponseTransformerMiddleware.create();
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (): Promise<HttpResponse> => {
         return http({
@@ -38,7 +38,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
     it('with unknown response, returns unknown response', async (): Promise<void> => {
       const middleware = HttpResponseTransformerMiddleware.create();
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (): Promise<HandlerResponse<'response:unknown', 1000>> => {
         return {

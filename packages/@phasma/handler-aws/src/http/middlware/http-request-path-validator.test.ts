@@ -3,7 +3,7 @@ import { fn, partial } from '@matt-usurp/grok/testing';
 import type { HandlerResponseConstraint } from '@phasma/handler/src/component/response';
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
 import { FromType } from '@phasma/handler/src/http/validator/zod';
-import { z, ZodIssue } from 'zod';
+import { z } from 'zod';
 import type { Event } from '../../index';
 import { HttpRequestPathValidatorContext, HttpRequestPathValidatorErrorResponse, HttpRequestPathValidatorMiddleware } from './http-request-path-validator';
 
@@ -14,7 +14,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestPathValidatorMiddleware.create(validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -59,7 +59,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestPathValidatorMiddleware.create(validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -106,7 +106,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestPathValidatorMiddleware.create(validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (context: HttpRequestPathValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
         expect(context.path).toStrictEqual('test-action:validator:success');
@@ -159,7 +159,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -182,7 +182,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
         value: {
           status: 400,
           body: [
-            expect.objectContaining<Partial<ZodIssue>>({
+            expect.objectContaining({
               code: 'invalid_type',
               message: 'Required',
               received: 'undefined',
@@ -208,7 +208,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (context: HttpRequestPathValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
         expect(context.path).toStrictEqual<TestPathMapping>({

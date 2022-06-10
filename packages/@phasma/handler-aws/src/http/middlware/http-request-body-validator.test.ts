@@ -4,7 +4,7 @@ import type { HandlerResponseConstraint } from '@phasma/handler/src/component/re
 import type { HttpBodyDecoder } from '@phasma/handler/src/http/body';
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
 import { FromType } from '@phasma/handler/src/http/validator/zod';
-import { z, ZodIssue } from 'zod';
+import { z } from 'zod';
 import type { Event } from '../../index';
 import { HttpRequestBodyValidatorContext, HttpRequestBodyValidatorErrorResponse, HttpRequestBodyValidatorMiddleware } from './http-request-body-validator';
 
@@ -16,7 +16,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestBodyValidatorMiddleware.create(decoder, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -52,7 +52,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestBodyValidatorMiddleware.create(decoder, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -94,7 +94,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestBodyValidatorMiddleware.create(decoder, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -145,7 +145,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestBodyValidatorMiddleware.create(decoder, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -196,7 +196,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequestBodyValidatorMiddleware.create(decoder, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (context: HttpRequestBodyValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
         expect(context.body).toStrictEqual('test-action:validator:success');
@@ -246,7 +246,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -286,7 +286,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -307,13 +307,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
         value: {
           status: 400,
           body: [
-            expect.objectContaining<Partial<ZodIssue>>({
+            expect.objectContaining({
               code: 'invalid_type',
               message: 'Required',
               received: 'undefined',
               path: ['name'],
             }),
-            expect.objectContaining<Partial<ZodIssue>>({
+            expect.objectContaining({
               code: 'invalid_type',
               message: 'Required',
               received: 'undefined',
@@ -339,7 +339,7 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (context: HttpRequestBodyValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
         expect(context.body).toStrictEqual<TestBodyMapping>({

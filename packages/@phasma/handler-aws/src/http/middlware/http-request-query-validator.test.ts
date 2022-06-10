@@ -4,7 +4,7 @@ import type { HandlerResponseConstraint } from '@phasma/handler/src/component/re
 import type { HttpQueryParser } from '@phasma/handler/src/http/query';
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
-import { z, ZodIssue } from 'zod';
+import { z } from 'zod';
 import type { Event } from '../../index';
 import { HttpRequesQueryValidatorMiddleware, HttpRequestQueryValidatorContext, HttpRequestQueryValidatorErrorResponse } from './http-request-query-validator';
 
@@ -22,7 +22,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequesQueryValidatorMiddleware.create<Grok.Constraint.Anything>(parser, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -64,7 +64,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequesQueryValidatorMiddleware.create<Grok.Constraint.Anything>(parser, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -115,7 +115,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequesQueryValidatorMiddleware.create<Grok.Constraint.Anything>(parser, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -166,7 +166,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       const middleware = HttpRequesQueryValidatorMiddleware.create<Grok.Constraint.Anything>(parser, validator);
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (context: HttpRequestQueryValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
         expect(context.query).toStrictEqual('test-action:validator:success');
@@ -216,7 +216,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -237,13 +237,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
         value: {
           status: 400,
           body: [
-            expect.objectContaining<Partial<ZodIssue>>({
+            expect.objectContaining({
               code: 'invalid_type',
               message: 'Required',
               received: 'undefined',
               path: ['foo'],
             }),
-            expect.objectContaining<Partial<ZodIssue>>({
+            expect.objectContaining({
               code: 'invalid_type',
               message: 'Required',
               received: 'undefined',
@@ -269,7 +269,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       expect(
         await middleware.invoke({
@@ -290,7 +290,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
         value: {
           status: 400,
           body: [
-            expect.objectContaining<Partial<ZodIssue>>({
+            expect.objectContaining({
               code: 'invalid_type',
               message: 'Required',
               received: 'undefined',
@@ -316,7 +316,7 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
         }),
       );
 
-      const next = jest.fn();
+      const next = vi.fn();
 
       next.mockImplementationOnce(async (context: HttpRequestQueryValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
         expect(context.query).toStrictEqual<TestQueryMapping>({
