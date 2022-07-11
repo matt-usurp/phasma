@@ -21,7 +21,11 @@ export default configure({
       exclude: [
         'packages/**/examples',
         'packages/**/*.proof.*',
+        'packages/**/*.test.ts',
+
         'packages/index.ts',
+        'packages/phasma/src/index.ts',
+        'packages/create-phasma/src/index.ts',
       ],
 
       reportsDirectory: 'build/coverage',
