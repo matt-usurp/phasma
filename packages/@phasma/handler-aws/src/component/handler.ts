@@ -1,6 +1,6 @@
+import type { HandlerContextBase, HandlerContextConstraint } from '@phasma/handler/src/component/context';
 import type { HandlerDefinition } from '@phasma/handler/src/component/handler';
-import type { HandlerContextBase, HandlerContextConstraint } from '../../../handler/src/component/context';
-import type { HandlerResponseConstraint } from '../../../handler/src/component/response';
+import type { HandlerResponseConstraint } from '@phasma/handler/src/component/response';
 import type { LambdaHandlerEventSourceIdentifiers, LambdaHandlerEventSourceResponseFromIdentifier } from './event';
 import type { LambdaHandlerProviderFromEventSourceIdentifier } from './provider';
 
