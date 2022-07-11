@@ -26,15 +26,18 @@ export default configure({
         'packages/index.ts',
         'packages/phasma/src/index.ts',
         'packages/create-phasma/src/index.ts',
+
+        // Events file should only ever be types.
+        'packages/@phasma/handler-aws/src/definition/events.ts',
       ],
 
       reportsDirectory: 'build/coverage',
       reporter: ['text', 'html-spa'],
 
-      lines: 100,
-      functions: 100,
-      branches: 100,
-      statements: 100,
+      lines: 80,
+      functions: 80,
+      branches: 80,
+      statements: 80,
     },
   },
 });

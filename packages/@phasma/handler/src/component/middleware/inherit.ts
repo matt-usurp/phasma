@@ -8,11 +8,9 @@ import { HandlerResponse, HandlerResponseIdentifier } from '../response';
  *
  * This is essentially a type means of doing a deep merge in some cases.
  */
-/* istanbul ignore next */ const HandlerInheritMarker = Symbol();
-
-/* istanbul ignore next */ const HandlerInheritSomeContext = Symbol();
-
-/* istanbul ignore next */ const HandlerInheritSomeResponse = Symbol();
+const HandlerInheritMarker = Symbol();
+const HandlerInheritSomeContext = Symbol();
+const HandlerInheritSomeResponse = Symbol();
 
 /**
  * A type that represents possible context values that should be bubbled up the call stack.

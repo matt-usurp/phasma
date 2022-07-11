@@ -1,4 +1,3 @@
-
 export type HttpValidatorFunctionResultSuccess<T> = {
   success: true;
   data: T;
