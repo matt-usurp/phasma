@@ -105,8 +105,19 @@ export type LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier extends
  * A factory that can create handler compositions using the builder functionality provided.
  * This is the recommended entrypoint for building aws handlers.
  */
-export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(builder: LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
-  const hb: LambdaHandlerBuilder<EventSourceIdentifier> = new HandlerBuilder();
+export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(factory: LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
+  const builder: LambdaHandlerBuilder<EventSourceIdentifier> = new HandlerBuilder();
 
-  return entrypoint(builder(hb));
+  // Essentially a cache that prevents the builder from being invoked multiple times.
+  // This solves the issue of the builder being invoked immediately which makes testing the entrypoint difficult.
+  // Now the builder is invoked only once on the first request.
+  let invoker: LambdaHandlerEntrypoint<EventSourceIdentifier> | undefined = undefined;
+
+  return (payload, context) => {
+    if (invoker === undefined) {
+      invoker = entrypoint(factory(builder));
+    }
+
+    return invoker(payload, context);
+  };
 };

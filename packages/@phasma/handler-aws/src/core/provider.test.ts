@@ -1,5 +1,6 @@
 import type { Grok } from '@matt-usurp/grok';
 import { NeverReachAssertionError } from '@matt-usurp/grok/core/assert-never';
+import { partial } from '@matt-usurp/grok/testing';
 import type { HandlerFunctionParametersPayload } from '@phasma/handler/src/component/handler';
 import { create, nothing } from '@phasma/handler/src/response';
 import * as AwsLambda from 'aws-lambda';
@@ -214,7 +215,7 @@ describe('factory()', (): void => {
     expect(response).toStrictEqual(undefined);
   });
 
-  it('with handler, providing build compisition, composition invoked instantly, only once', async (): Promise<void> => {
+  it('with handler, providing build compisition, composition invoked only once', async (): Promise<void> => {
     const instrument = vi.fn();
 
     const wrapper = factory<'cloudwatch:log'>(async (application) => {
@@ -225,13 +226,15 @@ describe('factory()', (): void => {
       });
     });
 
+    expect(instrument).toBeCalledTimes(0);
+
+    await wrapper(partial({}), context);
+
     expect(instrument).toBeCalledTimes(1);
 
-    await wrapper({
-      awslogs: {
-        data: 'here-log',
-      },
-    }, context);
+    await wrapper(partial({}), context);
+    await wrapper(partial({}), context);
+    await wrapper(partial({}), context);
 
     expect(instrument).toBeCalledTimes(1);
   });
