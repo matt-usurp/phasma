@@ -25,6 +25,36 @@ export namespace HandlerMiddlewareDefinition {
   export type SomeContextOutbound = Grok.Constraint.Anything;
   export type SomeResponseInbound = Grok.Constraint.Anything;
   export type SomeResponseOutbound = Grok.Constraint.Anything;
+
+  /**
+   * Retrieve data from the {@link HandlerMiddlewareDefinition}.
+   */
+  export namespace Get {
+    /**
+     * Retrieve the defined provider.
+     */
+    export type Provider<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionProvider'];
+
+    /**
+     * Retrieve the middleware inbound context.
+     */
+    export type ContextInbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionContextInbound'];
+
+    /**
+     * Retrieve the middleware outbound context.
+     */
+    export type ContextOutbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionContextOutbound'];
+
+    /**
+     * Retrieve the middleware inbound response.
+     */
+    export type ResponseInbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionResponseInbound'];
+
+    /**
+     * Retrieve the middleware outbound response.
+     */
+    export type ResponseOutbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionResponseOutbound'];
+  }
 }
 
 export type HandlerMiddlewareDefinitionConstraint = (
