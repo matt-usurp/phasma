@@ -27,17 +27,17 @@
     "packages/phasma"
   ],
   "devDependencies": {
-    "@commitlint/cli": "^17.0.2",
-    "@commitlint/config-conventional": "^17.0.2",
-    "@tsconfig/node14": "^1.0.1",
-    "@types/eslint": "^8.4.1",
-    "@types/node": "^16.11.39",
-    "@typescript-eslint/eslint-plugin": "^5.18.0",
-    "@typescript-eslint/parser": "^5.18.0",
-    "c8": "^7.11.3",
-    "eslint": "^8.12.0",
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@tsconfig/node16": "^1.0.3",
+    "@types/eslint": "^8.4.6",
+    "@types/node": "^16.11.59",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "@typescript-eslint/parser": "^5.37.0",
+    "@vitest/coverage-c8": "^0.23.2",
+    "eslint": "^8.23.1",
     "eslint-formatter-codeframe": "^7.32.1",
     "husky": "^8.0.1",
-    "vitest": "^0.14.2"
+    "vitest": "^0.23.2"
   }
 }

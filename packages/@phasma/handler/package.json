@@ -28,11 +28,11 @@
     }
   ],
   "dependencies": {
-    "@matt-usurp/grok": "^0.7.1"
+    "@matt-usurp/grok": "^0.8.0"
   },
   "peerDependencies": {
-    "qs": "^6.10.5",
-    "zod": "^3.17.3"
+    "qs": "^6.11.0",
+    "zod": "^3.19.1"
   },
   "devDependencies": {
     "@types/qs": "^6.9.7"
