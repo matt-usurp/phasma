@@ -17,6 +17,26 @@ export namespace HandlerDefinition {
   export type SomeProvider = Grok.Constraint.Anything;
   export type SomeContext = Grok.Constraint.Anything;
   export type SomeResponse = Grok.Constraint.Anything;
+
+  /**
+   * Retrieve data from the {@link HandlerDefinition}.
+   */
+  export namespace Get {
+    /**
+     * Retrieve the defined provider.
+     */
+    export type Provider<D extends HandlerDefinitionConstraint> = D['HandlerDefinitionProvider'];
+
+    /**
+     * Retrieve the handle context.
+     */
+    export type Context<D extends HandlerDefinitionConstraint> = D['HandlerDefinitionContext'];
+
+    /**
+     * Retrieve the handler response.
+     */
+    export type Response<D extends HandlerDefinitionConstraint> = D['HandlerDefinitionResponse'];
+  }
 }
 
 export type HandlerDefinitionConstraint = (
@@ -29,11 +49,11 @@ export type HandlerDefinitionConstraint = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-export type HandlerFunctionParameters<Definition extends HandlerDefinitionConstraint> = (
+export type HandlerFunctionParameters<D extends HandlerDefinitionConstraint> = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerFunctionParametersPayload<
-    Definition['HandlerDefinitionProvider'],
-    Definition['HandlerDefinitionContext']
+    HandlerDefinition.Get.Provider<D>,
+    HandlerDefinition.Get.Context<D>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -53,16 +73,16 @@ export type HandlerFunctionParametersPayload<
   readonly context: Context;
 };
 
-export type HandlerFunctionResponse<Definition extends HandlerDefinitionConstraint> = (
-  Definition['HandlerDefinitionResponse'] extends HandlerResponseConstraint
-    ? Promise<Definition['HandlerDefinitionResponse']>
+export type HandlerFunctionResponse<D extends HandlerDefinitionConstraint> = (
+  HandlerDefinition.Get.Response<D> extends HandlerResponseConstraint
+    ? Promise<HandlerDefinition.Get.Response<D>>
     : never
 );
 
 /**
  * An implementation of the handler type.
  */
-export type HandlerImplementationWithHandleFunction<Definition extends HandlerDefinitionConstraint> = {
+export type HandlerImplementationWithHandleFunction<D extends HandlerDefinitionConstraint> = {
   /**
    * Handle.
    */
@@ -70,12 +90,12 @@ export type HandlerImplementationWithHandleFunction<Definition extends HandlerDe
     parameters: (
     /* eslint-disable @typescript-eslint/indent */
       HandlerFunctionParametersPayload<
-        Definition['HandlerDefinitionProvider'],
-        Definition['HandlerDefinitionContext']
+        HandlerDefinition.Get.Provider<D>,
+        HandlerDefinition.Get.Context<D>
       >
     /* eslint-enable @typescript-eslint/indent */
     ),
-  ): HandlerFunctionResponse<Definition>;
+  ): HandlerFunctionResponse<D>;
 };
 
 export type HandlerComposition<
