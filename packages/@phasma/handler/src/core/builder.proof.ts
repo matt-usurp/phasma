@@ -1,5 +1,5 @@
-import type { HandlerDefinition, HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '../component/handler';
-import type { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '../component/middleware';
+import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionOutputFromDefinition } from '../component/handler';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../component/middleware';
 import type { HandlerProvider } from '../component/provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from '../component/response';
 import type { HandlerBuilder } from './builder';
@@ -39,8 +39,8 @@ type MiddlewarePassThrough = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class WithPassThrough implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewarePassThrough> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewarePassThrough>): HandlerMiddlewareFunctionResponse<MiddlewarePassThrough> {
+class WithPassThrough implements HandlerMiddlewareClassImplementation<MiddlewarePassThrough> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewarePassThrough>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewarePassThrough> {
     const response = next({
       ...context,
     });
@@ -67,8 +67,8 @@ type MiddlewareKnownInputContext = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class WithKnownInputContext implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareKnownInputContext> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareKnownInputContext>): HandlerMiddlewareFunctionResponse<MiddlewareKnownInputContext> {
+class WithKnownInputContext implements HandlerMiddlewareClassImplementation<MiddlewareKnownInputContext> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareKnownInputContext>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareKnownInputContext> {
     const response = next({
       ...context,
     });
@@ -95,8 +95,8 @@ type MiddlewareContextSubset = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class WithContextSubset implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextSubset> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextSubset>): HandlerMiddlewareFunctionResponse<MiddlewareContextSubset> {
+class WithContextSubset implements HandlerMiddlewareClassImplementation<MiddlewareContextSubset> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareContextSubset>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareContextSubset> {
     const response = next({
       ...context,
     });
@@ -124,8 +124,8 @@ type MiddlewareContextAdditional = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class WithContextAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextAdditional> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextAdditional>): HandlerMiddlewareFunctionResponse<MiddlewareContextAdditional> {
+class WithContextAdditional implements HandlerMiddlewareClassImplementation<MiddlewareContextAdditional> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareContextAdditional>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareContextAdditional> {
     const response = next({
       ...context,
 
@@ -155,8 +155,8 @@ type MiddlewareContextUsingAdditional = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class WithContextUsingAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareContextUsingAdditional> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareContextUsingAdditional>): HandlerMiddlewareFunctionResponse<MiddlewareContextUsingAdditional> {
+class WithContextUsingAdditional implements HandlerMiddlewareClassImplementation<MiddlewareContextUsingAdditional> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareContextUsingAdditional>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareContextUsingAdditional> {
     const response = next({
       ...context,
     });
@@ -188,8 +188,8 @@ type MiddlewareResponseAdditional = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class WithResponseAdditional implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseAdditional> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseAdditional>): HandlerMiddlewareFunctionResponse<MiddlewareResponseAdditional> {
+class WithResponseAdditional implements HandlerMiddlewareClassImplementation<MiddlewareResponseAdditional> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareResponseAdditional>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareResponseAdditional> {
     const response = await next({
       ...context,
     });
@@ -221,8 +221,8 @@ type MiddlewareResponseUsage = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class WithResponseUsage implements HandlerMiddlewareImplementationWithInvokeFunction<MiddlewareResponseUsage> {
-  public async invoke({ next, context }: HandlerMiddlewareFunctionParameters<MiddlewareResponseUsage>): HandlerMiddlewareFunctionResponse<MiddlewareResponseUsage> {
+class WithResponseUsage implements HandlerMiddlewareClassImplementation<MiddlewareResponseUsage> {
+  public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareResponseUsage>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareResponseUsage> {
     const response = await next({
       ...context,
     });
@@ -257,8 +257,8 @@ type ExampleHandlerDefinition = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-class ExampleHandler implements HandlerImplementationWithHandleFunction<ExampleHandlerDefinition> {
-  public async handle(): HandlerFunctionResponse<ExampleHandlerDefinition> {
+class ExampleHandler implements HandlerClassImplementation<ExampleHandlerDefinition> {
+  public async handle(): HandlerFunctionOutputFromDefinition<ExampleHandlerDefinition> {
     throw 123; // w/e
   }
 }

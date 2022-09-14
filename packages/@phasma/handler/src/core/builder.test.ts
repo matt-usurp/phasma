@@ -1,6 +1,6 @@
 import type { HandlerContextBase } from '../component/context';
-import type { HandlerDefinition, HandlerFunctionParameters, HandlerFunctionResponse, HandlerImplementationWithHandleFunction } from '../component/handler';
-import type { HandlerMiddlewareDefinition, HandlerMiddlewareFunctionParameters, HandlerMiddlewareFunctionResponse, HandlerMiddlewareImplementationWithInvokeFunction } from '../component/middleware';
+import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from '../component/handler';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../component/middleware';
 import type { HandlerProviderWithPayload } from '../component/provider';
 import type { HandlerResponse } from '../component/response';
 import { HandlerBuilder } from './builder';
@@ -24,8 +24,8 @@ type TestHandlerDefinition = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-const handler = new class Handler implements HandlerImplementationWithHandleFunction<TestHandlerDefinition> {
-  public async handle({ provider, context }: HandlerFunctionParameters<TestHandlerDefinition>): HandlerFunctionResponse<TestHandlerDefinition> {
+const handler = new class Handler implements HandlerClassImplementation<TestHandlerDefinition> {
+  public async handle({ provider, context }: HandlerFunctionInputFromDefinition<TestHandlerDefinition>): HandlerFunctionOutputFromDefinition<TestHandlerDefinition> {
     return {
       type: 'response:test',
       value: {
@@ -90,8 +90,8 @@ describe('HandlerBuilder', (): void => {
     /* eslint-enable @typescript-eslint/indent */
     );
 
-    const middleware = new class Middleware implements HandlerMiddlewareImplementationWithInvokeFunction<TestMiddleware> {
-      public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<TestMiddleware>): HandlerMiddlewareFunctionResponse<TestMiddleware> {
+    const middleware = new class Middleware implements HandlerMiddlewareClassImplementation<TestMiddleware> {
+      public async invoke({ context, next }: HandlerMiddlewareFunctionInputFromDefinition<TestMiddleware>): HandlerMiddlewareFunctionOutputFromDefinition<TestMiddleware> {
         return next({
           ...context,
 
@@ -157,8 +157,8 @@ describe('HandlerBuilder', (): void => {
     );
 
     const middleware = (name: string) => {
-      return new class Middleware implements HandlerMiddlewareImplementationWithInvokeFunction<TestMiddleware> {
-        public async invoke({ context, next }: HandlerMiddlewareFunctionParameters<TestMiddleware>): HandlerMiddlewareFunctionResponse<TestMiddleware> {
+      return new class Middleware implements HandlerMiddlewareClassImplementation<TestMiddleware> {
+        public async invoke({ context, next }: HandlerMiddlewareFunctionInputFromDefinition<TestMiddleware>): HandlerMiddlewareFunctionOutputFromDefinition<TestMiddleware> {
           return next({
             ...context,
 

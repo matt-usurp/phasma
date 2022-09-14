@@ -1,10 +1,16 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextConstraint } from './context';
-import type { HandlerFunctionParametersPayload } from './handler';
+import type { HandlerFunctionInput } from './handler';
 import type { HandlerMiddlewareContextPassThrough, HandlerMiddlewareResponsePassThrough } from './middleware/inherit';
 import type { HandlerProviderConstraint } from './provider';
 import type { HandlerResponseConstraint } from './response';
 
+/**
+ * A middleware definition that defines the {@link Provider}, context and response types.
+ *
+ * These types will be enforced at build type when used with the handler composer/builder.
+ * These types can be satisfied through implementing middleware or are provided as a base from the {@link Provider}.
+ */
 export type HandlerMiddlewareDefinition<
   Provider extends HandlerProviderConstraint,
   ContextInbound extends HandlerContextConstraint,
@@ -12,11 +18,11 @@ export type HandlerMiddlewareDefinition<
   ResponseInbound extends HandlerResponseConstraint,
   ResponseOutbound extends HandlerResponseConstraint,
 > = {
-  readonly HandlerMiddlewareDefinitionProvider: Provider;
-  readonly HandlerMiddlewareDefinitionContextInbound: ContextInbound;
-  readonly HandlerMiddlewareDefinitionContextOutbound: ContextOutbound;
-  readonly HandlerMiddlewareDefinitionResponseInbound: ResponseInbound;
-  readonly HandlerMiddlewareDefinitionResponseOutbound: ResponseOutbound;
+  readonly MP: Provider;
+  readonly MCI: ContextInbound;
+  readonly MCO: ContextOutbound;
+  readonly MRI: ResponseInbound;
+  readonly MRO: ResponseOutbound;
 };
 
 export namespace HandlerMiddlewareDefinition {
@@ -31,51 +37,49 @@ export namespace HandlerMiddlewareDefinition {
    */
   export namespace Get {
     /**
-     * Retrieve the defined provider.
+     * Retrieve the middleware provider from {@link Definition}.
      */
-    export type Provider<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionProvider'];
+    export type Provider<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MP'];
 
     /**
-     * Retrieve the middleware inbound context.
+     * Retrieve the middleware inbound context from {@link Definition}.
      */
-    export type ContextInbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionContextInbound'];
+    export type ContextInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCI'];
 
     /**
-     * Retrieve the middleware outbound context.
+     * Retrieve the middleware outbound context from {@link Definition}.
      */
-    export type ContextOutbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionContextOutbound'];
+    export type ContextOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCO'];
 
     /**
-     * Retrieve the middleware inbound response.
+     * Retrieve the middleware inbound response from {@link Definition}.
      */
-    export type ResponseInbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionResponseInbound'];
+    export type ResponseInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRI'];
 
     /**
-     * Retrieve the middleware outbound response.
+     * Retrieve the middleware outbound response from {@link Definition}.
      */
-    export type ResponseOutbound<D extends HandlerMiddlewareDefinitionConstraint> = D['HandlerMiddlewareDefinitionResponseOutbound'];
+    export type ResponseOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRO'];
   }
 }
 
 export type HandlerMiddlewareDefinitionConstraint = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
-    HandlerMiddlewareDefinition.SomeProvider,
-    HandlerMiddlewareDefinition.SomeContextInbound,
-    HandlerMiddlewareDefinition.SomeContextOutbound,
-    HandlerMiddlewareDefinition.SomeResponseInbound,
-    HandlerMiddlewareDefinition.SomeResponseOutbound
+    any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    any // eslint-disable-line @typescript-eslint/no-explicit-any
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
-export type HandlerMiddlewareImplementationWithInvokeFunction<D extends HandlerMiddlewareDefinitionConstraint> = {
+export type HandlerMiddlewareClassImplementation<Definition extends HandlerMiddlewareDefinitionConstraint> = {
   /**
    * Invoke the middleware and transform the context or response.
    */
-  invoke(
-    input: HandlerMiddlewareFunctionParameters<D>,
-  ): HandlerMiddlewareFunctionResponse<D>;
+  invoke(input: HandlerMiddlewareFunctionInputFromDefinition<Definition>): HandlerMiddlewareFunctionOutputFromDefinition<Definition>;
 };
 
 export type HandlerMiddlewareNextFunction<
@@ -83,22 +87,22 @@ export type HandlerMiddlewareNextFunction<
   Response extends HandlerResponseConstraint,
 > = (context: Context) => Promise<Response>;
 
-export type HandlerMiddlewareFunctionParameters<D extends HandlerMiddlewareDefinitionConstraint> = (
-  & HandlerMiddlewareFunctionParemeters.WithParameters<D>
-  & HandlerMiddlewareFunctionParemeters.WithNextFunction<D>
+export type HandlerMiddlewareFunctionInputFromDefinition<Definition extends HandlerMiddlewareDefinitionConstraint> = (
+  & HandlerMiddlewareFunctionInputFromDefinition.WithParameters<Definition>
+  & HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<Definition>
 );
 
-export namespace HandlerMiddlewareFunctionParemeters {
-  export type WithParameters<D extends HandlerMiddlewareDefinitionConstraint> = (
+export namespace HandlerMiddlewareFunctionInputFromDefinition {
+  export type WithParameters<Definition extends HandlerMiddlewareDefinitionConstraint> = (
   /* eslint-disable @typescript-eslint/indent */
-    HandlerFunctionParametersPayload<
-      D['HandlerMiddlewareDefinitionProvider'],
-      Grok.Merge<D['HandlerMiddlewareDefinitionContextInbound'], HandlerMiddlewareContextPassThrough>
+    HandlerFunctionInput<
+      HandlerMiddlewareDefinition.Get.Provider<Definition>,
+      Grok.Merge<HandlerMiddlewareDefinition.Get.ContextInbound<Definition>, HandlerMiddlewareContextPassThrough>
     >
   /* eslint-enable @typescript-eslint/indent */
   );
 
-  export type WithNextFunction<D extends HandlerMiddlewareDefinitionConstraint> = {
+  export type WithNextFunction<Definition extends HandlerMiddlewareDefinitionConstraint> = {
     /**
      * A middleware function to invoke the next element in the call chain.
      * This must take in the given context and the response must be returned within the parent function.
@@ -109,12 +113,21 @@ export namespace HandlerMiddlewareFunctionParemeters {
     readonly next: (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareNextFunction<
-        Grok.Merge<D['HandlerMiddlewareDefinitionContextOutbound'], HandlerMiddlewareContextPassThrough>,
-        Grok.Union<D['HandlerMiddlewareDefinitionResponseInbound'], HandlerMiddlewareResponsePassThrough>
+        Grok.Merge<HandlerMiddlewareDefinition.Get.ContextOutbound<Definition>, HandlerMiddlewareContextPassThrough>,
+        Grok.Union<HandlerMiddlewareDefinition.Get.ResponseInbound<Definition>, HandlerMiddlewareResponsePassThrough>
       >
     /* eslint-enable @typescript-eslint/indent */
     );
   };
 }
 
-export type HandlerMiddlewareFunctionResponse<D extends HandlerMiddlewareDefinitionConstraint> = Promise<Grok.Union<D['HandlerMiddlewareDefinitionResponseOutbound'], HandlerMiddlewareResponsePassThrough>>;
+export type HandlerMiddlewareFunctionOutputFromDefinition<D extends HandlerMiddlewareDefinitionConstraint> = (
+/* eslint-disable @typescript-eslint/indent */
+  Promise<
+    Grok.Union<
+      HandlerMiddlewareDefinition.Get.ResponseOutbound<D>,
+      HandlerMiddlewareResponsePassThrough
+    >
+  >
+/* eslint-enable @typescript-eslint/indent */
+);

@@ -1,5 +1,5 @@
 import { Grok, never } from '@matt-usurp/grok';
-import type { HandlerComposition, HandlerEntrypoint, HandlerImplementationWithHandleFunction } from '@phasma/handler/src/component/handler';
+import type { HandlerClassImplementation, HandlerComposition, HandlerEntrypoint } from '@phasma/handler/src/component/handler';
 import { HandlerBuilder } from '@phasma/handler/src/core/builder';
 import type { Context as AwsLambdaFunctionContext } from 'aws-lambda';
 import type { LambdaHandlerContextBase } from '../component/context';
@@ -20,7 +20,7 @@ export type LambdaHandlerBuilder<EventSourceIdentifier extends LambdaHandlerEven
 export type LambdaHandlerComposition<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerComposition<
-    HandlerImplementationWithHandleFunction<Grok.Constraint.Anything>,
+    HandlerClassImplementation<Grok.Constraint.Anything>,
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     LambdaHandlerContextBase,
     LambdaHandlerEventSourceResponseFromIdentifier<EventSourceIdentifier>

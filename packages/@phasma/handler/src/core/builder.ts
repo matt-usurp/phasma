@@ -1,7 +1,7 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextConstraint } from '../component/context';
-import type { HandlerComposition, HandlerDefinition, HandlerImplementationWithHandleFunction } from '../component/handler';
-import type { HandlerMiddlewareDefinition, HandlerMiddlewareImplementationWithInvokeFunction, HandlerMiddlewareNextFunction } from '../component/middleware';
+import type { HandlerClassImplementation, HandlerComposition, HandlerDefinition } from '../component/handler';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareNextFunction } from '../component/middleware';
 import type { HandlerMiddlewareResponsePassThrough } from '../component/middleware/inherit';
 import type { HandlerProviderConstraint } from '../component/provider';
 import type { HandlerResponseConstraint } from '../component/response';
@@ -31,7 +31,7 @@ export class HandlerBuilder<
    * The types bound to the middleware is not important here, its important that the handlers type mutates.
    * With the type safety we can only assume these handlers are going to work.
    */
-  protected readonly middlewares: HandlerMiddlewareImplementationWithInvokeFunction<Grok.Constraint.Anything>[] = [];
+  protected readonly middlewares: HandlerMiddlewareClassImplementation<Grok.Constraint.Anything>[] = [];
 
   /**
    * Use a middleware at this position in the call stack.
@@ -40,12 +40,12 @@ export class HandlerBuilder<
    */
   public use<
     /* eslint-disable @typescript-eslint/indent */
-    M extends HandlerMiddlewareImplementationWithInvokeFunction<
+    M extends HandlerMiddlewareClassImplementation<
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.SomeProvider,
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
         CurrentContext,
-        HandlerMiddlewareDefinition.SomeContextOutbound,
-        HandlerMiddlewareDefinition.SomeResponseInbound,
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
         CurrentResponse | HandlerMiddlewareResponsePassThrough
       >
     >,
@@ -55,7 +55,7 @@ export class HandlerBuilder<
     HandlerBuilder<
       Provider,
       (
-        M extends HandlerMiddlewareImplementationWithInvokeFunction<infer InferDefinition>
+        M extends HandlerMiddlewareClassImplementation<infer InferDefinition>
           ? (
             InferDefinition extends HandlerMiddlewareDefinition<
               HandlerMiddlewareDefinition.SomeProvider,
@@ -70,7 +70,7 @@ export class HandlerBuilder<
           : ErrorInferMiddlewareDefinition
       ),
       (
-        M extends HandlerMiddlewareImplementationWithInvokeFunction<infer InferDefinition>
+        M extends HandlerMiddlewareClassImplementation<infer InferDefinition>
           ? (
             InferDefinition extends HandlerMiddlewareDefinition<
               HandlerMiddlewareDefinition.SomeProvider,
@@ -100,9 +100,9 @@ export class HandlerBuilder<
    */
   public handle<
     /* eslint-disable @typescript-eslint/indent */
-    H extends HandlerImplementationWithHandleFunction<
+    H extends HandlerClassImplementation<
       HandlerDefinition<
-        HandlerMiddlewareDefinition.SomeProvider,
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
         HandlerContext,
         HandlerResponse
       >
