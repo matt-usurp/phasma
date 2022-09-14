@@ -1,10 +1,16 @@
+import type { Grok } from '@matt-usurp/grok';
+
 /**
- * A base context that is expected from all providers.
- * The minimal information a handler might want.
+ * A context base.
+ *
+ * This is expected to be implemented by all providers at the least.
+ * This is considered the minimal information a handler will required (if any).
  */
 export type HandlerContextBase = {
   /**
-   * Information about the request.
+   * Request information.
+   *
+   * @deprecated Should not be HTTP based, maybe "invocation"?
    */
   readonly request: {
     /**
@@ -15,4 +21,7 @@ export type HandlerContextBase = {
   };
 };
 
-export type HandlerContextConstraint = Record<string, unknown>;
+/**
+ * A constraint type that can be used to accept kinds of context.
+ */
+export type HandlerContextConstraint = Grok.Constraint.ObjectLike;

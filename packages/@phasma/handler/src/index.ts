@@ -10,11 +10,14 @@ export namespace Response {
 
 export namespace Handler {
   export import Definition = handler.HandlerDefinition;
-  export import Implementation = handler.HandlerImplementationWithHandleFunction;
+  export import Implementation = handler.HandlerClassImplementation;
 
   export namespace Fn {
-    export import Parameters = handler.HandlerFunctionParameters;
-    export import Response = handler.HandlerFunctionResponse;
+    export import Input = handler.HandlerFunctionInputFromDefinition;
+    export import Output = handler.HandlerFunctionOutputFromDefinition;
+
+    export import Parameters = handler.HandlerFunctionInputFromDefinition;
+    export import Response = handler.HandlerFunctionOutputFromDefinition;
   }
 
   export import Context = context.HandlerContextBase;
@@ -26,10 +29,13 @@ export namespace Handler {
 
 export namespace Middleware {
   export import Definition = middleware.HandlerMiddlewareDefinition;
-  export import Implementation = middleware.HandlerMiddlewareImplementationWithInvokeFunction;
+  export import Implementation = middleware.HandlerMiddlewareClassImplementation;
 
   export namespace Fn {
-    export import Parameters = middleware.HandlerMiddlewareFunctionParameters;
-    export import Response = middleware.HandlerMiddlewareFunctionResponse;
+    export import Input = middleware.HandlerMiddlewareFunctionInputFromDefinition;
+    export import Output = middleware.HandlerMiddlewareFunctionOutputFromDefinition;
+
+    export import Parameters = middleware.HandlerMiddlewareFunctionInputFromDefinition;
+    export import Response = middleware.HandlerMiddlewareFunctionOutputFromDefinition;
   }
 }
