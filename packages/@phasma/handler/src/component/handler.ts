@@ -20,6 +20,9 @@ export type HandlerDefinition<
 };
 
 export namespace HandlerDefinition {
+  /**
+   * Types that indicate a value should be inheritted.
+   */
   export namespace Inherit {
     /**
      * Indicate the provider should be inheritted.
@@ -27,12 +30,12 @@ export namespace HandlerDefinition {
     export type Provider = Grok.Inherit;
 
     /**
-     * Indicate the provider should be inheritted.
+     * Indicate the context should be inheritted.
      */
     export type Context = Grok.Inherit;
 
     /**
-     * Indicate the provider should be inheritted.
+     * Indicate the response should be inheritted.
      */
     export type Response = Grok.Inherit;
   }

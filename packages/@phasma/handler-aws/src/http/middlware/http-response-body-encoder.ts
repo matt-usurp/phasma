@@ -11,9 +11,9 @@ export type HttpBodyObjectTransport = HttpResponseTransport<number, Grok.Constra
 export type HttpTransformerMiddlewareDefinition<R extends HttpBodyObjectTransport> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
-    Middleware.Definition.SomeProvider,
-    Middleware.Definition.SomeContextInbound,
-    Middleware.Definition.SomeContextOutbound,
+    Middleware.Definition.Inherit.Provider,
+    Middleware.Definition.Inherit.ContextInbound,
+    Middleware.Definition.Inherit.ContextOutbound,
     HttpResponse<R>,
     HttpResponse<HttpResponseEncodedTransport>
   >

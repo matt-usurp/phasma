@@ -139,7 +139,7 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
       type Value = HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<(
       /* eslint-disable @typescript-eslint/indent */
         HandlerMiddlewareDefinition<
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          Grok.Inherit,
           TestContextInbound,
           TestContextOutbound,
           TestResponse<TestResponseInbound>,
@@ -163,7 +163,7 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
       /* eslint-disable @typescript-eslint/indent */
         HandlerMiddlewareDefinition<
           TestProvider,
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          Grok.Inherit,
           TestContextOutbound,
           TestResponse<TestResponseInbound>,
           TestResponse<TestResponseOutbound>
@@ -185,8 +185,8 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
       type Value = HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<(
       /* eslint-disable @typescript-eslint/indent */
         HandlerMiddlewareDefinition<
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          Grok.Inherit,
+          Grok.Inherit,
           TestContextOutbound,
           TestResponse<TestResponseInbound>,
           TestResponse<TestResponseOutbound>
@@ -230,7 +230,7 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
         HandlerMiddlewareDefinition<
           TestProvider,
           TestContextInbound,
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          Grok.Inherit,
           TestResponse<TestResponseInbound>,
           TestResponse<TestResponseOutbound>
         >
@@ -256,7 +256,7 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
           TestProvider,
           TestContextInbound,
           TestContextOutbound,
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          Grok.Inherit,
           TestResponse<TestResponseOutbound>
         >
       /* eslint-enable @typescript-eslint/indent */
@@ -280,8 +280,8 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
         HandlerMiddlewareDefinition<
           TestProvider,
           TestContextInbound,
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
-          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          Grok.Inherit,
+          Grok.Inherit,
           TestResponse<TestResponseOutbound>
         >
       /* eslint-enable @typescript-eslint/indent */

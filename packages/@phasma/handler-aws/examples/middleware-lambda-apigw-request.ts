@@ -13,9 +13,9 @@ type Definition = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Provider.WithEventSource<EventSourceIdentifier>,
-    Middleware.Definition.SomeContextInbound,
+    Middleware.Definition.Inherit.ContextInbound,
     ContextWithApiKey,
-    Middleware.Definition.SomeResponseInbound,
+    Middleware.Definition.Inherit.ResponseInbound,
     Event.ResultRaw<EventSourceIdentifier>
   >
 /* eslint-enable @typescript-eslint/indent */

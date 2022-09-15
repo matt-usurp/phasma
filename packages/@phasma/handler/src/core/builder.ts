@@ -58,13 +58,19 @@ export class HandlerBuilder<
         M extends HandlerMiddlewareClassImplementation<infer InferDefinition>
           ? (
             InferDefinition extends HandlerMiddlewareDefinition<
-              HandlerMiddlewareDefinition.SomeProvider,
-              HandlerMiddlewareDefinition.SomeContextInbound,
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
               infer InferContextOutbound,
-              HandlerMiddlewareDefinition.SomeResponseInbound,
-              HandlerMiddlewareDefinition.SomeResponseOutbound
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any // eslint-disable-line @typescript-eslint/no-explicit-any
             >
-              ? Grok.Merge<InferContextOutbound, CurrentContext>
+              ? (
+                Grok.If.IsInherit<
+                  Grok.Inherit.Normalise<InferContextOutbound>,
+                  CurrentContext,
+                  Grok.Merge<InferContextOutbound, CurrentContext>
+                >
+              )
               : ErrorInferContextOutbound
           )
           : ErrorInferMiddlewareDefinition
@@ -73,13 +79,19 @@ export class HandlerBuilder<
         M extends HandlerMiddlewareClassImplementation<infer InferDefinition>
           ? (
             InferDefinition extends HandlerMiddlewareDefinition<
-              HandlerMiddlewareDefinition.SomeProvider,
-              HandlerMiddlewareDefinition.SomeContextInbound,
-              HandlerMiddlewareDefinition.SomeContextOutbound,
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
               infer InferResponseInbound,
-              HandlerMiddlewareDefinition.SomeResponseOutbound
+              any // eslint-disable-line @typescript-eslint/no-explicit-any
             >
-              ? Grok.Union<InferResponseInbound, CurrentResponse>
+              ? (
+                Grok.If.IsInherit<
+                  Grok.Inherit.Normalise<InferResponseInbound>,
+                  CurrentResponse,
+                  Grok.Union<InferResponseInbound, CurrentResponse>
+                >
+              )
               : ErrorInferResponseInbound
           )
           : ErrorInferMiddlewareDefinition

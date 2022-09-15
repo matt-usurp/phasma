@@ -81,11 +81,11 @@ describe('HandlerBuilder', (): void => {
     type TestMiddleware = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.SomeProvider,
+        HandlerMiddlewareDefinition.Inherit.Provider,
         HandlerContextBase,
         HandlerContextBase & { readonly middleware: unknown },
-        HandlerMiddlewareDefinition.SomeResponseInbound,
-        HandlerMiddlewareDefinition.SomeResponseOutbound
+        HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );
@@ -147,11 +147,11 @@ describe('HandlerBuilder', (): void => {
     type TestMiddleware = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.SomeProvider,
+        HandlerMiddlewareDefinition.Inherit.Provider,
         HandlerContextBase,
         HandlerContextBase & { readonly middleware: unknown },
-        HandlerMiddlewareDefinition.SomeResponseInbound,
-        HandlerMiddlewareDefinition.SomeResponseOutbound
+        HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );
