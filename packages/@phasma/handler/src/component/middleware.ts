@@ -63,6 +63,26 @@ export namespace HandlerMiddlewareDefinition {
   }
 }
 
+/**
+ * A middleware definition with all {@link Grok.Inherit} values.
+ *
+ * This means all values are unused and should inherit from the composition chain.
+ */
+export type HandlerMiddlewareDefinitionBase = (
+/* eslint-disable @typescript-eslint/indent */
+  HandlerMiddlewareDefinition<
+    any, // HandlerMiddlewareDefinition.Inherit.Provider,
+    any, // HandlerMiddlewareDefinition.Inherit.ContextInbound,
+    any, // HandlerMiddlewareDefinition.Inherit.ContextOutbound,
+    any, // HandlerMiddlewareDefinition.Inherit.ResponseInbound
+    any // HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+  >
+/* eslint-enable @typescript-eslint/indent */
+);
+
+/**
+ * A constraint type for {@link HandlerMiddlewareDefinition}.
+ */
 export type HandlerMiddlewareDefinitionConstraint = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
@@ -75,25 +95,33 @@ export type HandlerMiddlewareDefinitionConstraint = (
 /* eslint-enable @typescript-eslint/indent */
 );
 
-export type HandlerMiddlewareClassImplementation<Definition extends HandlerMiddlewareDefinitionConstraint> = {
-  /**
-   * Invoke the middleware and transform the context or response.
-   */
-  invoke(input: HandlerMiddlewareFunctionInputFromDefinition<Definition>): HandlerMiddlewareFunctionOutputFromDefinition<Definition>;
-};
-
+/**
+ * The next function that resumes the composition chain, invoking either the next middleware or the handler.
+ *
+ * The {@link Context} is the outbound context that was mentioned in the {@link HandlerMiddlewareDefinition}.
+ * This denotes the context that is to be provided down chain to the next middleware or the handler.
+ *
+ * The {@link Response} is the inbound response that was mentioned in the {@link HandlerMiddlewareDefinition}.
+ * This denotes the response that is returned from the down chain middleware or the handler.
+ */
 export type HandlerMiddlewareNextFunction<
   Context extends HandlerContextConstraint,
   Response extends HandlerResponseConstraint,
 > = (context: Context) => Promise<Response>;
 
+/**
+ * The middleware invoke function input parameters defining {@link Provider}, {@link Context} and {@link HandlerMiddlewareNextFunction}.
+ */
 export type HandlerMiddlewareFunctionInputFromDefinition<Definition extends HandlerMiddlewareDefinitionConstraint> = (
-  & HandlerMiddlewareFunctionInputFromDefinition.WithParameters<Definition>
+  & HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<Definition>
   & HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<Definition>
 );
 
 export namespace HandlerMiddlewareFunctionInputFromDefinition {
-  export type WithParameters<Definition extends HandlerMiddlewareDefinitionConstraint> = (
+  /**
+   * A structure with the {@link HandlerFunctionInput} resolved from {@link Definition}
+   */
+  export type WithHandlerInput<Definition extends HandlerMiddlewareDefinitionConstraint> = (
   /* eslint-disable @typescript-eslint/indent */
     HandlerFunctionInput<
       HandlerMiddlewareDefinition.Get.Provider<Definition>,
@@ -102,13 +130,18 @@ export namespace HandlerMiddlewareFunctionInputFromDefinition {
   /* eslint-enable @typescript-eslint/indent */
   );
 
+  /**
+   * A structure with the {@link HandlerMiddlewareNextFunction} resolved from {@link Definition}.
+   */
   export type WithNextFunction<Definition extends HandlerMiddlewareDefinitionConstraint> = {
     /**
-     * A middleware function to invoke the next element in the call chain.
+     * A middleware function to invoke the next element in the composition chain.
      * This must take in the given context and the response must be returned within the parent function.
      *
      * Note, the inherit symbols are not to be interfaced with in code directly.
-     * These indicate an "unknown" possible element that might be handled in an element next in the chain.
+     * These indicate an "unknown" possible element that might be handled next in the chain.
+     *
+     * See {@link HandlerMiddlewareNextFunction} for more information.
      */
     readonly next: (
     /* eslint-disable @typescript-eslint/indent */
@@ -121,13 +154,32 @@ export namespace HandlerMiddlewareFunctionInputFromDefinition {
   };
 }
 
-export type HandlerMiddlewareFunctionOutputFromDefinition<D extends HandlerMiddlewareDefinitionConstraint> = (
+/**
+ * The middleware invoke function response resolved from {@link Definition}.
+ */
+export type HandlerMiddlewareFunctionOutputFromDefinition<Definition extends HandlerMiddlewareDefinitionConstraint> = (
 /* eslint-disable @typescript-eslint/indent */
   Promise<
     Grok.Union<
-      HandlerMiddlewareDefinition.Get.ResponseOutbound<D>,
+      HandlerMiddlewareDefinition.Get.ResponseOutbound<Definition>,
       HandlerMiddlewareResponsePassThrough
     >
   >
 /* eslint-enable @typescript-eslint/indent */
 );
+
+/**
+ * A class-based middleware implementation for {@link Definition}
+ */
+export type HandlerMiddlewareClassImplementation<Definition extends HandlerMiddlewareDefinitionConstraint> = {
+  /**
+   * Invoke the middleware with the given input parameters.
+   *
+   * You have access to the following input data, resolved from the {@link Definition}.
+   *
+   * - `input.context` which is the context requested.
+   * - `input.provider` which should denote the provider that called the handler.
+   * - `input.next()` which resumes the composition chain. This function is described {@link HandlerMiddlewareNextFunction here}.
+   */
+  invoke(input: HandlerMiddlewareFunctionInputFromDefinition<Definition>): HandlerMiddlewareFunctionOutputFromDefinition<Definition>;
+};

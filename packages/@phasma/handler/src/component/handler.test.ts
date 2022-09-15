@@ -287,7 +287,12 @@ export namespace Test_HandlerFunctionInputFromDefinition {
 export namespace Test_HandlerFunctionOutputFromDefinition {
   type Value = HandlerFunctionOutputFromDefinition<TestDefinition>;
 
-  type Case_WithPromise = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, Promise<TestResponse<TestResponseData>>>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type Case_WithPromise = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, Promise<any>>>;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type Case_WithResponseWrapper = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, Promise<TestResponse<any>>>>;
+  type Case_WithResponseData = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, Promise<TestResponse<TestResponseData>>>>;
 }
 
 /**
@@ -297,6 +302,10 @@ export namespace Test_HandlerClassImplementation {
   type Value = HandlerClassImplementation<TestDefinition>;
 
   type Case_WithFunction = Grok.Assert.IsTrue<Grok.Value.IsExtending<Value['handle'], Grok.Constraint.FunctionLike>>;
-  type Case_WithFunctionInput = Grok.Assert.IsTrue<Grok.Value.IsExactly<Parameters<Value['handle']>, [HandlerFunctionInputFromDefinition<TestDefinition>]>>;
-  type Case_WithFunctionOutput = Grok.Assert.IsTrue<Grok.Value.IsExactly<ReturnType<Value['handle']>, HandlerFunctionOutputFromDefinition<TestDefinition>>>;
+
+  type ValueInput = Parameters<Value['handle']>;
+  type Case_WithFunctionInput = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueInput, [HandlerFunctionInputFromDefinition<TestDefinition>]>>;
+
+  type ValueOutput = ReturnType<Value['handle']>;
+  type Case_WithFunctionOutput = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueOutput, HandlerFunctionOutputFromDefinition<TestDefinition>>>;
 }
