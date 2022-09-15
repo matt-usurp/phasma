@@ -175,13 +175,19 @@ export type HandlerFunctionInput<
 > = {
   /**
    * The {@link Provider} object with any specialised metadata.
+   *
+   * This value will only be available should {@link Provider} not be mentioned in the {@link HandlerDefinition}.
+   * In that case this will be `never` and should not be used.
    */
-  readonly provider: Provider;
+  readonly provider: Grok.If.IsInherit<Grok.Inherit.Normalise<Provider>, never, Provider>;
 
   /**
    * The {@link Context} that has been available through middleware and the base context from the {@link Provider}.
+   *
+   * This value will only be available should {@link Context} not be mentioned in the {@link HandlerDefinition}.
+   * In that case this will be `never` and should not be used.
    */
-  readonly context: Context;
+  readonly context: Grok.If.IsInherit<Grok.Inherit.Normalise<Context>, never, Context>;
 };
 
 /**

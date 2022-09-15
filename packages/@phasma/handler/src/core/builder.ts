@@ -116,7 +116,9 @@ export class HandlerBuilder<
 
       if (this.middlewares.length === 0) {
         return handler.handle({
-          provider,
+          // The type here is `never` because the constraint on the method uses `any`.
+          // There is nothing we can do here type-wise, but this is considered safe.
+          provider: provider as never,
           context: context as any, // eslint-disable-line @typescript-eslint/no-explicit-any
         });
       }
@@ -127,7 +129,9 @@ export class HandlerBuilder<
        */
       const terminate: HandlerBuilderPassThroughFunction = async (context) => {
         return handler.handle({
-          provider,
+          // The type here is `never` because the constraint on the method uses `any`.
+          // There is nothing we can do here type-wise, but this is considered safe.
+          provider: provider as never,
           context,
         });
       };
@@ -139,7 +143,9 @@ export class HandlerBuilder<
       const stack = this.middlewares.reduceRight<HandlerBuilderPassThroughFunction>((next, middleware) => {
         return async (context) => {
           return middleware.invoke({
-            provider,
+            // The type here is `never` because the constraint on the method uses `any`.
+            // There is nothing we can do here type-wise, but this is considered safe.
+            provider: provider as never,
             context,
             next,
           });

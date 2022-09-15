@@ -28,7 +28,7 @@
     }
   ],
   "dependencies": {
-    "@matt-usurp/grok": "^0.8.2"
+    "@matt-usurp/grok": "^0.8.3"
   },
   "peerDependencies": {
     "qs": "^6.11.0",

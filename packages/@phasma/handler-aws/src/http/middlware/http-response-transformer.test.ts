@@ -18,7 +18,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: 'given-provider',
+          provider: 'given-provider' as never,
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
@@ -49,7 +49,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: 'given-provider',
+          provider: 'given-provider' as never,
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),

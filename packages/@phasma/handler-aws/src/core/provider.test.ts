@@ -1,11 +1,10 @@
-import type { Grok } from '@matt-usurp/grok';
 import { NeverReachAssertionError } from '@matt-usurp/grok/core/assert-never';
 import { partial } from '@matt-usurp/grok/testing';
 import type { HandlerFunctionInput } from '@phasma/handler/src/component/handler';
 import { create, nothing } from '@phasma/handler/src/response';
 import * as AwsLambda from 'aws-lambda';
 import type { LambdaHandlerContextBase } from '../component/context';
-import type { LambdaHandlerProviderFromEventSourceIdentifier } from '../component/provider';
+import type { LambdaHandlerProvider, LambdaHandlerProviderFromEventSourceIdentifier } from '../component/provider';
 import { result } from '../response';
 import { entrypoint, factory } from './provider';
 
@@ -34,7 +33,7 @@ describe('entrypoint()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<Grok.Constraint.Anything, LambdaHandlerContextBase>) => {
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
       expect(input.provider.id).toStrictEqual('provider:aws');
       expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
       expect(input.context.function.ttl()).toStrictEqual(3002);
@@ -84,7 +83,7 @@ describe('entrypoint()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<Grok.Constraint.Anything, LambdaHandlerContextBase>) => {
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
       expect(input.provider.id).toStrictEqual('provider:aws');
       expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
       expect(input.context.function.ttl()).toStrictEqual(3002);
@@ -138,7 +137,7 @@ describe('entrypoint()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<Grok.Constraint.Anything, LambdaHandlerContextBase>) => {
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
       expect(input.provider.id).toStrictEqual('provider:aws');
       expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
       expect(input.context.function.ttl()).toStrictEqual(3002);
@@ -171,7 +170,7 @@ describe('factory()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<Grok.Constraint.Anything, LambdaHandlerContextBase>) => {
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
       expect(input.provider.id).toStrictEqual('provider:aws');
       expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
       expect(input.context.function.ttl()).toStrictEqual(3002);
