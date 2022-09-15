@@ -6,15 +6,132 @@ import type { HandlerMiddlewareResponsePassThrough } from '../../component/middl
 import type { HandlerProviderConstraint } from '../../component/provider';
 import type { HandlerResponseConstraint } from '../../component/response';
 
-type ErrorInferMiddlewareDefinition = 'ErrorInferMiddlewareDefinition';
-type ErrorInferContextOutbound = 'ErrorInferContextOutbound';
-type ErrorInferResponseInbound = 'ErrorInferResponseInbound';
-
 /**
  * An internal type that is used to create type free next functions.
  * These are used when building the composite function returned by the {@link HandlerComposer}.
  */
-type HandlerComposerPassThroughFunction = HandlerMiddlewareNextFunction<Grok.Constraint.Anything, Grok.Constraint.Anything>;
+type HandlerComposerPassThroughFunction = (
+/* eslint-disable @typescript-eslint/indent */
+  HandlerMiddlewareNextFunction<
+    any, // eslint-disable-line @typescript-eslint/no-explicit-any
+    any // eslint-disable-line @typescript-eslint/no-explicit-any
+  >
+/* eslint-enable @typescript-eslint/indent */
+);
+
+/**
+ * A constraint type for {@link HandlerMiddlewareClassImplementation} using {@link CurrentContext} and {@link CurrentResponse}.
+ */
+export type HandlerMiddlewareClassImplementationForCurrentUsageConstraint<
+  CurrentContext extends HandlerContextConstraint,
+  CurrentResponse extends HandlerResponseConstraint,
+> = (
+/* eslint-disable @typescript-eslint/indent */
+  HandlerMiddlewareClassImplementation<
+    HandlerMiddlewareDefinition<
+      any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      CurrentContext,
+      any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      any, // eslint-disable-line @typescript-eslint/no-explicit-any
+      CurrentResponse | HandlerMiddlewareResponsePassThrough
+    >
+  >
+/* eslint-enable @typescript-eslint/indent */
+);
+
+/**
+ * Merge the given {@link Middleware} into the current {@link HandlerComposer} type.
+ *
+ * The defined context should be merged with the current available context.
+ * The defined response will be added to the available responses.
+ * If either of the above are {@link Grok.Inherit} then their values are ignored, they will have no effect.
+ */
+export type HandlerComposerWithMiddlware<
+  Provider extends HandlerProviderConstraint,
+  ProviderContext extends HandlerContextConstraint,
+  ProviderResponse extends HandlerResponseConstraint,
+  CurrentContext extends HandlerContextConstraint,
+  CurrentResponse extends HandlerResponseConstraint,
+  Middleware extends HandlerMiddlewareClassImplementationForCurrentUsageConstraint<CurrentContext, CurrentResponse>,
+> = (
+/* eslint-disable @typescript-eslint/indent */
+  HandlerComposer<
+    Provider,
+    (
+      Middleware extends HandlerMiddlewareClassImplementation<infer InferDefinition>
+        ? (
+          InferDefinition extends (
+            HandlerMiddlewareDefinition<
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              infer InferContextOutbound,
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any // eslint-disable-line @typescript-eslint/no-explicit-any
+            >
+          )
+            ? HandlerComposerWithMiddlware.ResolveContext<CurrentContext, InferContextOutbound>
+            : 'Error:InferContextOutbound'
+        )
+        : 'Error:InferMiddlewareDefinition'
+    ),
+    (
+      Middleware extends HandlerMiddlewareClassImplementation<infer InferDefinition>
+        ? (
+          InferDefinition extends (
+            HandlerMiddlewareDefinition<
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              any, // eslint-disable-line @typescript-eslint/no-explicit-any
+              infer InferResponseInbound,
+              any // eslint-disable-line @typescript-eslint/no-explicit-any
+            >
+          )
+            ? HandlerComposerWithMiddlware.ResolveResponse<CurrentResponse, InferResponseInbound>
+            : 'Error:InferResponseInbound'
+        )
+        : 'Error:InferMiddlewareDefinition'
+    ),
+    ProviderContext,
+    ProviderResponse
+  >
+/* eslint-enable @typescript-eslint/indent */
+);
+
+export namespace HandlerComposerWithMiddlware {
+  /**
+   * A utility type to assist with resolving the context for the {@link HandlerComposer}.
+   *
+   * The {@link Current} is always expected to be a valid context type.
+   * The {@link Value} is unknown, and thus we need to validate it before using it.
+   * The result is either a {@link Grok.Merge} of both inputs or {@link Current} on its own.
+   */
+  export type ResolveContext<Current extends HandlerContextConstraint, Value> = (
+  /* eslint-disable @typescript-eslint/indent */
+    Grok.If.IsInherit<
+      Grok.Inherit.Normalise<Value>,
+      Current,
+      Grok.Merge<Current, Value>
+    >
+  /* eslint-enable @typescript-eslint/indent */
+  );
+
+  /**
+   * A utility type to assist with resolving the response for the {@link HandlerComposer}.
+   *
+   * The {@link Current} is always expected to be a valid response type.
+   * The {@link Value} is unknown, and thus we need to validate it before using it.
+   * The result is either a {@link Grok.Union} of both inputs or {@link Current} on its own.
+   */
+  export type ResolveResponse<Current extends HandlerResponseConstraint, Value> = (
+  /* eslint-disable @typescript-eslint/indent */
+    Grok.If.IsInherit<
+      Grok.Inherit.Normalise<Value>,
+      Current,
+      Grok.Union<Current, Value>
+    >
+  /* eslint-enable @typescript-eslint/indent */
+  );
+}
 
 /**
  * A handler composer.
@@ -26,107 +143,56 @@ export class HandlerComposer<
   Provider extends HandlerProviderConstraint,
   CurrentContext extends HandlerContextConstraint,
   CurrentResponse extends HandlerResponseConstraint,
-  OriginContext extends HandlerContextConstraint = CurrentContext,
-  OriginResponse extends HandlerResponseConstraint = CurrentResponse,
+  ProviderContext extends HandlerContextConstraint = CurrentContext,
+  ProviderResponse extends HandlerResponseConstraint = CurrentResponse,
 > {
   /**
-   * All middleware in order of execution.
-   * The types bound to the middleware is not important here, its important that the handlers type mutates.
-   * With the type safety we can only assume these handlers are going to work.
+   * All middleware in order of registration.
    */
-  protected readonly middlewares: HandlerMiddlewareClassImplementation<Grok.Constraint.Anything>[] = [];
+  protected readonly middlewares: HandlerMiddlewareClassImplementation<any>[] = []; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   /**
-   * Use a middleware at this position in the call stack.
-   * These middleware are executed in order before the handler.
-   * Changes to the context and response will bubble between them as expected.
+   * Use the given {@link Middleware} as part of the composition chain.
    */
   public use<
+    Middleware extends (
     /* eslint-disable @typescript-eslint/indent */
-    M extends HandlerMiddlewareClassImplementation<
-      HandlerMiddlewareDefinition<
-        any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        CurrentContext,
-        any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        CurrentResponse | HandlerMiddlewareResponsePassThrough
+      HandlerMiddlewareClassImplementation<
+        HandlerMiddlewareDefinition<
+          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          CurrentContext,
+          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          CurrentResponse | HandlerMiddlewareResponsePassThrough
+        >
       >
-    >,
     /* eslint-enable @typescript-eslint/indent */
-  >(middleware: M): (
-  /* eslint-disable @typescript-eslint/indent */
-    HandlerComposer<
-      Provider,
-      (
-        M extends HandlerMiddlewareClassImplementation<infer InferDefinition>
-          ? (
-            InferDefinition extends HandlerMiddlewareDefinition<
-              any, // eslint-disable-line @typescript-eslint/no-explicit-any
-              any, // eslint-disable-line @typescript-eslint/no-explicit-any
-              infer InferContextOutbound,
-              any, // eslint-disable-line @typescript-eslint/no-explicit-any
-              any // eslint-disable-line @typescript-eslint/no-explicit-any
-            >
-              ? (
-                Grok.If.IsInherit<
-                  Grok.Inherit.Normalise<InferContextOutbound>,
-                  CurrentContext,
-                  Grok.Merge<InferContextOutbound, CurrentContext>
-                >
-              )
-              : ErrorInferContextOutbound
-          )
-          : ErrorInferMiddlewareDefinition
-      ),
-      (
-        M extends HandlerMiddlewareClassImplementation<infer InferDefinition>
-          ? (
-            InferDefinition extends HandlerMiddlewareDefinition<
-              any, // eslint-disable-line @typescript-eslint/no-explicit-any
-              any, // eslint-disable-line @typescript-eslint/no-explicit-any
-              any, // eslint-disable-line @typescript-eslint/no-explicit-any
-              infer InferResponseInbound,
-              any // eslint-disable-line @typescript-eslint/no-explicit-any
-            >
-              ? (
-                Grok.If.IsInherit<
-                  Grok.Inherit.Normalise<InferResponseInbound>,
-                  CurrentResponse,
-                  Grok.Union<InferResponseInbound, CurrentResponse>
-                >
-              )
-              : ErrorInferResponseInbound
-          )
-          : ErrorInferMiddlewareDefinition
-      ),
-      OriginContext,
-      OriginResponse
-    >
-  /* eslint-enable @typescript-eslint/indent */
-  ) {
+    ),
+  >(middleware: Middleware): HandlerComposerWithMiddlware<Provider, ProviderContext, ProviderResponse, CurrentContext, CurrentResponse, Middleware> {
     this.middlewares.push(middleware);
 
     return this as any; // eslint-disable-line @typescript-eslint/no-explicit-any
   }
 
   /**
-   * Terminate the build process by executing the given handler.
-   * This function can be passed to a provider or executed manually.
+   * Use the given {@link Handler} and complete the composition.
    */
   public handle<
+    Handler extends (
     /* eslint-disable @typescript-eslint/indent */
-    H extends HandlerClassImplementation<
-      HandlerDefinition<
-        any, // eslint-disable-line @typescript-eslint/no-explicit-any
-        HandlerContext,
-        HandlerResponse
+      HandlerClassImplementation<
+        HandlerDefinition<
+          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          HandlerContext,
+          HandlerResponse
+        >
       >
-    >,
     /* eslint-enable @typescript-eslint/indent */
+    ),
     HandlerContext extends CurrentContext,
     HandlerResponse extends CurrentResponse,
-  >(handler: H): HandlerComposition<H, Provider, OriginContext, OriginResponse> {
-    const composite: HandlerComposition<H, Provider, OriginContext, OriginResponse> = async (input) => {
+  >(handler: Handler): HandlerComposition<Handler, Provider, ProviderContext, ProviderResponse> {
+    const composite: HandlerComposition<Handler, Provider, ProviderContext, ProviderResponse> = async (input) => {
       const { provider, context } = input;
 
       if (this.middlewares.length === 0) {
@@ -171,7 +237,7 @@ export class HandlerComposer<
     };
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore Assignment to read-only property
+    // @ts-expect-error Assignment to read-only property
     composite.$handler = handler;
 
     return composite;
