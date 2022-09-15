@@ -5,6 +5,8 @@ import type { Grok } from '@matt-usurp/grok';
  *
  * This is expected to be implemented by all providers at the least.
  * This is considered the minimal information a handler will required (if any).
+ *
+ * @deprecated Providers should not be enforced to use this.
  */
 export type HandlerContextBase = {
   /**
@@ -22,6 +24,6 @@ export type HandlerContextBase = {
 };
 
 /**
- * A constraint type that can be used to accept kinds of context.
+ * A constraint type for kinds of context.
  */
 export type HandlerContextConstraint = Grok.Constraint.ObjectLike;
