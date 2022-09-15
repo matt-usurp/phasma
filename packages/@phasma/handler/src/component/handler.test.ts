@@ -226,27 +226,32 @@ export namespace Test_HandlerDefinition {
   }
 
   /**
-   * {@link HandlerDefinition.Get.Provider}
+   * {@link HandlerDefinition.Get}
    */
-  export namespace Test_HandlerDefinition_Get_Provider {
-    type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinition.Get.Provider<TestDefinition>, TestProvider>>;
-    type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Provider<TestDefinition>, TestProvider>>;
-  }
+  export namespace Test_HandlerDefinition_Get {
+    /**
+     * {@link HandlerDefinition.Get.Provider}
+     */
+    export namespace Test_HandlerDefinition_Get_Provider {
+      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinition.Get.Provider<TestDefinition>, TestProvider>>;
+      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Provider<TestDefinition>, TestProvider>>;
+    }
 
-  /**
-   * {@link HandlerDefinition.Get.Context}
-   */
-  export namespace Test_HandlerDefinition_Get_Context {
-    type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinition.Get.Context<TestDefinition>, TestContextData>>;
-    type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Context<TestDefinition>, TestContextData>>;
-  }
+    /**
+     * {@link HandlerDefinition.Get.Context}
+     */
+    export namespace Test_HandlerDefinition_Get_Context {
+      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinition.Get.Context<TestDefinition>, TestContextData>>;
+      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Context<TestDefinition>, TestContextData>>;
+    }
 
-  /**
-   * {@link HandlerDefinition.Get.Response}
-   */
-  export namespace Test_HandlerDefinition_Get_Response {
-    type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinition.Get.Response<TestDefinition>, TestResponse<TestResponseData>>>;
-    type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Response<TestDefinition>, TestResponse<TestResponseData>>>;
+    /**
+     * {@link HandlerDefinition.Get.Response}
+     */
+    export namespace Test_HandlerDefinition_Get_Response {
+      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinition.Get.Response<TestDefinition>, TestResponse<TestResponseData>>>;
+      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Response<TestDefinition>, TestResponse<TestResponseData>>>;
+    }
   }
 }
 
