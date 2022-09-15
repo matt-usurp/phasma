@@ -1,10 +1,10 @@
 import type { Grok } from '@matt-usurp/grok';
-import type { HandlerContextConstraint } from '../component/context';
-import type { HandlerClassImplementation, HandlerComposition, HandlerDefinition } from '../component/handler';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareNextFunction } from '../component/middleware';
-import type { HandlerMiddlewareResponsePassThrough } from '../component/middleware/inherit';
-import type { HandlerProviderConstraint } from '../component/provider';
-import type { HandlerResponseConstraint } from '../component/response';
+import type { HandlerContextConstraint } from '../../component/context';
+import type { HandlerClassImplementation, HandlerComposition, HandlerDefinition } from '../../component/handler';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareNextFunction } from '../../component/middleware';
+import type { HandlerMiddlewareResponsePassThrough } from '../../component/middleware/inherit';
+import type { HandlerProviderConstraint } from '../../component/provider';
+import type { HandlerResponseConstraint } from '../../component/response';
 
 type ErrorInferMiddlewareDefinition = 'ErrorInferMiddlewareDefinition';
 type ErrorInferContextOutbound = 'ErrorInferContextOutbound';
@@ -12,14 +12,17 @@ type ErrorInferResponseInbound = 'ErrorInferResponseInbound';
 
 /**
  * An internal type that is used to create type free next functions.
- * These are used when building the composite function returned by the builder.
+ * These are used when building the composite function returned by the {@link HandlerComposer}.
  */
-type HandlerBuilderPassThroughFunction = HandlerMiddlewareNextFunction<Grok.Constraint.Anything, Grok.Constraint.Anything>;
+type HandlerComposerPassThroughFunction = HandlerMiddlewareNextFunction<Grok.Constraint.Anything, Grok.Constraint.Anything>;
 
 /**
- * A handler builder for composing handlers and middleware.
+ * A handler composer.
+ *
+ * This class builds a composition chain by link middlewares with handlers.
+ * The response is a composition that will trigger the chain.
  */
-export class HandlerBuilder<
+export class HandlerComposer<
   Provider extends HandlerProviderConstraint,
   CurrentContext extends HandlerContextConstraint,
   CurrentResponse extends HandlerResponseConstraint,
@@ -52,7 +55,7 @@ export class HandlerBuilder<
     /* eslint-enable @typescript-eslint/indent */
   >(middleware: M): (
   /* eslint-disable @typescript-eslint/indent */
-    HandlerBuilder<
+    HandlerComposer<
       Provider,
       (
         M extends HandlerMiddlewareClassImplementation<infer InferDefinition>
@@ -139,7 +142,7 @@ export class HandlerBuilder<
        * Middleware next function that will terminate with the handler.
        * This will execute the handler and start the response transformation.
        */
-      const terminate: HandlerBuilderPassThroughFunction = async (context) => {
+      const terminate: HandlerComposerPassThroughFunction = async (context) => {
         return handler.handle({
           // The type here is `never` because the constraint on the method uses `any`.
           // There is nothing we can do here type-wise, but this is considered safe.
@@ -152,7 +155,7 @@ export class HandlerBuilder<
        * A composite function with all the middlewares chained together.
        * Each middleware is strung together in order with the handler terminating the stack.
        */
-      const stack = this.middlewares.reduceRight<HandlerBuilderPassThroughFunction>((next, middleware) => {
+      const stack = this.middlewares.reduceRight<HandlerComposerPassThroughFunction>((next, middleware) => {
         return async (context) => {
           return middleware.invoke({
             // The type here is `never` because the constraint on the method uses `any`.

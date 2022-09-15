@@ -1,5 +1,5 @@
 import type { HandlerProvider } from '@phasma/handler/src/component/provider';
-import type { HandlerBuilder } from '@phasma/handler/src/core/builder';
+import type { HandlerComposer } from '@phasma/handler/src/core/handler/composer';
 import { nothing } from '@phasma/handler/src/response';
 import type { Handler } from '../src/index';
 
@@ -16,9 +16,9 @@ export class ExampleHandler implements Handler.Implementation<ExampleHandlerDefi
   }
 }
 
-declare const builder: HandlerBuilder<ExampleProvider, Handler.Context, Handler.Response.Nothing>;
+declare const composer: HandlerComposer<ExampleProvider, Handler.Context, Handler.Response.Nothing>;
 
-const handler = builder.handle(new ExampleHandler());
+const handler = composer.handle(new ExampleHandler());
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 handler({

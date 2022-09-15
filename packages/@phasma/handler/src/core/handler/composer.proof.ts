@@ -1,8 +1,8 @@
-import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionOutputFromDefinition } from '../component/handler';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../component/middleware';
-import type { HandlerProvider } from '../component/provider';
-import type { HandlerResponse, HandlerResponseIdentifier } from '../component/response';
-import type { HandlerBuilder } from './builder';
+import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionOutputFromDefinition } from '../../component/handler';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
+import type { HandlerProvider } from '../../component/provider';
+import type { HandlerResponse, HandlerResponseIdentifier } from '../../component/response';
+import type { HandlerComposer } from './composer';
 
 type Provider = HandlerProvider<'provider:example'>;
 
@@ -21,7 +21,7 @@ type BaseResponse = HandlerResponse<HandlerResponseIdentifier<'base'>, {
   ok: boolean;
 }>;
 
-declare const b0: HandlerBuilder<Provider, BaseContext, BaseResponse>;
+declare const b0: HandlerComposer<Provider, BaseContext, BaseResponse>;
 
 // --
 // --

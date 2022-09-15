@@ -1,9 +1,9 @@
-import type { HandlerContextBase } from '../component/context';
-import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from '../component/handler';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../component/middleware';
-import type { HandlerProviderWithPayload } from '../component/provider';
-import type { HandlerResponse } from '../component/response';
-import { HandlerBuilder } from './builder';
+import type { HandlerContextBase } from '../../component/context';
+import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from '../../component/handler';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
+import type { HandlerProviderWithPayload } from '../../component/provider';
+import type { HandlerResponse } from '../../component/response';
+import { HandlerComposer } from './composer';
 
 type TestProvider = HandlerProviderWithPayload<'provider:test', {
   input: unknown;
@@ -40,13 +40,13 @@ const handler = new class Handler implements HandlerClassImplementation<TestHand
   }
 };
 
-describe('HandlerBuilder', (): void => {
-  it('with handler, returns composite', async (): Promise<void> => {
-    const builder = new HandlerBuilder<TestProvider, HandlerContextBase, TestResponse>();
-    const composite = builder.handle(handler);
+describe('HandlerComposer', (): void => {
+  it('with handler, returns composition', async (): Promise<void> => {
+    const composer = new HandlerComposer<TestProvider, HandlerContextBase, TestResponse>();
+    const composition = composer.handle(handler);
 
     expect(
-      await composite({
+      await composition({
         provider: {
           id: 'provider:test',
           payload: {
@@ -77,7 +77,7 @@ describe('HandlerBuilder', (): void => {
     });
   });
 
-  it('with middleware, with handler, returns composite', async (): Promise<void> => {
+  it('with middleware, with handler, returns composition', async (): Promise<void> => {
     type TestMiddleware = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
@@ -102,13 +102,13 @@ describe('HandlerBuilder', (): void => {
       }
     };
 
-    const builder = new HandlerBuilder<TestProvider, HandlerContextBase, TestResponse>();
-    const composite = builder
+    const composer = new HandlerComposer<TestProvider, HandlerContextBase, TestResponse>();
+    const composition = composer
       .use(middleware)
       .handle(handler);
 
     expect(
-      await composite({
+      await composition({
         provider: {
           id: 'provider:test',
           payload: {
@@ -174,15 +174,15 @@ describe('HandlerBuilder', (): void => {
       };
     };
 
-    const builder = new HandlerBuilder<TestProvider, HandlerContextBase, TestResponse>();
-    const composite = builder
+    const composer = new HandlerComposer<TestProvider, HandlerContextBase, TestResponse>();
+    const composition = composer
       .use(middleware('first'))
       .use(middleware('second'))
       .use(middleware('third'))
       .handle(handler);
 
     expect(
-      await composite({
+      await composition({
         provider: {
           id: 'provider:test',
           payload: {

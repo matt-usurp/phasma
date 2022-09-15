@@ -8,7 +8,7 @@ import type { HandlerResponseConstraint } from './response';
 /**
  * A middleware definition that defines the {@link Provider}, context and response types.
  *
- * These types will be enforced at build type when used with the handler composer/builder.
+ * These types will be enforced at build type when used with the handler composer.
  * These types can be satisfied through implementing middleware or are provided as a base from the {@link Provider}.
  */
 export type HandlerMiddlewareDefinition<

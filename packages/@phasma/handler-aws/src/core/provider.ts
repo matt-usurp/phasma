@@ -1,15 +1,15 @@
 import { Grok, never } from '@matt-usurp/grok';
 import type { HandlerClassImplementation, HandlerComposition, HandlerEntrypoint } from '@phasma/handler/src/component/handler';
-import { HandlerBuilder } from '@phasma/handler/src/core/builder';
+import { HandlerComposer } from '@phasma/handler/src/core/handler/composer';
 import type { Context as AwsLambdaFunctionContext } from 'aws-lambda';
 import type { LambdaHandlerContextBase } from '../component/context';
 import type { LambdaHandlerEventSourceIdentifiers, LambdaHandlerEventSourcePayloadFromIdentifier, LambdaHandlerEventSourceResponseFromIdentifier, LambdaHandlerEventSourceResultFromIdentifier } from '../component/event';
 import type { LambdaHandlerProviderFromEventSourceIdentifier, LambdaHandlerProviderIdentifier } from '../component/provider';
 import { unwrap } from '../response';
 
-export type LambdaHandlerBuilder<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
+export type LambdaHandlerComposer<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
 /* eslint-disable @typescript-eslint/indent */
-  HandlerBuilder<
+  HandlerComposer<
     LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
     LambdaHandlerContextBase,
     LambdaHandlerEventSourceResponseFromIdentifier<EventSourceIdentifier>
@@ -99,14 +99,14 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
   return fn;
 };
 
-export type LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (application: LambdaHandlerBuilder<EventSourceIdentifier>) => Promise<LambdaHandlerComposition<EventSourceIdentifier>>;
+export type LambdaHandlerCompositionFactory<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (application: LambdaHandlerComposer<EventSourceIdentifier>) => Promise<LambdaHandlerComposition<EventSourceIdentifier>>;
 
 /**
  * A factory that can create handler compositions using the builder functionality provided.
  * This is the recommended entrypoint for building aws handlers.
  */
-export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(factory: LambdaHandlerBuilderCompositionFactory<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
-  const builder: LambdaHandlerBuilder<EventSourceIdentifier> = new HandlerBuilder();
+export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(factory: LambdaHandlerCompositionFactory<EventSourceIdentifier>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
+  const composer: LambdaHandlerComposer<EventSourceIdentifier> = new HandlerComposer();
 
   // Essentially a cache that prevents the builder from being invoked multiple times.
   // This solves the issue of the builder being invoked immediately which makes testing the entrypoint difficult.
@@ -115,7 +115,7 @@ export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceId
 
   return (payload, context) => {
     if (invoker === undefined) {
-      invoker = entrypoint(factory(builder));
+      invoker = entrypoint(factory(composer));
     }
 
     return invoker(payload, context);
