@@ -122,12 +122,12 @@ export namespace HandlerDefinition {
    */
   export namespace Get {
     /**
-     * Retrieve the defined provider from {@link Definition}.
+     * Retrieve the handler provider from {@link Definition}.
      */
     export type Provider<Definition extends HandlerDefinitionConstraint> = Definition['HP'];
 
     /**
-     * Retrieve the handle context from {@link Definition}.
+     * Retrieve the handler context from {@link Definition}.
      */
     export type Context<Definition extends HandlerDefinitionConstraint> = Definition['HC'];
 
@@ -154,7 +154,7 @@ export type HandlerDefinitionBase = (
 );
 
 /**
- * A constraint type for the {@link HandlerDefinition}.
+ * A constraint type for {@link HandlerDefinition}.
  */
 export type HandlerDefinitionConstraint = (
 /* eslint-disable @typescript-eslint/indent */
@@ -216,15 +216,20 @@ export type HandlerFunctionOutputFromDefinition<Definition extends HandlerDefini
  */
 export type HandlerClassImplementation<Definition extends HandlerDefinitionConstraint> = {
   /**
-   * Handle an action using the given input parameters.
+   * Handle an action with the given input parameters.
    *
-   * You have access to the `{ context }` which should be as defined in the {@link Definition}.
-   * You have access to the `{ provider }` which should denote the provider that called the handler.
+   * You have access to the following input data, resolved from the {@link Definition}.
+   *
+   * - `input.context` which is the context requested.
+   * - `input.provider` which should denote the provider that called the handler.
    */
   handle(
-    input: ( // The type breakdown is important here otherwise we get errors with the usage.
+    input: ( //
     /* eslint-disable @typescript-eslint/indent */
       HandlerFunctionInput<
+        // We are resolving the input manually here as using the `FromDefinition` version causes type errors.
+        // My thinking is that the type system has better resolution with this method over the helper class.
+        // Either way, this works and can become a refactor point in the future.
         HandlerDefinition.Get.Provider<Definition>,
         HandlerDefinition.Get.Context<Definition>
       >
