@@ -80,7 +80,7 @@ export namespace HandlerDefinition {
   );
 
   /**
-   * Use the given {@link Context} within the given {@link Definition}.
+   * Use the given {@link Context} within {@link Definition}.
    */
   export type WithContext<
     Context extends HandlerContextConstraint,
@@ -118,7 +118,7 @@ export namespace HandlerDefinition {
   );
 
   /**
-   * Retrieve data from the {@link HandlerDefinition}.
+   * Retrieve data from {@link HandlerDefinition}.
    */
   export namespace Get {
     /**
@@ -191,7 +191,7 @@ export type HandlerFunctionInput<
 };
 
 /**
- * The handler function input parameters resolved from the {@link Definition}.
+ * The handler function input parameters resolved from {@link Definition}.
  */
 export type HandlerFunctionInputFromDefinition<Definition extends HandlerDefinitionConstraint> = (
 /* eslint-disable @typescript-eslint/indent */
@@ -203,7 +203,7 @@ export type HandlerFunctionInputFromDefinition<Definition extends HandlerDefinit
 );
 
 /**
- * The handler function response resolved from the given {@link Definition}.
+ * The handler function response resolved from {@link Definition}.
  */
 export type HandlerFunctionOutputFromDefinition<Definition extends HandlerDefinitionConstraint> = (
   HandlerDefinition.Get.Response<Definition> extends HandlerResponseConstraint
