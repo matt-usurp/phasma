@@ -1,4 +1,5 @@
 import type { Grok } from '@matt-usurp/grok';
+import type { Response } from '../index';
 import type { HandlerResponse, HandlerResponseIdentifier, HandlerResponsePresetNothing, HandlerResponsePresetNothingIdentity } from './response';
 
 it('ignored, only type tests', (): void => {
@@ -11,9 +12,12 @@ it('ignored, only type tests', (): void => {
  * {@link HandlerResponseIdentifier}
  */
 export namespace Test_HandlerResponseIdentifier {
-  type Case_WithOne = Grok.Assert<HandlerResponseIdentifier<'one'>, 'response:one'>;
-  type Case_WithTwo = Grok.Assert<HandlerResponseIdentifier<'two'>, 'response:two'>;
-  type Case_WithThree = Grok.Assert<HandlerResponseIdentifier<'three'>, 'response:three'>;
+  type Case_WithOne = Grok.Assert<Response.Identifier<'one'>, 'response:one'>;
+  type Case_WithOneAlias = Grok.Assert<HandlerResponseIdentifier<'one'>, 'response:one'>;
+  type Case_WithTwo = Grok.Assert<Response.Identifier<'two'>, 'response:two'>;
+  type Case_WithTwoAlias = Grok.Assert<HandlerResponseIdentifier<'two'>, 'response:two'>;
+  type Case_WithThree = Grok.Assert<Response.Identifier<'three'>, 'response:three'>;
+  type Case_WithThreeAlias = Grok.Assert<HandlerResponseIdentifier<'three'>, 'response:three'>;
 }
 
 /**
@@ -27,6 +31,21 @@ export namespace Test_HandlerResponse {
    * {@link HandlerResponse}
    */
   export namespace Test_HandlerResponse {
+    type Case_WithStructureOne = Grok.Assert<TestResponseOne, {
+      readonly type: 'response:one';
+      readonly value: 'value-one';
+    }>;
+
+    type Case_WithStructureTwo = Grok.Assert<TestResponseTwo, {
+      readonly type: 'response:two';
+      readonly value: 'value-two';
+    }>;
+  }
+
+  /**
+   * {@link HandlerResponse}
+   */
+  export namespace Test_HandlerResponse_WithAlias {
     type Case_WithStructureOne = Grok.Assert<TestResponseOne, {
       readonly type: 'response:one';
       readonly value: 'value-one';

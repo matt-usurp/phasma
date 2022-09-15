@@ -4,6 +4,7 @@ import type { HandlerResponseConstraint } from '@phasma/handler/src/component/re
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
 import { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z } from 'zod';
+import { LambdaHandlerProviderWithEventFromEventSourceIdentifier } from '../../component/provider';
 import type { Event } from '../../index';
 import { HttpRequestPathValidatorContext, HttpRequestPathValidatorErrorResponse, HttpRequestPathValidatorMiddleware } from './http-request-path-validator';
 
@@ -19,13 +20,13 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
       expect(
         await middleware.invoke({
           // Provider is ignore for this middleware
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: undefined,
             }),
-          },
+          }),
 
           // Context is ignored for this middleware
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -64,13 +65,13 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
       expect(
         await middleware.invoke({
           // Provider is ignore for this middleware
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: 'value:provider:payload:path:invalid' as unknown as Record<string, string>,
             }),
-          },
+          }),
 
           // Context is ignored for this middleware
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -120,15 +121,15 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
       expect(
         await middleware.invoke({
           // Provider is ignore for this middleware
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: {
                 foo: 'bar',
               },
             }),
-          },
+          }),
 
           // Context is ignored for this middleware
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -163,15 +164,15 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: {
                 user: 'some-user',
               },
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -224,16 +225,16 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: {
                 user: 'some-user',
                 session: 'some-session',
               },
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,

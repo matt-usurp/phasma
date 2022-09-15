@@ -2,7 +2,7 @@ import type { HandlerContextBase, HandlerContextConstraint } from '@phasma/handl
 import type { HandlerDefinition } from '@phasma/handler/src/component/handler';
 import type { HandlerResponseConstraint } from '@phasma/handler/src/component/response';
 import type { LambdaHandlerEventSourceIdentifiers, LambdaHandlerEventSourceResponseFromIdentifier } from './event';
-import type { LambdaHandlerProviderFromEventSourceIdentifier } from './provider';
+import type { LambdaHandlerProviderWithEventFromEventSourceIdentifier } from './provider';
 
 export type LambdaHandlerDefinition<
   EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers,
@@ -11,7 +11,7 @@ export type LambdaHandlerDefinition<
 > = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
-    LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
+    LambdaHandlerProviderWithEventFromEventSourceIdentifier<EventSourceIdentifier>,
     Context,
     Response
   >

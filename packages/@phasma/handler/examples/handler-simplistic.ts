@@ -8,9 +8,9 @@ export type ExampleProvider = HandlerProvider<'provider:foo'>;
 export type ExampleHandlerDefinition = Handler.Definition<ExampleProvider, Handler.Context, Handler.Response.Nothing>;
 
 export class ExampleHandler implements Handler.Implementation<ExampleHandlerDefinition> {
-  public async handle({ provider, context }: Handler.Fn.Parameters<ExampleHandlerDefinition>): Handler.Fn.Response<ExampleHandlerDefinition> {
+  public async handle({ provider, context }: Handler.Fn.Input<ExampleHandlerDefinition>): Handler.Fn.Output<ExampleHandlerDefinition> {
     provider.id; // "provider:foo"
-    context.request.id; // "some-id"
+    context.id; // "some-id"
 
     return nothing();
   }
@@ -27,8 +27,6 @@ handler({
   },
 
   context: {
-    request: {
-      id: 'some-id',
-    },
+    id: 'some-id',
   },
 });

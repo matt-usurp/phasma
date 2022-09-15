@@ -5,11 +5,14 @@ type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
 type Definition = Handler.Definition<EventSourceIdentifier>;
 
 export class SomeHandler implements Handler.Implementation<Definition> {
-  public async handle({ provider, context }: Handler.Fn.Parameters<Definition>): Handler.Fn.Response<Definition> {
+  /**
+   * @inheritdoc
+   */
+  public async handle({ provider, context }: Handler.Fn.Input<Definition>): Handler.Fn.Output<Definition> {
     provider.id;
-    provider.payload.headers;
+    provider.event.headers;
 
-    context.request.id;
+    context.id;
 
     throw undefined;
   }

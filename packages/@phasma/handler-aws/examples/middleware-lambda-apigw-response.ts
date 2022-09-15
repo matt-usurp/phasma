@@ -28,6 +28,9 @@ type Definition = (
  * When another response is received we ignore and pass it up chain.
  */
 export class TransformCustomResponseMiddleware implements Middleware.Implementation<Definition> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ context, next }: Middleware.Fn.Parameters<Definition>): Middleware.Fn.Response<Definition> {
     const value = await next(context);
 
@@ -38,7 +41,7 @@ export class TransformCustomResponseMiddleware implements Middleware.Implementat
       const data = unwrap(value);
 
       // Return a response that is compatible with the gateway.
-      return result<Response.Unwrapped<EventSourceResponse>>({
+      return result<Response.Get.Value<EventSourceResponse>>({
         statusCode: 401,
 
         body: JSON.stringify({

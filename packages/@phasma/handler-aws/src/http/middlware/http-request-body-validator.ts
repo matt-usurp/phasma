@@ -42,7 +42,7 @@ export class HttpRequestBodyValidatorMiddleware<T> implements Middleware.Impleme
   ) {}
 
   public async invoke({ provider, context, next }: Middleware.Fn.Parameters<HttpRequestBodyValidatorMiddlewareDefinition<T>>): Middleware.Fn.Response<HttpRequestBodyValidatorMiddlewareDefinition<T>> {
-    const body = provider.payload?.body;
+    const body = provider.event?.body;
 
     if (body === undefined || body === '') {
       return http({

@@ -5,6 +5,7 @@ import type { HttpQueryParser } from '@phasma/handler/src/http/query';
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z } from 'zod';
+import { LambdaHandlerProviderWithEventFromEventSourceIdentifier } from '../../component/provider';
 import type { Event } from '../../index';
 import { HttpRequesQueryValidatorMiddleware, HttpRequestQueryValidatorContext, HttpRequestQueryValidatorErrorResponse } from './http-request-query-validator';
 
@@ -26,13 +27,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               rawQueryString: undefined,
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -68,13 +69,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               rawQueryString: 'value:provider:payload:query:invalid',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -119,13 +120,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               rawQueryString: 'value:provider:payload:query:invalid',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -179,13 +180,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               rawQueryString: 'value:provider:payload:raw-query-string:valid',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -220,13 +221,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               rawQueryString: '<foo><bar>',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -273,13 +274,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               rawQueryString: 'foo=a',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -332,13 +333,13 @@ describe(HttpRequesQueryValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               rawQueryString: 'foo=a&bar=b',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,

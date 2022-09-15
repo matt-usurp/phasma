@@ -1,7 +1,7 @@
 import { entrypoint, factory, id } from './core/provider';
 import * as index from './index';
 
-describe('.id', (): void => {
+describe('id', (): void => {
   it('is forwarded export', () => expect(index.id).toStrictEqual(id));
 });
 

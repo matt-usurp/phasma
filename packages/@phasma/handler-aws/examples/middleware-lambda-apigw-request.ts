@@ -27,8 +27,11 @@ type Definition = (
  * When the key is present it is provided as context down chain.
  */
 export class EnforceApiKeyHeaderMiddleware implements Middleware.Implementation<Definition> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ provider, context, next }: Middleware.Fn.Parameters<Definition>): Middleware.Fn.Response<Definition> {
-    const value = provider.payload.headers['x-api-key'];
+    const value = provider.event.headers['x-api-key'];
 
     if (value === undefined || value.length === 0) {
       return result<Event.Result<EventSourceIdentifier>>({
