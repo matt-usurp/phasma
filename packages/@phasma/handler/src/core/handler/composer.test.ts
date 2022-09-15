@@ -1,9 +1,10 @@
+import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextBase } from '../../component/context';
 import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from '../../component/handler';
 import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
-import type { HandlerProviderWithPayload } from '../../component/provider';
-import type { HandlerResponse } from '../../component/response';
-import { HandlerComposer } from './composer';
+import type { HandlerProvider, HandlerProviderIdentifier, HandlerProviderWithPayload } from '../../component/provider';
+import type { HandlerResponse, HandlerResponseIdentifier } from '../../component/response';
+import { HandlerComposer, HandlerComposerWithMiddlware } from './composer';
 
 type TestProvider = HandlerProviderWithPayload<'provider:test', {
   input: unknown;
@@ -222,3 +223,350 @@ describe('HandlerComposer', (): void => {
     });
   });
 });
+
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+/**
+ * {@link HandlerComposerWithMiddlware}
+ */
+export namespace Test_HandlerComposerWithMiddlware {
+  type InferContextFromHandlerComposition<Composition> = (
+  /* eslint-disable @typescript-eslint/indent */
+    Composition extends (
+      HandlerComposer<
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        infer InferValue,
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any // eslint-disable-line @typescript-eslint/no-explicit-any
+      >
+    )
+      ? InferValue
+      : never
+  /* eslint-enable @typescript-eslint/indent */
+  );
+
+  type InferResponseFromHandlerComposition<Composition> = (
+  /* eslint-disable @typescript-eslint/indent */
+    Composition extends (
+      HandlerComposer<
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        infer InferValue,
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any // eslint-disable-line @typescript-eslint/no-explicit-any
+      >
+    )
+      ? InferValue
+      : never
+  /* eslint-enable @typescript-eslint/indent */
+  );
+
+  type InferProviderContextFromHandlerComposition<Composition> = (
+  /* eslint-disable @typescript-eslint/indent */
+    Composition extends (
+      HandlerComposer<
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        infer InferValue,
+        any // eslint-disable-line @typescript-eslint/no-explicit-any
+      >
+    )
+      ? InferValue
+      : never
+  /* eslint-enable @typescript-eslint/indent */
+  );
+
+  type InferProviderResponseFromHandlerComposition<Composition> = (
+  /* eslint-disable @typescript-eslint/indent */
+    Composition extends (
+      HandlerComposer<
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        infer InferValue
+      >
+    )
+      ? InferValue
+      : never
+  /* eslint-enable @typescript-eslint/indent */
+  );
+
+  /**
+   * {@link HandlerComposerWithMiddlware}
+   */
+  export namespace Test_HandlerComposerWithMiddlware_WithResponse_UnionWithCurrentResponse {
+    type Provider = HandlerProvider<HandlerProviderIdentifier<'provider'>>;
+    type ProviderContext = { ignore: 'provider:context' };
+    type ProviderResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { ignore: 'provider:response' }>;
+
+    type CurrentContext = { current: 'current:context' };
+    type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { current: 'current:response' }>;
+
+    type MiddlewareContextOutbound = { outbound: 'middleware:context' };
+    type MiddlewareResponseInbound = HandlerResponse<HandlerResponseIdentifier<'outbound'>, { outbound: 'middleware:response' }>;
+
+    type MiddlewareDefinition = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerMiddlewareDefinition<
+        HandlerMiddlewareDefinition.Inherit.Provider,
+        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        MiddlewareContextOutbound,
+        MiddlewareResponseInbound,
+        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type Value = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerComposerWithMiddlware<
+        Provider,
+        ProviderContext,
+        ProviderResponse,
+        CurrentContext,
+        CurrentResponse,
+        HandlerMiddlewareClassImplementation<MiddlewareDefinition>
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type ValueConext = InferContextFromHandlerComposition<Value>;
+    type ValueResponse = InferResponseFromHandlerComposition<Value>;
+
+    type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueConext, CurrentContext & MiddlewareContextOutbound>>;
+    type Case_WithResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueResponse, CurrentResponse | MiddlewareResponseInbound>>;
+
+    type Case_WithProviderContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderContextFromHandlerComposition<Value>, ProviderContext>>;
+    type Case_WithProviderResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderResponseFromHandlerComposition<Value>, ProviderResponse>>;
+  }
+
+  /**
+   * {@link HandlerComposerWithMiddlware}
+   */
+  export namespace Test_HandlerComposerWithMiddlware_WithInherit_IgnoreMiddleware {
+    type Provider = HandlerProvider<HandlerProviderIdentifier<'provider'>>;
+    type ProviderContext = { ignore: 'provider:context' };
+    type ProviderResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { ignore: 'provider:response' }>;
+
+    type CurrentContext = { current: 'current:context' };
+    type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { current: 'current:response' }>;
+
+    type MiddlewareContextOutbound = HandlerMiddlewareDefinition.Inherit.ContextOutbound;
+    type MiddlewareResponseInbound = HandlerMiddlewareDefinition.Inherit.ResponseInbound;
+
+    type MiddlewareDefinition = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerMiddlewareDefinition<
+        HandlerMiddlewareDefinition.Inherit.Provider,
+        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        MiddlewareContextOutbound,
+        MiddlewareResponseInbound,
+        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type Value = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerComposerWithMiddlware<
+        Provider,
+        ProviderContext,
+        ProviderResponse,
+        CurrentContext,
+        CurrentResponse,
+        HandlerMiddlewareClassImplementation<MiddlewareDefinition>
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type ValueConext = InferContextFromHandlerComposition<Value>;
+    type ValueResponse = InferResponseFromHandlerComposition<Value>;
+
+    type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueConext, CurrentContext>>;
+    type Case_WithResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueResponse, CurrentResponse>>;
+
+    type Case_WithProviderContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderContextFromHandlerComposition<Value>, ProviderContext>>;
+    type Case_WithProviderResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderResponseFromHandlerComposition<Value>, ProviderResponse>>;
+  }
+
+  /**
+   * {@link HandlerComposerWithMiddlware}
+   */
+  export namespace Test_HandlerComposerWithMiddlware_WithContext_MergeWithCurrentContext {
+    type Provider = HandlerProvider<HandlerProviderIdentifier<'provider'>>;
+    type ProviderContext = { ignore: 'provider:context' };
+    type ProviderResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { ignore: 'provider:response' }>;
+
+    type CurrentContext = { current: 'current:context' };
+    type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { current: 'current:response' }>;
+
+    type MiddlewareContextOutbound = { outbound: 'middleware:context' };
+    type MiddlewareResponseInbound = HandlerMiddlewareDefinition.Inherit.ResponseInbound;
+
+    type MiddlewareDefinition = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerMiddlewareDefinition<
+        HandlerMiddlewareDefinition.Inherit.Provider,
+        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        MiddlewareContextOutbound,
+        MiddlewareResponseInbound,
+        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type Value = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerComposerWithMiddlware<
+        Provider,
+        ProviderContext,
+        ProviderResponse,
+        CurrentContext,
+        CurrentResponse,
+        HandlerMiddlewareClassImplementation<MiddlewareDefinition>
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type ValueConext = InferContextFromHandlerComposition<Value>;
+    type ValueResponse = InferResponseFromHandlerComposition<Value>;
+
+    type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueConext, CurrentContext & MiddlewareContextOutbound>>;
+    type Case_WithResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueResponse, CurrentResponse>>;
+
+    type Case_WithProviderContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderContextFromHandlerComposition<Value>, ProviderContext>>;
+    type Case_WithProviderResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderResponseFromHandlerComposition<Value>, ProviderResponse>>;
+  }
+
+  /**
+   * {@link HandlerComposerWithMiddlware}
+   */
+  export namespace Test_HandlerComposerWithMiddlware_WithResponse_UnionWithCurrentResponse {
+    type Provider = HandlerProvider<HandlerProviderIdentifier<'provider'>>;
+    type ProviderContext = { ignore: 'provider:context' };
+    type ProviderResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { ignore: 'provider:response' }>;
+
+    type CurrentContext = { current: 'current:context' };
+    type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { current: 'current:response' }>;
+
+    type MiddlewareContextOutbound = HandlerMiddlewareDefinition.Inherit.ContextOutbound;
+    type MiddlewareResponseInbound = HandlerResponse<HandlerResponseIdentifier<'outbound'>, { outbound: 'middleware:response' }>;
+
+    type MiddlewareDefinition = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerMiddlewareDefinition<
+        HandlerMiddlewareDefinition.Inherit.Provider,
+        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        MiddlewareContextOutbound,
+        MiddlewareResponseInbound,
+        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type Value = (
+    /* eslint-disable @typescript-eslint/indent */
+      HandlerComposerWithMiddlware<
+        Provider,
+        ProviderContext,
+        ProviderResponse,
+        CurrentContext,
+        CurrentResponse,
+        HandlerMiddlewareClassImplementation<MiddlewareDefinition>
+      >
+    /* eslint-enable @typescript-eslint/indent */
+    );
+
+    type ValueConext = InferContextFromHandlerComposition<Value>;
+    type ValueResponse = InferResponseFromHandlerComposition<Value>;
+
+    type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueConext, CurrentContext>>;
+    type Case_WithResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueResponse, CurrentResponse | MiddlewareResponseInbound>>;
+
+    type Case_WithProviderContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderContextFromHandlerComposition<Value>, ProviderContext>>;
+    type Case_WithProviderResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<InferProviderResponseFromHandlerComposition<Value>, ProviderResponse>>;
+  }
+
+  /**
+   * {@link HandlerComposerWithMiddlware.ResolveContext}
+   */
+  export namespace Test_HandlerComposerWithMiddlware_ResolveContext {
+    /**
+     * {@link HandlerComposerWithMiddlware.ResolveContext}
+     */
+    export namespace Test_HandlerComposerWithMiddlware_ResolveContext_WithValue {
+      type CurrentContext = { current: 'current:context' };
+      type NewContext = { new: 'new:context' };
+
+      type Value = HandlerComposerWithMiddlware.ResolveContext<CurrentContext, NewContext>;
+
+      type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, CurrentContext & NewContext>>;
+    }
+
+    /**
+     * {@link HandlerComposerWithMiddlware.ResolveContext}
+     */
+    export namespace Test_HandlerComposerWithMiddlware_ResolveContext_WithAny {
+      type CurrentContext = { current: 'current:context' };
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      type Value = HandlerComposerWithMiddlware.ResolveContext<CurrentContext, any>;
+
+      type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, CurrentContext>>;
+    }
+
+    /**
+     * {@link HandlerComposerWithMiddlware.ResolveContext}
+     */
+    export namespace Test_HandlerComposerWithMiddlware_ResolveContext_WithInherit {
+      type CurrentContext = { current: 'current:context' };
+
+      type Value = HandlerComposerWithMiddlware.ResolveContext<CurrentContext, Grok.Inherit>;
+
+      type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, CurrentContext>>;
+    }
+  }
+
+  /**
+   * {@link HandlerComposerWithMiddlware.ResolveResponse}
+   */
+  export namespace Test_HandlerComposerWithMiddlware_ResolveResponse {
+    /**
+     * {@link HandlerComposerWithMiddlware.ResolveResponse}
+     */
+    export namespace Test_HandlerComposerWithMiddlware_ResolveResponse_WithValue {
+      type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'current'>, { current: 'current:context' }>;
+      type NewResponse = HandlerResponse<HandlerResponseIdentifier<'new'>, { new: 'new:context' }>;
+
+      type Value = HandlerComposerWithMiddlware.ResolveResponse<CurrentResponse, NewResponse>;
+
+      type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, CurrentResponse | NewResponse>>;
+    }
+
+    /**
+     * {@link HandlerComposerWithMiddlware.ResolveResponse}
+     */
+    export namespace Test_HandlerComposerWithMiddlware_ResolveResponse_WithAny {
+      type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'current'>, { current: 'current:context' }>;
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      type Value = HandlerComposerWithMiddlware.ResolveResponse<CurrentResponse, any>;
+
+      type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, CurrentResponse>>;
+    }
+
+    /**
+     * {@link HandlerComposerWithMiddlware.ResolveResponse}
+     */
+    export namespace Test_HandlerComposerWithMiddlware_ResolveResponse_WithInherit {
+      type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'current'>, { current: 'current:context' }>;
+
+      type Value = HandlerComposerWithMiddlware.ResolveResponse<CurrentResponse, Grok.Inherit>;
+
+      type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, CurrentResponse>>;
+    }
+  }
+}
