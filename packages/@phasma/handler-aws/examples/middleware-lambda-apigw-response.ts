@@ -13,9 +13,9 @@ type CustomResponse = HandlerResponse<CustomResponseIdentifier, {
 type Definition = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
-    Middleware.Definition.SomeProvider,
-    Middleware.Definition.SomeContextInbound,
-    Middleware.Definition.SomeContextOutbound,
+    Middleware.Definition.Inherit.Provider,
+    Middleware.Definition.Inherit.ContextInbound,
+    Middleware.Definition.Inherit.ContextOutbound,
     CustomResponse,
     EventSourceResponse
   >

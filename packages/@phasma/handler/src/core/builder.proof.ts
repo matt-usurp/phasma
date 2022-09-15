@@ -31,19 +31,20 @@ type MiddlewarePassThrough = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
-    HandlerMiddlewareDefinition.SomeContextInbound,
-    HandlerMiddlewareDefinition.SomeContextOutbound,
-    HandlerMiddlewareDefinition.SomeResponseInbound,
-    HandlerMiddlewareDefinition.SomeResponseOutbound
+    HandlerMiddlewareDefinition.Inherit.Provider,
+    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
 class WithPassThrough implements HandlerMiddlewareClassImplementation<MiddlewarePassThrough> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewarePassThrough>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewarePassThrough> {
-    const response = next({
-      ...context,
-    });
+    const response = next(context);
 
     return response;
   }
@@ -60,14 +61,17 @@ type MiddlewareKnownInputContext = (
   HandlerMiddlewareDefinition<
     Provider,
     BaseContext,
-    HandlerMiddlewareDefinition.SomeContextOutbound,
-    HandlerMiddlewareDefinition.SomeResponseInbound,
-    HandlerMiddlewareDefinition.SomeResponseOutbound
+    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
 class WithKnownInputContext implements HandlerMiddlewareClassImplementation<MiddlewareKnownInputContext> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareKnownInputContext>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareKnownInputContext> {
     const response = next({
       ...context,
@@ -88,14 +92,17 @@ type MiddlewareContextSubset = (
   HandlerMiddlewareDefinition<
     Provider,
     Pick<BaseContext, 'age'>,
-    HandlerMiddlewareDefinition.SomeContextOutbound,
-    HandlerMiddlewareDefinition.SomeResponseInbound,
-    HandlerMiddlewareDefinition.SomeResponseOutbound
+    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
 class WithContextSubset implements HandlerMiddlewareClassImplementation<MiddlewareContextSubset> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareContextSubset>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareContextSubset> {
     const response = next({
       ...context,
@@ -118,13 +125,16 @@ type MiddlewareContextAdditional = (
     Provider,
     Pick<BaseContext, 'age'>,
     { born: Date },
-    HandlerMiddlewareDefinition.SomeResponseInbound,
-    HandlerMiddlewareDefinition.SomeResponseOutbound
+    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
 class WithContextAdditional implements HandlerMiddlewareClassImplementation<MiddlewareContextAdditional> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareContextAdditional>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareContextAdditional> {
     const response = next({
       ...context,
@@ -148,14 +158,17 @@ type MiddlewareContextUsingAdditional = (
   HandlerMiddlewareDefinition<
     Provider,
     { born: Date },
-    HandlerMiddlewareDefinition.SomeContextOutbound,
-    HandlerMiddlewareDefinition.SomeResponseInbound,
-    HandlerMiddlewareDefinition.SomeResponseOutbound
+    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
 class WithContextUsingAdditional implements HandlerMiddlewareClassImplementation<MiddlewareContextUsingAdditional> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareContextUsingAdditional>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareContextUsingAdditional> {
     const response = next({
       ...context,
@@ -180,8 +193,8 @@ type MiddlewareResponseAdditional = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
-    HandlerMiddlewareDefinition.SomeContextInbound,
-    HandlerMiddlewareDefinition.SomeContextOutbound,
+    HandlerMiddlewareDefinition.Inherit.Provider,
+    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
     NewResponse,
     BaseResponse
   >
@@ -189,10 +202,11 @@ type MiddlewareResponseAdditional = (
 );
 
 class WithResponseAdditional implements HandlerMiddlewareClassImplementation<MiddlewareResponseAdditional> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareResponseAdditional>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareResponseAdditional> {
-    const response = await next({
-      ...context,
-    });
+    const response = await next(context);
 
     if (response.type === 'response:new') {
       return {} as BaseResponse;
@@ -214,14 +228,17 @@ type MiddlewareResponseUsage = (
   HandlerMiddlewareDefinition<
     Provider,
     { age: number },
-    HandlerMiddlewareDefinition.SomeContextOutbound,
-    HandlerMiddlewareDefinition.SomeResponseInbound,
+    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
+    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
     NewResponse
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
 class WithResponseUsage implements HandlerMiddlewareClassImplementation<MiddlewareResponseUsage> {
+  /**
+   * @inheritdoc
+   */
   public async invoke({ next, context }: HandlerMiddlewareFunctionInputFromDefinition<MiddlewareResponseUsage>): HandlerMiddlewareFunctionOutputFromDefinition<MiddlewareResponseUsage> {
     const response = await next({
       ...context,
@@ -250,7 +267,7 @@ const b7 = b6.use(new WithResponseUsage());
 type ExampleHandlerDefinition = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
-    HandlerDefinition.SomeProvider,
+    HandlerDefinition.Inherit.Provider,
     { age: number },
     NewResponse
   >
@@ -258,6 +275,9 @@ type ExampleHandlerDefinition = (
 );
 
 class ExampleHandler implements HandlerClassImplementation<ExampleHandlerDefinition> {
+  /**
+   * @inheritdoc
+   */
   public async handle(): HandlerFunctionOutputFromDefinition<ExampleHandlerDefinition> {
     throw 123; // w/e
   }
