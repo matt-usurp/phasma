@@ -30,7 +30,7 @@
     }
   ],
   "dependencies": {
-    "@matt-usurp/grok": "^0.8.2",
+    "@matt-usurp/grok": "^0.8.3",
     "@phasma/handler": "^0.3.1",
     "@types/aws-lambda": "^8.10.104"
   }

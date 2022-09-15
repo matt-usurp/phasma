@@ -27,10 +27,7 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          // Provider is ignore for this middleware
-          provider: 'given-provider',
-
-          // Context is ignored for this middleware
+          provider: 'given-provider' as never,
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
@@ -69,10 +66,7 @@ describe(HttpResponseBodyEncoderMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          // Provider is ignore for this middleware
-          provider: 'given-provider',
-
-          // Context is ignored for this middleware
+          provider: 'given-provider' as never,
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
