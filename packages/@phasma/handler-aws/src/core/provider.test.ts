@@ -1,30 +1,34 @@
 import { NeverReachAssertionError } from '@matt-usurp/grok/core/assert-never';
 import { partial } from '@matt-usurp/grok/testing';
+import type { HandlerContextBase } from '@phasma/handler/src/component/context';
 import type { HandlerFunctionInput } from '@phasma/handler/src/component/handler';
 import { create, nothing } from '@phasma/handler/src/response';
 import * as AwsLambda from 'aws-lambda';
-import type { LambdaHandlerContextBase } from '../component/context';
-import type { LambdaHandlerProvider, LambdaHandlerProviderFromEventSourceIdentifier } from '../component/provider';
+import type { LambdaHandlerProvider, LambdaHandlerProviderWithEventFromEventSourceIdentifier } from '../component/provider';
 import { result } from '../response';
 import { entrypoint, factory } from './provider';
 
 type TestContext = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerFunctionInput<
-    LambdaHandlerProviderFromEventSourceIdentifier<'cloudwatch:log'>,
-    LambdaHandlerContextBase
+    LambdaHandlerProviderWithEventFromEventSourceIdentifier<'cloudwatch:log'>,
+    HandlerContextBase
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
-const context: AwsLambda.Context = {
-  awsRequestId: 'test-request-id',
-  invokedFunctionArn: 'aws:arn:fn:something',
-  functionName: 'test-function-name',
-  functionVersion: 'test-function-verison',
+const context = partial<AwsLambda.Context>({
+  awsRequestId: 'test:context:id',
+
+  logGroupName: 'test:logging:group:name',
+  logStreamName: 'test:logging:stream:name',
+
+  invokedFunctionArn: 'test:function:arn',
+  functionName: 'test:function:name',
+  functionVersion: 'test:function:version',
   memoryLimitInMB: '400',
   getRemainingTimeInMillis: () => 3002,
-} as AwsLambda.Context;
+});
 
 describe('entrypoint()', (): void => {
   it('with handler, creates entrypoint, executes as expected, returns nothing', async (): Promise<void> => {
@@ -33,44 +37,47 @@ describe('entrypoint()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
-      expect(input.provider.id).toStrictEqual('provider:aws');
-      expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
-      expect(input.context.function.ttl()).toStrictEqual(3002);
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, HandlerContextBase>) => {
+      expect(input.provider.id).toStrictEqual('provider:aws:lambda');
+      expect(input.provider.function.arn).toStrictEqual('test:function:arn');
+      expect(input.provider.function.ttl()).toStrictEqual(3002);
 
       return nothing();
     });
 
     const response = await wrapper({
       awslogs: {
-        data: 'here-log',
+        data: 'test:event:logs:data',
       },
     }, context);
 
     expect(handler).toBeCalledTimes(1);
     expect(handler).toHaveBeenCalledWith<[TestContext]>({
       provider: {
-        id: 'provider:aws',
+        id: 'provider:aws:lambda',
 
-        payload: {
+        function: {
+          arn: 'test:function:arn',
+          name: 'test:function:name',
+          version: 'test:function:version',
+          memory: 400,
+          ttl: expect.any(Function),
+        },
+
+        logging: {
+          group: 'test:logging:group:name',
+          stream: 'test:logging:stream:name',
+        },
+
+        event: {
           awslogs: {
-            data: 'here-log',
+            data: 'test:event:logs:data',
           },
         },
       },
 
       context: {
-        request: {
-          id: 'test-request-id',
-        },
-
-        function: {
-          arn: 'aws:arn:fn:something',
-          name: 'test-function-name',
-          version: 'test-function-verison',
-          memory: 400,
-          ttl: expect.any(Function),
-        },
+        id: 'test:context:id',
       },
     });
 
@@ -83,10 +90,10 @@ describe('entrypoint()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
-      expect(input.provider.id).toStrictEqual('provider:aws');
-      expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
-      expect(input.context.function.ttl()).toStrictEqual(3002);
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, HandlerContextBase>) => {
+      expect(input.provider.id).toStrictEqual('provider:aws:lambda');
+      expect(input.provider.function.arn).toStrictEqual('test:function:arn');
+      expect(input.provider.function.ttl()).toStrictEqual(3002);
 
       return result({
         foobar: false,
@@ -95,34 +102,37 @@ describe('entrypoint()', (): void => {
 
     const response = await wrapper({
       awslogs: {
-        data: 'here-log',
+        data: 'test:event:logs:data',
       },
     }, context);
 
     expect(handler).toBeCalledTimes(1);
     expect(handler).toHaveBeenCalledWith<[TestContext]>({
       provider: {
-        id: 'provider:aws',
+        id: 'provider:aws:lambda',
 
-        payload: {
+        function: {
+          arn: 'test:function:arn',
+          name: 'test:function:name',
+          version: 'test:function:version',
+          memory: 400,
+          ttl: expect.any(Function),
+        },
+
+        logging: {
+          group: 'test:logging:group:name',
+          stream: 'test:logging:stream:name',
+        },
+
+        event: {
           awslogs: {
-            data: 'here-log',
+            data: 'test:event:logs:data',
           },
         },
       },
 
       context: {
-        request: {
-          id: 'test-request-id',
-        },
-
-        function: {
-          arn: 'aws:arn:fn:something',
-          name: 'test-function-name',
-          version: 'test-function-verison',
-          memory: 400,
-          ttl: expect.any(Function),
-        },
+        id: 'test:context:id',
       },
     });
 
@@ -137,10 +147,10 @@ describe('entrypoint()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
-      expect(input.provider.id).toStrictEqual('provider:aws');
-      expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
-      expect(input.context.function.ttl()).toStrictEqual(3002);
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, HandlerContextBase>) => {
+      expect(input.provider.id).toStrictEqual('provider:aws:lambda');
+      expect(input.provider.function.arn).toStrictEqual('test:function:arn');
+      expect(input.provider.function.ttl()).toStrictEqual(3002);
 
       return create('response:unknown', {
         unknown: true,
@@ -150,7 +160,7 @@ describe('entrypoint()', (): void => {
     try {
       await wrapper({
         awslogs: {
-          data: 'here-log',
+          data: 'test:event:logs:data',
         },
       }, context);
     } catch (caught: unknown) {
@@ -170,51 +180,54 @@ describe('factory()', (): void => {
 
     expect(handler).toBeCalledTimes(0);
 
-    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, LambdaHandlerContextBase>) => {
-      expect(input.provider.id).toStrictEqual('provider:aws');
-      expect(input.context.function.arn).toStrictEqual('aws:arn:fn:something');
-      expect(input.context.function.ttl()).toStrictEqual(3002);
+    handler.mockImplementationOnce((input: HandlerFunctionInput<LambdaHandlerProvider, HandlerContextBase>) => {
+      expect(input.provider.id).toStrictEqual('provider:aws:lambda');
+      expect(input.provider.function.arn).toStrictEqual('test:function:arn');
+      expect(input.provider.function.ttl()).toStrictEqual(3002);
 
       return nothing();
     });
 
     const response = await wrapper({
       awslogs: {
-        data: 'here-log',
+        data: 'test:event:logs:data',
       },
     }, context);
 
     expect(handler).toBeCalledTimes(1);
     expect(handler).toHaveBeenCalledWith<[TestContext]>({
       provider: {
-        id: 'provider:aws',
+        id: 'provider:aws:lambda',
 
-        payload: {
+        function: {
+          arn: 'test:function:arn',
+          name: 'test:function:name',
+          version: 'test:function:version',
+          memory: 400,
+          ttl: expect.any(Function),
+        },
+
+        logging: {
+          group: 'test:logging:group:name',
+          stream: 'test:logging:stream:name',
+        },
+
+        event: {
           awslogs: {
-            data: 'here-log',
+            data: 'test:event:logs:data',
           },
         },
       },
 
       context: {
-        request: {
-          id: 'test-request-id',
-        },
-
-        function: {
-          arn: 'aws:arn:fn:something',
-          name: 'test-function-name',
-          version: 'test-function-verison',
-          memory: 400,
-          ttl: expect.any(Function),
-        },
+        id: 'test:context:id',
       },
     });
 
     expect(response).toStrictEqual(undefined);
   });
 
-  it('with handler, providing build compisition, composition invoked only once', async (): Promise<void> => {
+  it('with handler, providing built compisition, composition invoked only once', async (): Promise<void> => {
     const instrument = vi.fn();
 
     const wrapper = factory<'cloudwatch:log'>(async (application) => {

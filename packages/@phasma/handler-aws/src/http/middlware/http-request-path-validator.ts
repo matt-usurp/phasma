@@ -36,7 +36,7 @@ export class HttpRequestPathValidatorMiddleware<T extends Grok.Constraint.Object
   ) {}
 
   public async invoke({ provider, context, next }: Middleware.Fn.Parameters<HttpRequestPathValidatorMiddlewareDefinition<T>>): Middleware.Fn.Response<HttpRequestPathValidatorMiddlewareDefinition<T>> {
-    const path = provider.payload?.pathParameters;
+    const path = provider.event?.pathParameters;
 
     if (path === undefined) {
       return http({

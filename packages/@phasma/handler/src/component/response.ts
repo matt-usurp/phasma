@@ -1,3 +1,5 @@
+import * as self from './response';
+
 /**
  * A template for response identifiers.
  *
@@ -36,6 +38,9 @@ export type HandlerResponse<
 };
 
 export namespace HandlerResponse {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Identifier = self.HandlerResponseIdentifier;
+
   /**
    * Retrieve data from the {@link HandlerResponse}.
    */

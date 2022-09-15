@@ -31,7 +31,7 @@ export class HttpResponseTransformerMiddleware<R extends HttpResponseEncodedTran
     const value = await next(context);
 
     if (value.type === 'response:http') {
-      return result<Response.Unwrapped<HttpResponseLambdaProxy>>({
+      return result<Response.Get.Value<HttpResponseLambdaProxy>>({
         statusCode: value.value.status,
         headers: value.value.headers ?? {},
         body: value.value.body,

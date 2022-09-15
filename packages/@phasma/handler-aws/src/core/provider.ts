@@ -1,17 +1,17 @@
 import { Grok, never } from '@matt-usurp/grok';
+import type { HandlerContextBase } from '@phasma/handler/src/component/context';
 import type { HandlerClassImplementation, HandlerComposition, HandlerEntrypoint } from '@phasma/handler/src/component/handler';
 import { HandlerComposer } from '@phasma/handler/src/core/handler/composer';
 import type { Context as AwsLambdaFunctionContext } from 'aws-lambda';
-import type { LambdaHandlerContextBase } from '../component/context';
 import type { LambdaHandlerEventSourceIdentifiers, LambdaHandlerEventSourcePayloadFromIdentifier, LambdaHandlerEventSourceResponseFromIdentifier, LambdaHandlerEventSourceResultFromIdentifier } from '../component/event';
-import type { LambdaHandlerProviderFromEventSourceIdentifier, LambdaHandlerProviderIdentifier } from '../component/provider';
+import type { LambdaHandlerProviderIdentifier, LambdaHandlerProviderWithEventFromEventSourceIdentifier } from '../component/provider';
 import { unwrap } from '../response';
 
 export type LambdaHandlerComposer<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerComposer<
-    LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
-    LambdaHandlerContextBase,
+    LambdaHandlerProviderWithEventFromEventSourceIdentifier<EventSourceIdentifier>,
+    HandlerContextBase,
     LambdaHandlerEventSourceResponseFromIdentifier<EventSourceIdentifier>
   >
 /* eslint-enable @typescript-eslint/indent */
@@ -21,17 +21,17 @@ export type LambdaHandlerComposition<EventSourceIdentifier extends LambdaHandler
 /* eslint-disable @typescript-eslint/indent */
   HandlerComposition<
     HandlerClassImplementation<Grok.Constraint.Anything>,
-    LambdaHandlerProviderFromEventSourceIdentifier<EventSourceIdentifier>,
-    LambdaHandlerContextBase,
+    LambdaHandlerProviderWithEventFromEventSourceIdentifier<EventSourceIdentifier>,
+    HandlerContextBase,
     LambdaHandlerEventSourceResponseFromIdentifier<EventSourceIdentifier>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
 /**
- * The aws provider identifier.
+ * The {@link LambdaHandlerProviderIdentifier} string literal.
  */
-export const id: LambdaHandlerProviderIdentifier = 'provider:aws';
+export const id: LambdaHandlerProviderIdentifier = 'provider:aws:lambda';
 
 /**
  * Arguments provided to an entrypoint function via aws lambda.
@@ -59,17 +59,10 @@ export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerE
  * This produces a function that is compatible with aws lambda.
  */
 export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers>(composition: Promise<LambdaHandlerComposition<EventSourceIdentifier>>): LambdaHandlerEntrypoint<EventSourceIdentifier> => {
-  const fn: LambdaHandlerEntrypoint<EventSourceIdentifier> = async (payload, context) => {
+  const fn: LambdaHandlerEntrypoint<EventSourceIdentifier> = async (event, context) => {
     const result = await (await composition)({
       provider: {
         id,
-        payload,
-      },
-
-      context: {
-        request: {
-          id: context.awsRequestId,
-        },
 
         function: {
           arn: context.invokedFunctionArn,
@@ -78,6 +71,17 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
           memory: parseInt(context.memoryLimitInMB, 10),
           ttl: () => context.getRemainingTimeInMillis(),
         },
+
+        logging: {
+          group: context.logGroupName,
+          stream: context.logStreamName,
+        },
+
+        event,
+      },
+
+      context: {
+        id: context.awsRequestId,
       },
     });
 
@@ -92,8 +96,7 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
     throw never(result);
   };
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore Assignment to read-only property
+  // @ts-expect-error Assignment to read-only property
   fn.$composition = composition;
 
   return fn;

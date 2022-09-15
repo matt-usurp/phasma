@@ -41,7 +41,10 @@ type Definition = Handler.Definition<EventSourceIdentifier, Context, HttpRespons
  * @endpoint POST /users/{user}
  */
 export class ExampleHandler implements Handler.Implementation<Definition> {
-  public async handle({ context }: Handler.Fn.Parameters<Definition>): Handler.Fn.Response<Definition> {
+  /**
+   * @inheritdoc
+   */
+  public async handle({ context }: Handler.Fn.Input<Definition>): Handler.Fn.Output<Definition> {
     context.path.user; // from HttpRequestPathValidatorMiddleware
     context.body.name; // from HttpRequestBodyValidatorMiddleware
 

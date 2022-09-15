@@ -91,8 +91,9 @@ export const entrypoint = (composition: ExampleHandlerComposition): ExampleHandl
     },
 
     context: {
+      id: payload.id,
+
       request: {
-        id: payload.id,
         timestamp: payload.timestamp,
       },
     },

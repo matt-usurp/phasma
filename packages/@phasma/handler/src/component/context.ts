@@ -8,17 +8,10 @@ import type { Grok } from '@matt-usurp/grok';
  */
 export type HandlerContextBase = {
   /**
-   * Request information.
-   *
-   * @deprecated Should not be HTTP based, maybe "invocation"?
+   * The invocation id, this is a unique identity that is assigned by a provider.
+   * If a provider has one it will be used, otherwise this should fallback to a uuid.
    */
-  readonly request: {
-    /**
-     * A unique identity that represents this request.
-     * Some providers might be able to use this for tracing purposes.
-     */
-    readonly id: string;
-  };
+  readonly id: string;
 };
 
 /**

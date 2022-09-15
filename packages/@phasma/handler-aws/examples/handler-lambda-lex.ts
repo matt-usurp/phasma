@@ -6,9 +6,12 @@ type EventSourceIdentifier = Event.Source<'lex'>;
 type Definition = Handler.Definition<EventSourceIdentifier>;
 
 export class SomeHandler implements Handler.Implementation<Definition> {
-  public async handle({ provider }: Handler.Fn.Parameters<Definition>): Handler.Fn.Response<Definition> {
+  /**
+   * @inheritdoc
+   */
+  public async handle({ provider }: Handler.Fn.Input<Definition>): Handler.Fn.Output<Definition> {
     provider.id; // "provider:aws"
-    provider.payload; // LexEvent
+    provider.event; // LexEvent
 
     return result<Event.Result<EventSourceIdentifier>>({
       dialogAction: {

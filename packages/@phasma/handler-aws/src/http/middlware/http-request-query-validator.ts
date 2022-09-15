@@ -42,7 +42,7 @@ export class HttpRequesQueryValidatorMiddleware<T extends Grok.Constraint.Object
   ) {}
 
   public async invoke({ provider, context, next }: Middleware.Fn.Parameters<HttpRequesQueryValidatorMiddlewareDefinition<T>>): Middleware.Fn.Response<HttpRequesQueryValidatorMiddlewareDefinition<T>> {
-    const query = provider.payload?.rawQueryString ?? '';
+    const query = provider.event?.rawQueryString ?? '';
     const parsed = this.parser(query);
 
     if (parsed === undefined) {

@@ -13,7 +13,10 @@ type ExampleResponse = HttpResponseTransport<200, {
 type Definition = Handler.Definition<EventSourceIdentifier, Handler.Context, HttpResponse<ExampleResponse>>;
 
 export class ExampleHandler implements Handler.Implementation<Definition> {
-  public async handle(): Handler.Fn.Response<Definition> {
+  /**
+   * @inheritdoc
+   */
+  public async handle(): Handler.Fn.Output<Definition> {
     return http<ExampleResponse>({
       status: 200,
       body: {

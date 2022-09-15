@@ -236,7 +236,6 @@ export class HandlerComposer<
       return stack(context);
     };
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error Assignment to read-only property
     composite.$handler = handler;
 

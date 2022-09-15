@@ -56,9 +56,7 @@ describe('HandlerComposer', (): void => {
         },
 
         context: {
-          request: {
-            id: 'request-id',
-          },
+          id: 'request-id',
         },
       }),
     ).toStrictEqual<TestResponse>({
@@ -69,9 +67,7 @@ describe('HandlerComposer', (): void => {
           pid: 'provider:test',
           pin: 'provider-input',
           ctx: {
-            request: {
-              id: 'request-id',
-            },
+            id: 'request-id',
           },
         },
       },
@@ -118,9 +114,7 @@ describe('HandlerComposer', (): void => {
         },
 
         context: {
-          request: {
-            id: 'request-id',
-          },
+          id: 'request-id',
         },
       }),
     ).toStrictEqual<TestResponse>({
@@ -131,9 +125,7 @@ describe('HandlerComposer', (): void => {
           pid: 'provider:test',
           pin: 'provider-input',
           ctx: {
-            request: {
-              id: 'request-id',
-            },
+            id: 'request-id',
 
             middleware: {
               hello: 'world',
@@ -192,9 +184,7 @@ describe('HandlerComposer', (): void => {
         },
 
         context: {
-          request: {
-            id: 'request-id',
-          },
+          id: 'request-id',
         },
       }),
     ).toStrictEqual<TestResponse>({
@@ -205,9 +195,7 @@ describe('HandlerComposer', (): void => {
           pid: 'provider:test',
           pin: 'provider-input-again',
           ctx: {
-            request: {
-              id: 'request-id',
-            },
+            id: 'request-id',
 
             middleware: {
               name: 'third',

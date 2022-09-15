@@ -4,9 +4,7 @@ import * as handler from './component/handler';
 import * as middleware from './component/middleware';
 import * as response from './component/response';
 
-export namespace Response {
-  export import Unwrapped = response.HandlerResponseUnwrapped;
-}
+export import Response = response.HandlerResponse;
 
 export namespace Handler {
   export import Definition = handler.HandlerDefinition;
@@ -15,9 +13,6 @@ export namespace Handler {
   export namespace Fn {
     export import Input = handler.HandlerFunctionInputFromDefinition;
     export import Output = handler.HandlerFunctionOutputFromDefinition;
-
-    export import Parameters = handler.HandlerFunctionInputFromDefinition;
-    export import Response = handler.HandlerFunctionOutputFromDefinition;
   }
 
   export import Context = context.HandlerContextBase;

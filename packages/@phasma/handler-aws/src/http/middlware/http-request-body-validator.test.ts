@@ -5,6 +5,7 @@ import type { HttpBodyDecoder } from '@phasma/handler/src/http/body';
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
 import { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z } from 'zod';
+import { LambdaHandlerProviderWithEventFromEventSourceIdentifier } from '../../component/provider';
 import type { Event } from '../../index';
 import { HttpRequestBodyValidatorContext, HttpRequestBodyValidatorErrorResponse, HttpRequestBodyValidatorMiddleware } from './http-request-body-validator';
 
@@ -20,13 +21,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: undefined,
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -56,13 +57,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: '',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -98,13 +99,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: 'value:provider:payload:body:malformed',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -149,13 +150,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: 'value:provider:payload:body:invalid',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -209,13 +210,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: 'value:provider:payload:body:valid',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -250,13 +251,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: '{b"r[o]ke"n}}',
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -290,13 +291,13 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: JSON.stringify({}),
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
@@ -355,16 +356,16 @@ describe(HttpRequestBodyValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: {
-            id: 'provider:aws',
+          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+            id: 'provider:aws:lambda',
 
-            payload: partial<Event.Payload<'apigw:proxy:v2'>>({
+            event: partial<Event.Payload<'apigw:proxy:v2'>>({
               body: JSON.stringify({
                 name: 'some-name',
                 age: 40,
               }),
             }),
-          },
+          }),
 
           context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
