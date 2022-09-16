@@ -43,7 +43,7 @@ export namespace Middleware {
   export import Implementation = CoreMiddleware.Implementation;
 
   export namespace Fn {
-    export import Parameters = CoreMiddleware.Fn.Parameters;
-    export import Response = CoreMiddleware.Fn.Response;
+    export import Parameters = CoreMiddleware.Fn.Input;
+    export import Response = CoreMiddleware.Fn.Output;
   }
 }

@@ -1,5 +1,5 @@
-import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionOutputFromDefinition } from '../../component/handler';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
+import type { HandlerClassImplementation, HandlerDefinition, HandlerDefinitionInheritProvider, HandlerFunctionOutputFromDefinition } from '../../component/handler';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionInheritContextOutbound, HandlerMiddlewareDefinitionInheritProvider, HandlerMiddlewareDefinitionInheritResponseInbound, HandlerMiddlewareDefinitionInheritResponseOutbound, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
 import type { HandlerProvider } from '../../component/provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from '../../component/response';
 import type { HandlerComposer } from './composer';
@@ -31,10 +31,10 @@ type MiddlewarePassThrough = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
-    HandlerMiddlewareDefinition.Inherit.Provider,
-    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+    HandlerMiddlewareDefinitionInheritProvider,
+    HandlerMiddlewareDefinitionInheritContextOutbound,
+    HandlerMiddlewareDefinitionInheritResponseInbound,
+    HandlerMiddlewareDefinitionInheritResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -61,9 +61,9 @@ type MiddlewareKnownInputContext = (
   HandlerMiddlewareDefinition<
     Provider,
     BaseContext,
-    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+    HandlerMiddlewareDefinitionInheritContextOutbound,
+    HandlerMiddlewareDefinitionInheritResponseInbound,
+    HandlerMiddlewareDefinitionInheritResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -92,9 +92,9 @@ type MiddlewareContextSubset = (
   HandlerMiddlewareDefinition<
     Provider,
     Pick<BaseContext, 'age'>,
-    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+    HandlerMiddlewareDefinitionInheritContextOutbound,
+    HandlerMiddlewareDefinitionInheritResponseInbound,
+    HandlerMiddlewareDefinitionInheritResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -125,8 +125,8 @@ type MiddlewareContextAdditional = (
     Provider,
     Pick<BaseContext, 'age'>,
     { born: Date },
-    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+    HandlerMiddlewareDefinitionInheritResponseInbound,
+    HandlerMiddlewareDefinitionInheritResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -158,9 +158,9 @@ type MiddlewareContextUsingAdditional = (
   HandlerMiddlewareDefinition<
     Provider,
     { born: Date },
-    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+    HandlerMiddlewareDefinitionInheritContextOutbound,
+    HandlerMiddlewareDefinitionInheritResponseInbound,
+    HandlerMiddlewareDefinitionInheritResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -193,8 +193,8 @@ type MiddlewareResponseAdditional = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
     Provider,
-    HandlerMiddlewareDefinition.Inherit.Provider,
-    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
+    HandlerMiddlewareDefinitionInheritProvider,
+    HandlerMiddlewareDefinitionInheritContextOutbound,
     NewResponse,
     BaseResponse
   >
@@ -228,8 +228,8 @@ type MiddlewareResponseUsage = (
   HandlerMiddlewareDefinition<
     Provider,
     { age: number },
-    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
+    HandlerMiddlewareDefinitionInheritContextOutbound,
+    HandlerMiddlewareDefinitionInheritResponseInbound,
     NewResponse
   >
 /* eslint-enable @typescript-eslint/indent */
@@ -267,7 +267,7 @@ const b7 = b6.use(new WithResponseUsage());
 type ExampleHandlerDefinition = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
-    HandlerDefinition.Inherit.Provider,
+    HandlerDefinitionInheritProvider,
     { age: number },
     NewResponse
   >

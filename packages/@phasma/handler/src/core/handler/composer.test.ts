@@ -1,14 +1,19 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextBase } from '../../component/context';
 import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from '../../component/handler';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
-import type { HandlerProvider, HandlerProviderIdentifier, HandlerProviderWithPayload } from '../../component/provider';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionInheritContextInbound, HandlerMiddlewareDefinitionInheritContextOutbound, HandlerMiddlewareDefinitionInheritProvider, HandlerMiddlewareDefinitionInheritResponseInbound, HandlerMiddlewareDefinitionInheritResponseOutbound, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
+import type { HandlerProvider, HandlerProviderIdentifier } from '../../component/provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from '../../component/response';
 import { HandlerComposer, HandlerComposerWithMiddlware } from './composer';
 
-type TestProvider = HandlerProviderWithPayload<'provider:test', {
-  input: unknown;
-}>;
+type TestProvider = (
+  & HandlerProvider<HandlerProviderIdentifier<'test'>>
+  & {
+    readonly payload: {
+      readonly input: unknown;
+    };
+  }
+);
 
 type TestResponse = HandlerResponse<'response:test', {
   state: boolean;
@@ -78,11 +83,11 @@ describe('HandlerComposer', (): void => {
     type TestMiddleware = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.Inherit.Provider,
+        HandlerMiddlewareDefinitionInheritProvider,
         HandlerContextBase,
         HandlerContextBase & { readonly middleware: unknown },
-        HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+        HandlerMiddlewareDefinitionInheritResponseInbound,
+        HandlerMiddlewareDefinitionInheritResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );
@@ -140,11 +145,11 @@ describe('HandlerComposer', (): void => {
     type TestMiddleware = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.Inherit.Provider,
+        HandlerMiddlewareDefinitionInheritProvider,
         HandlerContextBase,
         HandlerContextBase & { readonly middleware: unknown },
-        HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+        HandlerMiddlewareDefinitionInheritResponseInbound,
+        HandlerMiddlewareDefinitionInheritResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );
@@ -299,11 +304,11 @@ export namespace Test_HandlerComposerWithMiddlware {
     type MiddlewareDefinition = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.Inherit.Provider,
-        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        HandlerMiddlewareDefinitionInheritProvider,
+        HandlerMiddlewareDefinitionInheritContextInbound,
         MiddlewareContextOutbound,
         MiddlewareResponseInbound,
-        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+        HandlerMiddlewareDefinitionInheritResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );
@@ -342,17 +347,17 @@ export namespace Test_HandlerComposerWithMiddlware {
     type CurrentContext = { current: 'current:context' };
     type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { current: 'current:response' }>;
 
-    type MiddlewareContextOutbound = HandlerMiddlewareDefinition.Inherit.ContextOutbound;
-    type MiddlewareResponseInbound = HandlerMiddlewareDefinition.Inherit.ResponseInbound;
+    type MiddlewareContextOutbound = HandlerMiddlewareDefinitionInheritContextOutbound;
+    type MiddlewareResponseInbound = HandlerMiddlewareDefinitionInheritResponseInbound;
 
     type MiddlewareDefinition = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.Inherit.Provider,
-        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        HandlerMiddlewareDefinitionInheritProvider,
+        HandlerMiddlewareDefinitionInheritContextInbound,
         MiddlewareContextOutbound,
         MiddlewareResponseInbound,
-        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+        HandlerMiddlewareDefinitionInheritResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );
@@ -392,16 +397,16 @@ export namespace Test_HandlerComposerWithMiddlware {
     type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { current: 'current:response' }>;
 
     type MiddlewareContextOutbound = { outbound: 'middleware:context' };
-    type MiddlewareResponseInbound = HandlerMiddlewareDefinition.Inherit.ResponseInbound;
+    type MiddlewareResponseInbound = HandlerMiddlewareDefinitionInheritResponseInbound;
 
     type MiddlewareDefinition = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.Inherit.Provider,
-        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        HandlerMiddlewareDefinitionInheritProvider,
+        HandlerMiddlewareDefinitionInheritContextInbound,
         MiddlewareContextOutbound,
         MiddlewareResponseInbound,
-        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+        HandlerMiddlewareDefinitionInheritResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );
@@ -440,17 +445,17 @@ export namespace Test_HandlerComposerWithMiddlware {
     type CurrentContext = { current: 'current:context' };
     type CurrentResponse = HandlerResponse<HandlerResponseIdentifier<'provider'>, { current: 'current:response' }>;
 
-    type MiddlewareContextOutbound = HandlerMiddlewareDefinition.Inherit.ContextOutbound;
+    type MiddlewareContextOutbound = HandlerMiddlewareDefinitionInheritContextOutbound;
     type MiddlewareResponseInbound = HandlerResponse<HandlerResponseIdentifier<'outbound'>, { outbound: 'middleware:response' }>;
 
     type MiddlewareDefinition = (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareDefinition<
-        HandlerMiddlewareDefinition.Inherit.Provider,
-        HandlerMiddlewareDefinition.Inherit.ContextInbound,
+        HandlerMiddlewareDefinitionInheritProvider,
+        HandlerMiddlewareDefinitionInheritContextInbound,
         MiddlewareContextOutbound,
         MiddlewareResponseInbound,
-        HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+        HandlerMiddlewareDefinitionInheritResponseOutbound
       >
     /* eslint-enable @typescript-eslint/indent */
     );

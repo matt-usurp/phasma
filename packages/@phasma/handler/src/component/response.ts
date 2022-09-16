@@ -1,5 +1,3 @@
-import * as self from './response';
-
 /**
  * A template for response identifiers.
  *
@@ -37,30 +35,20 @@ export type HandlerResponse<
   readonly value: Value;
 };
 
-export namespace HandlerResponse {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  export import Identifier = self.HandlerResponseIdentifier;
-
-  /**
-   * Retrieve data from the {@link HandlerResponse}.
-   */
-  export namespace Get {
-    /**
-     * Retrieve the {@link HandlerResponseIdentifier} from {@link Response}.
-     */
-    export type Identifier<Response extends HandlerResponseConstraint> = Response['type'];
-
-    /**
-     * Retrieve the value from {@link Response}.
-     */
-    export type Value<Response extends HandlerResponseConstraint> = Response['value'];
-  }
-}
-
 /**
  * A constraint type for {@link HandlerResponse}.
  */
 export type HandlerResponseConstraint = HandlerResponse<HandlerResponseIdentifierConstraint, unknown>;
+
+/**
+ * Retrieve the {@link HandlerResponseIdentifier} from {@link Response}.
+ */
+export type HandlerResponseGetIdentifier<Response extends HandlerResponseConstraint> = Response['type'];
+
+/**
+ * Retrieve the value from {@link Response}.
+ */
+export type HandlerResponseGetValue<Response extends HandlerResponseConstraint> = Response['value'];
 
 /**
  * A utility type to retreive the value of a given handler response type.
@@ -84,3 +72,26 @@ export type HandlerResponsePresetNothingIdentity = HandlerResponseIdentifier<'no
  * Not all providers support {@link HandlerResponsePresetNothing} and may provide their own tailored versions instead.
  */
 export type HandlerResponsePresetNothing = HandlerResponse<HandlerResponsePresetNothingIdentity, undefined>;
+
+/**
+ * The below import(s) and namespace allows this file to compose a better developer experience through type aliasing.
+ * Here we define a series of aliases that provide better naming and a single type import.
+ * This is then aliased in the root file with a better name also.
+ */
+import * as response from './response';
+
+export namespace HandlerResponse {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Identifier = response.HandlerResponseIdentifier;
+
+  export namespace Get {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Identifier = response.HandlerResponseGetIdentifier;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Value = response.HandlerResponseGetValue;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Nothing = response.HandlerResponsePresetNothing;
+}

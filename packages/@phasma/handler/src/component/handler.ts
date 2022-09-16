@@ -6,7 +6,7 @@ import type { HandlerResponseConstraint } from './response';
 /**
  * A handler definition that defines the {@link Provider}, {@link Context} and {@link Response} to be used.
  *
- * These types will be enforced at build type when used with the handler composer.
+ * These types will be enforced at build time when used with the handler composer.
  * These types can be satisfied through implementing middleware or are provided as a base from the {@link Provider}.
  */
 export type HandlerDefinition<
@@ -19,128 +19,6 @@ export type HandlerDefinition<
   readonly HR: Response;
 };
 
-export namespace HandlerDefinition {
-  /**
-   * Types that indicate a value should be inheritted.
-   */
-  export namespace Inherit {
-    /**
-     * Indicate the provider should be inheritted.
-     */
-    export type Provider = Grok.Inherit;
-
-    /**
-     * Indicate the context should be inheritted.
-     */
-    export type Context = Grok.Inherit;
-
-    /**
-     * Indicate the response should be inheritted.
-     */
-    export type Response = Grok.Inherit;
-  }
-
-  /**
-   * @deprecated use {@link HandlerDefinition.Inherit.Provider} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeProvider = HandlerDefinition.Inherit.Provider;
-
-  /**
-   * @deprecated use {@link HandlerDefinition.Inherit.Context} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeContext = HandlerDefinition.Inherit.Context;
-
-  /**
-   * @deprecated use {@link HandlerDefinition.Inherit.Response} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeResponse = HandlerDefinition.Inherit.Response;
-
-  /**
-   * Create a {@link HandlerDefinition} without a provider.
-   */
-  export type WithoutProvider<
-    Context extends HandlerContextConstraint,
-    Response extends HandlerResponseConstraint,
-  > = HandlerDefinition.WithContext<Context, HandlerDefinition.WithResponse<Response>>;
-
-  /**
-   * Use the given {@link Provider} within the given {@link Definition}.
-   */
-  export type WithProvider<
-    Provider extends HandlerProviderConstraint,
-    Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
-  > = (
-  /* eslint-disable @typescript-eslint/indent */
-    Grok.Inherit.Merge<
-      HandlerDefinition<
-        Provider,
-        HandlerDefinition.Inherit.Context,
-        HandlerDefinition.Inherit.Response
-      >,
-      Definition
-    >
-  /* eslint-enable @typescript-eslint/indent */
-  );
-
-  /**
-   * Use the given {@link Context} within {@link Definition}.
-   */
-  export type WithContext<
-    Context extends HandlerContextConstraint,
-    Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
-  > = (
-  /* eslint-disable @typescript-eslint/indent */
-    Grok.Inherit.Merge<
-      HandlerDefinition<
-        HandlerDefinition.Inherit.Provider,
-        Context,
-        HandlerDefinition.Inherit.Response
-      >,
-      Definition
-    >
-  /* eslint-enable @typescript-eslint/indent */
-  );
-
-  /**
-   * Use the given {@link Response} within the given {@link Definition}.
-   */
-  export type WithResponse<
-    Response extends HandlerResponseConstraint,
-    Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
-  > = (
-  /* eslint-disable @typescript-eslint/indent */
-    Grok.Inherit.Merge<
-      HandlerDefinition<
-        HandlerDefinition.Inherit.Provider,
-        HandlerDefinition.Inherit.Context,
-        Response
-      >,
-      Definition
-    >
-  /* eslint-enable @typescript-eslint/indent */
-  );
-
-  /**
-   * Retrieve data from {@link HandlerDefinition}.
-   */
-  export namespace Get {
-    /**
-     * Retrieve the handler provider from {@link Definition}.
-     */
-    export type Provider<Definition extends HandlerDefinitionConstraint> = Definition['HP'];
-
-    /**
-     * Retrieve the handler context from {@link Definition}.
-     */
-    export type Context<Definition extends HandlerDefinitionConstraint> = Definition['HC'];
-
-    /**
-     * Retrieve the handler response from {@link Definition}.
-     */
-    export type Response<Definition extends HandlerDefinitionConstraint> = Definition['HR'];
-  }
-}
-
 /**
  * A handler definition with all {@link Grok.Inherit} values.
  *
@@ -149,9 +27,9 @@ export namespace HandlerDefinition {
 export type HandlerDefinitionBase = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
-    HandlerDefinition.Inherit.Provider,
-    HandlerDefinition.Inherit.Context,
-    HandlerDefinition.Inherit.Response
+    HandlerDefinitionInheritProvider,
+    HandlerDefinitionInheritContext,
+    HandlerDefinitionInheritResponse
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -168,6 +46,101 @@ export type HandlerDefinitionConstraint = (
   >
 /* eslint-enable @typescript-eslint/indent */
 );
+
+/**
+ * Create a {@link HandlerDefinition} without a provider.
+ */
+export type HandlerDefinitionWithoutProvider<
+  Context extends HandlerContextConstraint,
+  Response extends HandlerResponseConstraint,
+> = HandlerDefinitionWithContext<Context, HandlerDefinitionWithResponse<Response>>;
+
+/**
+ * Use the given {@link Provider} within the given {@link Definition}.
+ */
+export type HandlerDefinitionWithProvider<
+  Provider extends HandlerProviderConstraint,
+  Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
+> = (
+/* eslint-disable @typescript-eslint/indent */
+ Grok.Inherit.Merge<
+   HandlerDefinition<
+     Provider,
+     HandlerDefinitionInheritContext,
+     HandlerDefinitionInheritResponse
+   >,
+   Definition
+ >
+/* eslint-enable @typescript-eslint/indent */
+);
+
+/**
+ * Use the given {@link Context} within {@link Definition}.
+ */
+export type HandlerDefinitionWithContext<
+  Context extends HandlerContextConstraint,
+  Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
+> = (
+/* eslint-disable @typescript-eslint/indent */
+ Grok.Inherit.Merge<
+   HandlerDefinition<
+     HandlerDefinitionInheritProvider,
+     Context,
+     HandlerDefinitionInheritResponse
+   >,
+   Definition
+ >
+/* eslint-enable @typescript-eslint/indent */
+);
+
+/**
+ * Use the given {@link Response} within the given {@link Definition}.
+ */
+export type HandlerDefinitionWithResponse<
+  Response extends HandlerResponseConstraint,
+  Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
+> = (
+/* eslint-disable @typescript-eslint/indent */
+ Grok.Inherit.Merge<
+   HandlerDefinition<
+     HandlerDefinitionInheritProvider,
+     HandlerDefinitionInheritContext,
+     Response
+   >,
+   Definition
+ >
+/* eslint-enable @typescript-eslint/indent */
+);
+
+/**
+ * Retrieve the handler provider from {@link Definition}.
+ */
+export type HandlerDefinitionGetProvider<Definition extends HandlerDefinitionConstraint> = Definition['HP'];
+
+/**
+ * Retrieve the handler context from {@link Definition}.
+ */
+export type HandlerDefinitionGetContext<Definition extends HandlerDefinitionConstraint> = Definition['HC'];
+
+/**
+ * Retrieve the handler response from {@link Definition}.
+ */
+export type HandlerDefinitionGetResponse<Definition extends HandlerDefinitionConstraint> = Definition['HR'];
+
+/**
+ * Indicate the provider should be inheritted.
+ */
+export type HandlerDefinitionInheritProvider = Grok.Inherit;
+
+/**
+ * Indicate the context should be inheritted.
+ */
+export type HandlerDefinitionInheritContext = Grok.Inherit;
+
+/**
+ * Indicate the response should be inheritted.
+ */
+export type HandlerDefinitionInheritResponse = Grok.Inherit;
 
 /**
  * The handler function input parameters defining {@link Provider} and {@link Context}.
@@ -199,8 +172,8 @@ export type HandlerFunctionInput<
 export type HandlerFunctionInputFromDefinition<Definition extends HandlerDefinitionConstraint> = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerFunctionInput<
-    HandlerDefinition.Get.Provider<Definition>,
-    HandlerDefinition.Get.Context<Definition>
+    HandlerDefinitionGetProvider<Definition>,
+    HandlerDefinitionGetContext<Definition>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -209,8 +182,8 @@ export type HandlerFunctionInputFromDefinition<Definition extends HandlerDefinit
  * The handler function response resolved from {@link Definition}.
  */
 export type HandlerFunctionOutputFromDefinition<Definition extends HandlerDefinitionConstraint> = (
-  HandlerDefinition.Get.Response<Definition> extends HandlerResponseConstraint
-    ? Promise<HandlerDefinition.Get.Response<Definition>>
+  HandlerDefinitionGetResponse<Definition> extends HandlerResponseConstraint
+    ? Promise<HandlerDefinitionGetResponse<Definition>>
     : never
 );
 
@@ -233,8 +206,8 @@ export type HandlerClassImplementation<Definition extends HandlerDefinitionConst
         // We are resolving the input manually here as using the `FromDefinition` version causes type errors.
         // My thinking is that the type system has better resolution with this method over the helper class.
         // Either way, this works and can become a refactor point in the future.
-        HandlerDefinition.Get.Provider<Definition>,
-        HandlerDefinition.Get.Context<Definition>
+        HandlerDefinitionGetProvider<Definition>,
+        HandlerDefinitionGetContext<Definition>
       >
     /* eslint-enable @typescript-eslint/indent */
     ),
@@ -285,3 +258,81 @@ export type HandlerEntrypoint<
    */
   (...args: EntrypointArguments): EntrypointResponse;
 };
+
+/**
+ * The below import(s) and namespace allows this file to compose a better developer experience through type aliasing.
+ * Here we define a series of aliases that provide better naming and a single type import.
+ * This is then aliased in the root file with a better name also.
+ */
+import * as context from './context';
+import * as handler from './handler';
+import * as response from './response';
+
+/**
+ * The handler namespace.
+ */
+export namespace Handler {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Definition = handler.HandlerDefinition;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Implementation = handler.HandlerClassImplementation;
+
+  /**
+   * Types for working with the handler function signature.
+   */
+  export namespace Fn {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Input = handler.HandlerFunctionInputFromDefinition;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Output = handler.HandlerFunctionOutputFromDefinition;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Context = context.HandlerContextBase;
+
+  /**
+   * Shortcut to preset {@link response.HandlerResponse HandlerResponse} types.
+   *
+   * @deprecated use {@link response.HandlerResponse Response} directly, to be removed in `>=1.1.0`
+   */
+  export namespace Response {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Nothing = response.HandlerResponse.Nothing;
+  }
+}
+
+/*!
+ * This is a developer experience namespace merge.
+ * You are probably looking for the {@link HandlerDefinition} type specifically.
+ */
+export namespace HandlerDefinition {
+  /**
+   * Retrieve data from {@link Handler.Definition}.
+   */
+  export namespace Get {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Provider = handler.HandlerDefinitionGetProvider;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Context = handler.HandlerDefinitionGetContext;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Response = handler.HandlerDefinitionGetResponse;
+  }
+
+  /**
+   * Types that indicate a value within {@link Handler.Definition} should be inheritted.
+   */
+  export namespace Inherit {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Provider = handler.HandlerDefinitionInheritProvider;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Context = handler.HandlerDefinitionInheritContext;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Response = handler.HandlerDefinitionInheritResponse;
+  }
+}
