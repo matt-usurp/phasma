@@ -4,7 +4,7 @@ import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import * as json from '@phasma/handler/src/http/body/json';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 
-type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
+type EventSourceIdentifier = Event.Identifier<'apigw:proxy:v2'>;
 
 type ExampleResponse = HttpResponseTransport<200, {
   name: string;

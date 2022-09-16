@@ -51,13 +51,6 @@ export type HandlerResponseGetIdentifier<Response extends HandlerResponseConstra
 export type HandlerResponseGetValue<Response extends HandlerResponseConstraint> = Response['value'];
 
 /**
- * A utility type to retreive the value of a given handler response type.
- *
- * @deprecated use `HandlerResponse.Get.Value` instead, to be removed in `>=1.1.0`
- */
-export type HandlerResponseUnwrapped<Response extends HandlerResponseConstraint> = Response['value'];
-
-/**
  * A preset {@link HandlerResponseIdentifier} for noop (no-operation) responses.
  *
  * See {@link HandlerResponsePresetNothing} for more information.

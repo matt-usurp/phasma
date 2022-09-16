@@ -8,7 +8,7 @@ import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/h
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z } from 'zod';
 
-type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
+type EventSourceIdentifier = Event.Identifier<'apigw:proxy:v2'>;
 
 type ExampleRequestPath = {
   user: string;

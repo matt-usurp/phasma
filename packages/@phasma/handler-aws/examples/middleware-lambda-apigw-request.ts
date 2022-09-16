@@ -1,7 +1,7 @@
 import { Event, Middleware, Provider } from '@phasma/handler-aws/src/index';
 import { result } from '@phasma/handler-aws/src/response';
 
-type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
+type EventSourceIdentifier = Event.Identifier<'apigw:proxy:v2'>;
 
 type ContextWithApiKey = {
   readonly api: {
@@ -12,11 +12,11 @@ type ContextWithApiKey = {
 type Definition = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
-    Provider.WithEventSource<EventSourceIdentifier>,
+    Provider.ForEvent<EventSourceIdentifier>,
     Middleware.Definition.Inherit.ContextInbound,
     ContextWithApiKey,
     Middleware.Definition.Inherit.ResponseInbound,
-    Event.ResultRaw<EventSourceIdentifier>
+    Event.Response<EventSourceIdentifier>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -30,11 +30,11 @@ export class EnforceApiKeyHeaderMiddleware implements Middleware.Implementation<
   /**
    * @inheritdoc
    */
-  public async invoke({ provider, context, next }: Middleware.Fn.Parameters<Definition>): Middleware.Fn.Response<Definition> {
+  public async invoke({ provider, context, next }: Middleware.Fn.Input<Definition>): Middleware.Fn.Output<Definition> {
     const value = provider.event.headers['x-api-key'];
 
     if (value === undefined || value.length === 0) {
-      return result<Event.Result<EventSourceIdentifier>>({
+      return result<Event.ResponseValue<EventSourceIdentifier>>({
         statusCode: 401,
       });
     }

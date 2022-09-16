@@ -33,7 +33,7 @@ export class HttpResponseBodyEncoderMiddleware<R extends HttpBodyObjectTransport
     public readonly encoder: HttpBodyEncoder,
   ) {}
 
-  public async invoke({ context, next }: Middleware.Fn.Parameters<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpTransformerMiddlewareDefinition<R>> {
+  public async invoke({ context, next }: Middleware.Fn.Input<HttpTransformerMiddlewareDefinition<R>>): Middleware.Fn.Output<HttpTransformerMiddlewareDefinition<R>> {
     const value = await next(context);
 
     if (value.type === 'response:http') {

@@ -1,5 +1,5 @@
 import * as response from '@phasma/handler-aws/src/response';
-import type { LambdaHandlerEventSourceResultFromIdentifier } from './component/event';
+import type { LambdaHandlerEventSourceGetResponseValueFromIdentifier } from './component/event';
 import type { LambdaHandlerResponse } from './component/response';
 import { nothing, result, unwrap } from './response';
 
@@ -13,7 +13,7 @@ describe('unwrap()', (): void => {
 
 describe('result()', (): void => {
   it('with given value, returns lambda handler result, api gateway', (): void => {
-    type R = LambdaHandlerEventSourceResultFromIdentifier<'apigw:proxy:v2'>;
+    type R = LambdaHandlerEventSourceGetResponseValueFromIdentifier<'apigw:proxy:v2'>;
 
     expect(
       result<R>({
@@ -32,7 +32,7 @@ describe('result()', (): void => {
   });
 
   it('with given value, returns lambda handler result, lex', (): void => {
-    type R = LambdaHandlerEventSourceResultFromIdentifier<'lex'>;
+    type R = LambdaHandlerEventSourceGetResponseValueFromIdentifier<'lex'>;
 
     expect(
       result<R>({

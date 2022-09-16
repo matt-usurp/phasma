@@ -1,6 +1,6 @@
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 
-type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
+type EventSourceIdentifier = Event.Identifier<'apigw:proxy:v2'>;
 
 type Definition = Handler.Definition<EventSourceIdentifier>;
 
