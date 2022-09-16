@@ -1,5 +1,5 @@
 import { Event, Middleware, Provider } from '@phasma/handler-aws/src/index';
-import { result } from '../src/response';
+import { result } from '@phasma/handler-aws/src/response';
 
 type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
 

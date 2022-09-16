@@ -1,5 +1,5 @@
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
-import { nothing } from '@phasma/handler/src/response';
+import { nothing } from '@phasma/handler-aws/src/response';
 
 type EventSourceIdentifier = Event.Source<'sqs'>;
 

@@ -1,6 +1,5 @@
 import type { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
-import type { Middleware } from '@phasma/handler/src/index';
-import type { Event, Response } from '../../index';
+import type { Event, Middleware, Response } from '../../index';
 import { result } from '../../response';
 
 export type HttpResponseLambdaProxy = Event.ResultRaw<'apigw:proxy:v2'>;
