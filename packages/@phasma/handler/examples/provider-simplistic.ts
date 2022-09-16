@@ -1,10 +1,9 @@
 import type { Grok } from '@matt-usurp/grok';
+import type { HandlerContextBase } from '@phasma/handler/src/component/context';
 import type { HandlerClassImplementation, HandlerComposition, HandlerEntrypoint } from '@phasma/handler/src/component/handler';
-import type { HandlerProvider, HandlerProviderIdentifier, HandlerProviderWithPayload } from '@phasma/handler/src/component/provider';
+import type { HandlerProvider, HandlerProviderIdentifier } from '@phasma/handler/src/component/provider';
+import type { HandlerResponse, HandlerResponseIdentifier } from '@phasma/handler/src/component/response';
 import type { HandlerComposer } from '@phasma/handler/src/core/handler/composer';
-import type { HandlerContextBase } from '../src/component/context';
-import type { HandlerResponse, HandlerResponseIdentifier } from '../src/component/response';
-
 
 /**
  * This payload represents the data being provided to your function.
@@ -20,7 +19,12 @@ export type ExampleProviderPayload = {
 
 export type ExampleProviderIdentifier = HandlerProviderIdentifier<'example'>;
 export type ExampleProvider = HandlerProvider<'provider:foo'>;
-export type ExampleProviderWithPayload = HandlerProviderWithPayload<ExampleProviderIdentifier, ExampleProviderPayload>;
+export type ExampleProviderWithPayload = (
+  & HandlerProvider<ExampleProviderIdentifier>
+  & {
+    readonly payload: ExampleProviderPayload;
+  }
+);
 
 // --
 // -- Context

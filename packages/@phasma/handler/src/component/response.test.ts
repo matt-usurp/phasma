@@ -1,6 +1,6 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { Response } from '../index';
-import type { HandlerResponse, HandlerResponseIdentifier, HandlerResponsePresetNothing, HandlerResponsePresetNothingIdentity } from './response';
+import type { HandlerResponse, HandlerResponseGetIdentifier, HandlerResponseGetValue, HandlerResponseIdentifier, HandlerResponsePresetNothing, HandlerResponsePresetNothingIdentity } from './response';
 
 it('ignored, only type tests', (): void => {
   expect(true).toStrictEqual(true);
@@ -12,70 +12,99 @@ it('ignored, only type tests', (): void => {
  * {@link HandlerResponseIdentifier}
  */
 export namespace Test_HandlerResponseIdentifier {
-  type Case_WithOne = Grok.Assert<Response.Identifier<'one'>, 'response:one'>;
-  type Case_WithOneAlias = Grok.Assert<HandlerResponseIdentifier<'one'>, 'response:one'>;
-  type Case_WithTwo = Grok.Assert<Response.Identifier<'two'>, 'response:two'>;
-  type Case_WithTwoAlias = Grok.Assert<HandlerResponseIdentifier<'two'>, 'response:two'>;
-  type Case_WithThree = Grok.Assert<Response.Identifier<'three'>, 'response:three'>;
-  type Case_WithThreeAlias = Grok.Assert<HandlerResponseIdentifier<'three'>, 'response:three'>;
+  /**
+   * {@link HandlerResponseIdentifier}
+   */
+  export namespace Test_HandlerResponseIdentifier {
+    type Case_WithOne = Grok.Assert<HandlerResponseIdentifier<'one'>, 'response:one'>;
+    type Case_WithTwo = Grok.Assert<HandlerResponseIdentifier<'two'>, 'response:two'>;
+    type Case_WithThree = Grok.Assert<HandlerResponseIdentifier<'three'>, 'response:three'>;
+  }
+
+  /**
+   * {@link Response.Identifier}
+   */
+  export namespace Test_HandlerResponseIdentifier_UsingAlias {
+    type Case_WithOne = Grok.Assert<Response.Identifier<'one'>, 'response:one'>;
+    type Case_WithTwo = Grok.Assert<Response.Identifier<'two'>, 'response:two'>;
+    type Case_WithThree = Grok.Assert<Response.Identifier<'three'>, 'response:three'>;
+  }
 }
 
 /**
  * {@link HandlerResponse}
  */
 export namespace Test_HandlerResponse {
-  type TestResponseOne = HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>;
-  type TestResponseTwo = HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>;
-
   /**
    * {@link HandlerResponse}
    */
   export namespace Test_HandlerResponse {
-    type Case_WithStructureOne = Grok.Assert<TestResponseOne, {
+    type Case_WithStructureOne = Grok.Assert<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>, {
       readonly type: 'response:one';
       readonly value: 'value-one';
     }>;
 
-    type Case_WithStructureTwo = Grok.Assert<TestResponseTwo, {
+    type Case_WithStructureTwo = Grok.Assert<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>, {
       readonly type: 'response:two';
       readonly value: 'value-two';
     }>;
   }
 
   /**
-   * {@link HandlerResponse}
+   * {@link Response}
    */
-  export namespace Test_HandlerResponse_WithAlias {
-    type Case_WithStructureOne = Grok.Assert<TestResponseOne, {
+  export namespace Test_HandlerResponse_UsingAlias {
+    type Case_WithStructureOne = Grok.Assert<Response<Response.Identifier<'one'>, 'value-one'>, {
       readonly type: 'response:one';
       readonly value: 'value-one';
     }>;
 
-    type Case_WithStructureTwo = Grok.Assert<TestResponseTwo, {
+    type Case_WithStructureTwo = Grok.Assert<Response<Response.Identifier<'two'>, 'value-two'>, {
       readonly type: 'response:two';
       readonly value: 'value-two';
     }>;
   }
+}
+
+/**
+ * {@link HandlerResponseGetIdentifier}
+ */
+export namespace Test_HandlerResponseGetIdentifier {
+  /**
+   * {@link HandlerResponseGetIdentifier}
+   */
+  export namespace Test_HandlerResponseGetIdentifier {
+    type Case_WithOne = Grok.Assert<HandlerResponseGetIdentifier<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'response:one'>;
+    type Case_WithTwo = Grok.Assert<HandlerResponseGetIdentifier<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'response:two'>;
+  }
 
   /**
-   * {@link HandlerResponse.Get}
+   * {@link Response.Get.Identifier}
    */
-  export namespace Test_HandlerResponse_Get {
-    /**
-     * {@link HandlerResponse.Get.Identifier}
-     */
-    export namespace Test_HandlerResponse_Get_Identifier {
-      type Case_WithOne = Grok.Assert<HandlerResponse.Get.Identifier<TestResponseOne>, 'response:one'>;
-      type Case_WithTwo = Grok.Assert<HandlerResponse.Get.Identifier<TestResponseTwo>, 'response:two'>;
-    }
+  export namespace Test_HandlerResponseGetIdentifier_UsingAlias {
+    type Case_WithOne = Grok.Assert<Response.Get.Identifier<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'response:one'>;
+    type Case_WithTwo = Grok.Assert<Response.Get.Identifier<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'response:two'>;
+  }
+}
 
-    /**
-     * {@link HandlerResponse.Get.Value}
-     */
-    export namespace Test_HandlerResponse_Get_Value {
-      type Case_WithOne = Grok.Assert<HandlerResponse.Get.Value<TestResponseOne>, 'value-one'>;
-      type Case_WithTwo = Grok.Assert<HandlerResponse.Get.Value<TestResponseTwo>, 'value-two'>;
-    }
+/**
+ * {@link HandlerResponseGetValue}
+ */
+export namespace Test_HandlerResponseGetValue {
+  /**
+   * {@link HandlerResponseGetValue}
+   */
+  export namespace Test_HandlerResponseGetValue {
+    type Case_WithOne = Grok.Assert<HandlerResponseGetValue<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'value-one'>;
+    type Case_WithTwo = Grok.Assert<HandlerResponseGetValue<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'value-two'>;
+  }
+
+  /**
+   * {@link Response.Get.Value}
+   */
+  export namespace Test_HandlerResponseGetValue_UsingAlias {
+    type Case_WithOne = Grok.Assert<Response.Get.Value<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'value-one'>;
+    type Case_WithTwo = Grok.Assert<Response.Get.Value<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'value-two'>;
   }
 }
 

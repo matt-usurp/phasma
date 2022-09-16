@@ -25,93 +25,6 @@ export type HandlerMiddlewareDefinition<
   readonly MRO: ResponseOutbound;
 };
 
-export namespace HandlerMiddlewareDefinition {
-  /**
-   * Types that indicate a value should be inheritted.
-   */
-  export namespace Inherit {
-    /**
-     * Indicate the provider should be inheritted.
-     */
-    export type Provider = Grok.Inherit;
-
-    /**
-     * Indicate the context inbound should be inheritted.
-     */
-    export type ContextInbound = Grok.Inherit;
-
-    /**
-     * Indicate the context outbound should be inheritted.
-     */
-    export type ContextOutbound = Grok.Inherit;
-
-    /**
-     * Indicate the response inbound should be inheritted.
-     */
-    export type ResponseInbound = Grok.Inherit;
-
-    /**
-     * Indicate the response outbound should be inheritted.
-     */
-    export type ResponseOutbound = Grok.Inherit;
-  }
-
-  /**
-   * @deprecated use {@link HandlerMiddlewareDefinition.Inherit.Provider} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeProvider = HandlerMiddlewareDefinition.Inherit.Provider;
-
-  /**
-   * @deprecated use {@link HandlerMiddlewareDefinition.Inherit.ContextInbound} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeContextInbound = HandlerMiddlewareDefinition.Inherit.ContextInbound;
-
-  /**
-   * @deprecated use {@link HandlerMiddlewareDefinition.Inherit.ContextOutbound} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeContextOutbound = HandlerMiddlewareDefinition.Inherit.ContextOutbound;
-
-  /**
-   * @deprecated use {@link HandlerMiddlewareDefinition.Inherit.ResponseInbound} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeResponseInbound = HandlerMiddlewareDefinition.Inherit.ResponseInbound;
-
-  /**
-   * @deprecated use {@link HandlerMiddlewareDefinition.Inherit.ResponseOutbound} instead, to be removed in `>=1.1.0`
-   */
-  export type SomeResponseOutbound = HandlerMiddlewareDefinition.Inherit.ResponseOutbound;
-
-  /**
-   * Retrieve data from the {@link HandlerMiddlewareDefinition}.
-   */
-  export namespace Get {
-    /**
-     * Retrieve the middleware provider from {@link Definition}.
-     */
-    export type Provider<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MP'];
-
-    /**
-     * Retrieve the middleware inbound context from {@link Definition}.
-     */
-    export type ContextInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCI'];
-
-    /**
-     * Retrieve the middleware outbound context from {@link Definition}.
-     */
-    export type ContextOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCO'];
-
-    /**
-     * Retrieve the middleware inbound response from {@link Definition}.
-     */
-    export type ResponseInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRI'];
-
-    /**
-     * Retrieve the middleware outbound response from {@link Definition}.
-     */
-    export type ResponseOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRO'];
-  }
-}
-
 /**
  * A middleware definition with all {@link Grok.Inherit} values.
  *
@@ -120,11 +33,11 @@ export namespace HandlerMiddlewareDefinition {
 export type HandlerMiddlewareDefinitionBase = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
-    HandlerMiddlewareDefinition.Inherit.Provider,
-    HandlerMiddlewareDefinition.Inherit.ContextInbound,
-    HandlerMiddlewareDefinition.Inherit.ContextOutbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseInbound,
-    HandlerMiddlewareDefinition.Inherit.ResponseOutbound
+    HandlerMiddlewareDefinitionInheritProvider,
+    HandlerMiddlewareDefinitionInheritContextInbound,
+    HandlerMiddlewareDefinitionInheritContextOutbound,
+    HandlerMiddlewareDefinitionInheritResponseInbound,
+    HandlerMiddlewareDefinitionInheritResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -143,6 +56,56 @@ export type HandlerMiddlewareDefinitionConstraint = (
   >
 /* eslint-enable @typescript-eslint/indent */
 );
+
+/**
+ * Retrieve the middleware provider from {@link Definition}.
+ */
+export type HandlerMiddlewareDefinitionGetProvider<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MP'];
+
+/**
+ * Retrieve the middleware inbound context from {@link Definition}.
+ */
+export type HandlerMiddlewareDefinitionGetContextInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCI'];
+
+/**
+ * Retrieve the middleware outbound context from {@link Definition}.
+ */
+export type HandlerMiddlewareDefinitionGetContextOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCO'];
+
+/**
+ * Retrieve the middleware inbound response from {@link Definition}.
+ */
+export type HandlerMiddlewareDefinitionGetResponseInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRI'];
+
+/**
+ * Retrieve the middleware outbound response from {@link Definition}.
+ */
+export type HandlerMiddlewareDefinitionGetResponseOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRO'];
+
+/**
+ * Indicate the provider should be inheritted.
+ */
+export type HandlerMiddlewareDefinitionInheritProvider = Grok.Inherit;
+
+/**
+ * Indicate the context inbound should be inheritted.
+ */
+export type HandlerMiddlewareDefinitionInheritContextInbound = Grok.Inherit;
+
+/**
+ * Indicate the context outbound should be inheritted.
+ */
+export type HandlerMiddlewareDefinitionInheritContextOutbound = Grok.Inherit;
+
+/**
+ * Indicate the response inbound should be inheritted.
+ */
+export type HandlerMiddlewareDefinitionInheritResponseInbound = Grok.Inherit;
+
+/**
+ * Indicate the response outbound should be inheritted.
+ */
+export type HandlerMiddlewareDefinitionInheritResponseOutbound = Grok.Inherit;
 
 /**
  * The next function that resumes the composition chain, invoking either the next middleware or the handler.
@@ -244,3 +207,71 @@ export type HandlerMiddlewareClassImplementation<Definition extends HandlerMiddl
    */
   invoke(input: HandlerMiddlewareFunctionInputFromDefinition<Definition>): HandlerMiddlewareFunctionOutputFromDefinition<Definition>;
 };
+
+/**
+ * The below import(s) and namespace allows this file to compose a better developer experience through type aliasing.
+ * Here we define a series of aliases that provide better naming and a single type import.
+ * This is then aliased in the root file with a better name also.
+ */
+import * as middleware from './middleware';
+
+export namespace HandlerMiddleware {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Definition = middleware.HandlerMiddlewareDefinition;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Implementation = middleware.HandlerMiddlewareClassImplementation;
+
+  /**
+   * Types for working with the middleware invoke function signature.
+   */
+  export namespace Fn {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Input = middleware.HandlerMiddlewareFunctionInputFromDefinition;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Output = middleware.HandlerMiddlewareFunctionOutputFromDefinition;
+  }
+}
+
+export namespace HandlerMiddlewareDefinition {
+  /**
+   * Retrieve data from the {@link HandlerMiddlewareDefinition}.
+   */
+  export namespace Get {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Provider = middleware.HandlerMiddlewareDefinitionGetProvider;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ContextInbound = middleware.HandlerMiddlewareDefinitionGetContextInbound;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ContextOutbound = middleware.HandlerMiddlewareDefinitionGetContextOutbound;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ResponseInbound = middleware.HandlerMiddlewareDefinitionGetResponseInbound;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ResponseOutbound = middleware.HandlerMiddlewareDefinitionGetResponseOutbound;
+  }
+
+  /**
+   * Types that indicate a value should be inheritted.
+   */
+  export namespace Inherit {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Provider = middleware.HandlerMiddlewareDefinitionInheritProvider;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ContextInbound = middleware.HandlerMiddlewareDefinitionInheritContextInbound;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ContextOutbound = middleware.HandlerMiddlewareDefinitionInheritContextOutbound;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ResponseInbound = middleware.HandlerMiddlewareDefinitionInheritResponseInbound;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import ResponseOutbound = middleware.HandlerMiddlewareDefinitionInheritResponseOutbound;
+  }
+}

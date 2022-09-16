@@ -1,5 +1,3 @@
-import type { Grok } from '@matt-usurp/grok';
-
 /**
  * A template for provider identifiers.
  *
@@ -27,17 +25,22 @@ export type HandlerProvider<Identifier extends HandlerProviderIdentifierConstrai
 /**
  * A constraint type for {@link HandlerProvider}.
  */
-export type HandlerProviderConstraint = HandlerProvider<Grok.Constraint.Anything>;
+export type HandlerProviderConstraint = (
+/* eslint-disable @typescript-eslint/indent */
+  HandlerProvider<
+    any // eslint-disable-line @typescript-eslint/no-explicit-any
+  >
+/* eslint-enable @typescript-eslint/indent */
+);
 
 /**
- * A {@link HandlerProvider} with some {@link Payload} attached.
- *
- * @deprecated use provider specialised type instead, providers might use with own terminology instead of "payload".
+ * The below import(s) and namespace allows this file to compose a better developer experience through type aliasing.
+ * Here we define a series of aliases that provide better naming and a single type import.
+ * This is then aliased in the root file with a better name also.
  */
-export type HandlerProviderWithPayload<
-  Identifier extends HandlerProviderIdentifierConstraint,
-  Payload,
-> = (
-  & HandlerProvider<Identifier>
-  & { readonly payload: Payload }
-);
+import * as provider from './provider';
+
+export namespace HandlerProvider {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Identifier = provider.HandlerProviderIdentifier;
+}

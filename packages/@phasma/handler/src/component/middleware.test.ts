@@ -1,6 +1,6 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { Middleware } from '../index';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionBase, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition, HandlerMiddlewareNextFunction } from './middleware';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionBase, HandlerMiddlewareDefinitionGetContextInbound, HandlerMiddlewareDefinitionGetContextOutbound, HandlerMiddlewareDefinitionGetProvider, HandlerMiddlewareDefinitionGetResponseInbound, HandlerMiddlewareDefinitionGetResponseOutbound, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition, HandlerMiddlewareNextFunction } from './middleware';
 import type { HandlerMiddlewareContextPassThrough, HandlerMiddlewareResponsePassThrough } from './middleware/inherit';
 import type { HandlerProvider, HandlerProviderIdentifier } from './provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from './response';
@@ -11,11 +11,8 @@ it('ignored, only type tests', (): void => {
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-type TestProviderIdentifier = HandlerProviderIdentifier<'test'>;
-type TestProvider = HandlerProvider<TestProviderIdentifier>;
-
-type TestResponseIdentifier = HandlerResponseIdentifier<'test'>;
-type TestResponse<T> = HandlerResponse<TestResponseIdentifier, T>;
+type TestProvider = HandlerProvider<HandlerProviderIdentifier<'test'>>;
+type TestResponse<T> = HandlerResponse<HandlerResponseIdentifier<'test'>, T>;
 
 type TestContextInbound = { case: 'context:inbound' };
 type TestContextOutbound = { case: 'context:outbound' };
@@ -36,52 +33,97 @@ type TestDefinition = (
 );
 
 /**
- * {@link HandlerMiddlewareDefinition}
+ * {@link HandlerMiddlewareDefinitionGetProvider}
  */
-export namespace Test_HandlerMiddlewareDefinition {
+export namespace Test_HandlerMiddlewareDefinitionGetProvider {
   /**
-   * {@link HandlerMiddlewareDefinition.Get}
+   * {@link HandlerMiddlewareDefinitionGetProvider}
    */
-  export namespace Test_HandlerMiddlewareDefinition_Get {
-    /**
-     * {@link HandlerMiddlewareDefinition.Get.Provider}
-     */
-    export namespace Test_HandlerMiddlewareDefinition_Get_Provider {
-      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinition.Get.Provider<TestDefinition>, TestProvider>>;
-      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.Provider<TestDefinition>, TestProvider>>;
-    }
+  export namespace Test_HandlerMiddlewareDefinitionGetProvider {
+    type Case_WithProvider = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinitionGetProvider<TestDefinition>, TestProvider>>;
+  }
 
-    /**
-     * {@link HandlerMiddlewareDefinition.Get.ContextInbound}
-     */
-    export namespace Test_HandlerMiddlewareDefinition_Get_ContextInbound {
-      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinition.Get.ContextInbound<TestDefinition>, TestContextInbound>>;
-      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ContextInbound<TestDefinition>, TestContextInbound>>;
-    }
+  /**
+   * {@link Middleware.Definition.Get.Provider}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetProvider {
+    type Case_WithProvider = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.Provider<TestDefinition>, TestProvider>>;
+  }
+}
 
-    /**
-     * {@link HandlerMiddlewareDefinition.Get.ContextOutbound}
-     */
-    export namespace Test_HandlerMiddlewareDefinition_Get_ContextOutbound {
-      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinition.Get.ContextOutbound<TestDefinition>, TestContextOutbound>>;
-      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ContextOutbound<TestDefinition>, TestContextOutbound>>;
-    }
+/**
+ * {@link HandlerMiddlewareDefinitionGetContextInbound}
+ */
+export namespace Test_HandlerMiddlewareDefinitionGetContextInbound {
+  /**
+   * {@link HandlerMiddlewareDefinitionGetContextInbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetContextInbound {
+    type Case_WithContextInbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinitionGetContextInbound<TestDefinition>, TestContextInbound>>;
+  }
 
-    /**
-     * {@link HandlerMiddlewareDefinition.Get.ResponseInbound}
-     */
-    export namespace Test_HandlerMiddlewareDefinition_Get_ResponseInbound {
-      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinition.Get.ResponseInbound<TestDefinition>, TestResponse<TestResponseInbound>>>;
-      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ResponseInbound<TestDefinition>, TestResponse<TestResponseInbound>>>;
-    }
+  /**
+   * {@link Middleware.Definition.Get.ContextInbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetContextInbound {
+    type Case_WithContextInbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ContextInbound<TestDefinition>, TestContextInbound>>;
+  }
+}
 
-    /**
-     * {@link HandlerMiddlewareDefinition.Get.ResponseOutbound}
-     */
-    export namespace Test_HandlerMiddlewareDefinition_Get_ResponseOutbound {
-      type Case_Main = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinition.Get.ResponseOutbound<TestDefinition>, TestResponse<TestResponseOutbound>>>;
-      type Case_Alias = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ResponseOutbound<TestDefinition>, TestResponse<TestResponseOutbound>>>;
-    }
+/**
+ * {@link HandlerMiddlewareDefinitionGetContextOutbound}
+ */
+export namespace Test_HandlerMiddlewareDefinitionGetContextOutbound {
+  /**
+   * {@link HandlerMiddlewareDefinitionGetContextOutbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetContextOutbound {
+    type Case_WithContextOutbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinitionGetContextOutbound<TestDefinition>, TestContextOutbound>>;
+  }
+
+  /**
+   * {@link Middleware.Definition.Get.ContextOutbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetContextOutbound {
+    type Case_WithContextOutbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ContextOutbound<TestDefinition>, TestContextOutbound>>;
+  }
+}
+
+/**
+ * {@link HandlerMiddlewareDefinitionGetResponseInbound}
+ */
+export namespace Test_HandlerMiddlewareDefinitionGetResponseInbound {
+  /**
+   * {@link HandlerMiddlewareDefinitionGetResponseInbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetResponseInbound {
+    type Case_WithResponseInbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinitionGetResponseInbound<TestDefinition>, TestResponse<TestResponseInbound>>>;
+  }
+
+  /**
+   * {@link Middleware.Definition.Get.ResponseInbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetResponseInbound {
+    type Case_WithResponseInbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ResponseInbound<TestDefinition>, TestResponse<TestResponseInbound>>>;
+  }
+}
+
+/**
+ * {@link HandlerMiddlewareDefinitionGetResponseOutbound}
+ */
+export namespace Test_HandlerMiddlewareDefinitionGetResponseOutbound {
+  /**
+   * {@link HandlerMiddlewareDefinitionGetResponseOutbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetResponseOutbound {
+    type Case_WithResponseOutbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerMiddlewareDefinitionGetResponseOutbound<TestDefinition>, TestResponse<TestResponseOutbound>>>;
+  }
+
+  /**
+   * {@link Middleware.Definition.Get.ResponseOutbound}
+   */
+  export namespace Test_HandlerMiddlewareDefinitionGetResponseOutbound {
+    type Case_WithResponseOutbound = Grok.Assert.IsTrue<Grok.Value.IsExactly<Middleware.Definition.Get.ResponseOutbound<TestDefinition>, TestResponse<TestResponseOutbound>>>;
   }
 }
 
