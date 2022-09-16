@@ -1,7 +1,7 @@
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import { result } from '@phasma/handler-aws/src/response';
 
-type EventSourceIdentifier = Event.Source<'lex'>;
+type EventSourceIdentifier = Event.Identifier<'lex'>;
 
 type Definition = Handler.Definition<EventSourceIdentifier>;
 
@@ -13,7 +13,7 @@ export class SomeHandler implements Handler.Implementation<Definition> {
     provider.id; // "provider:aws"
     provider.event; // LexEvent
 
-    return result<Event.Result<EventSourceIdentifier>>({
+    return result<Event.ResponseValue<EventSourceIdentifier>>({
       dialogAction: {
         type: 'ConfirmIntent',
         intentName: 'some-name',

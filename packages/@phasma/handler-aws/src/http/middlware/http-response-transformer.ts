@@ -2,7 +2,7 @@ import type { HttpResponse, HttpResponseTransport } from '@phasma/handler/src/ht
 import type { Event, Middleware, Response } from '../../index';
 import { result } from '../../response';
 
-export type HttpResponseLambdaProxy = Event.ResultRaw<'apigw:proxy:v2'>;
+export type HttpResponseLambdaProxy = Event.Response<'apigw:proxy:v2'>;
 
 export type HttpResponseEncodedTransport = HttpResponseTransport<number, string>;
 
@@ -26,7 +26,7 @@ export class HttpResponseTransformerMiddleware<R extends HttpResponseEncodedTran
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   protected constructor() {}
 
-  public async invoke({ context, next }: Middleware.Fn.Parameters<HttpResponseTransformerMiddlewareDefinition<R>>): Middleware.Fn.Response<HttpResponseTransformerMiddlewareDefinition<R>> {
+  public async invoke({ context, next }: Middleware.Fn.Input<HttpResponseTransformerMiddlewareDefinition<R>>): Middleware.Fn.Output<HttpResponseTransformerMiddlewareDefinition<R>> {
     const value = await next(context);
 
     if (value.type === 'response:http') {

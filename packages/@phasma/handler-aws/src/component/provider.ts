@@ -1,16 +1,19 @@
 import type { HandlerProvider, HandlerProviderIdentifier } from '@phasma/handler/src/component/provider';
 import type { Context as RawLambdaContext } from 'aws-lambda';
-import type { LambdaHandlerEventSourceIdentifiers, LambdaHandlerEventSourcePayloadFromIdentifier } from './event';
+import type { LambdaHandlerEventSourceGetPayloadFromIdentifier, LambdaHandlerEventSourceIdentifiers } from './event';
 
 export type { RawLambdaContext };
 
 /**
- * A provider identifier for AWS Lambda.
+ * A {@link HandlerProviderIdentifier} for AWS Lambda.
  *
  * @see {@link HandlerProviderIdentifier} for more information.
  */
 export type LambdaHandlerProviderIdentifier = HandlerProviderIdentifier<'aws:lambda'>;
 
+/**
+ * A {@link HandlerProvider} for AWS Lambda.
+ */
 export type LambdaHandlerProvider = (
   & HandlerProvider<LambdaHandlerProviderIdentifier>
   & {
@@ -26,21 +29,27 @@ export type LambdaHandlerProvider = (
   }
 );
 
-export type LambdaHandlerProviderWithEvent<Event> = (
+/**
+ * A {@link LambdaHandlerProvider} with an event payload attached.
+ */
+export type LambdaHandlerProviderWithEvent<Value> = (
   & LambdaHandlerProvider
   & {
     /**
      * The event details that were pass to this function invocation.
      *
-     * This {@link Event} information is tailored to the specific event payload depending on the event source identifier used.
+     * This {@link Value} information is tailored to the specific event payload depending on the event source identifier used.
      * Some invocations might not have an event, in which case this will be `never` or an empty object.
      */
-    readonly event: Event;
+    readonly event: Value;
   }
 );
 
-export type LambdaHandlerProviderWithEventFromEventSourceIdentifier<EventSourceIdentifier extends LambdaHandlerEventSourceIdentifiers> = (
-  LambdaHandlerProviderWithEvent<LambdaHandlerEventSourcePayloadFromIdentifier<EventSourceIdentifier>>
+/**
+ * A {@link LambdaHandlerProviderWithEvent} with the event payload resolved from the given {@link Identifier}.
+ */
+export type LambdaHandlerProviderWithEventFromEventSourceIdentifier<Identifier extends LambdaHandlerEventSourceIdentifiers> = (
+  LambdaHandlerProviderWithEvent<LambdaHandlerEventSourceGetPayloadFromIdentifier<Identifier>>
 );
 
 /**
@@ -115,3 +124,22 @@ export type LambdaHandlerProviderFunctionMeta = {
    */
   readonly ttl: () => number;
 };
+
+/**
+ * The below import(s) and namespace allows this file to compose a better developer experience through type aliasing.
+ * Here we define a series of aliases that provide better naming and a single type import.
+ * This is then aliased in the root file with a better name also.
+ */
+import * as provider from './provider';
+
+/*!
+ * This is a developer experience namespace merge.
+ * You are probably looking for the defined type instead, keep searching for another result.
+ */
+export namespace LambdaHandlerProvider {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import Identifier = provider.LambdaHandlerProviderIdentifier;
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  export import ForEvent = provider.LambdaHandlerProviderWithEventFromEventSourceIdentifier;
+}

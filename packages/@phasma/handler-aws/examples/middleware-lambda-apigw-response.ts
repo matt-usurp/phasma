@@ -1,9 +1,9 @@
-import type { Event, Middleware, Response } from '@phasma/handler-aws/src/index';
+import type { Event, Middleware } from '@phasma/handler-aws/src/index';
 import { result, unwrap } from '@phasma/handler-aws/src/response';
 import type { HandlerResponse, HandlerResponseIdentifier } from '@phasma/handler/src/component/response';
 
-type EventSourceIdentifier = Event.Source<'apigw:proxy:v2'>;
-type EventSourceResponse = Event.ResultRaw<EventSourceIdentifier>;
+type EventSourceIdentifier = Event.Identifier<'apigw:proxy:v2'>;
+type EventSourceResponse = Event.Response<EventSourceIdentifier>;
 
 type CustomResponseIdentifier = HandlerResponseIdentifier<'custom:unauthorised'>;
 type CustomResponse = HandlerResponse<CustomResponseIdentifier, {
@@ -31,7 +31,7 @@ export class TransformCustomResponseMiddleware implements Middleware.Implementat
   /**
    * @inheritdoc
    */
-  public async invoke({ context, next }: Middleware.Fn.Parameters<Definition>): Middleware.Fn.Response<Definition> {
+  public async invoke({ context, next }: Middleware.Fn.Input<Definition>): Middleware.Fn.Output<Definition> {
     const value = await next(context);
 
     // Here we test for our custom type.
@@ -41,7 +41,7 @@ export class TransformCustomResponseMiddleware implements Middleware.Implementat
       const data = unwrap(value);
 
       // Return a response that is compatible with the gateway.
-      return result<Response.Get.Value<EventSourceResponse>>({
+      return result<Event.ResponseValue<EventSourceIdentifier>>({
         statusCode: 401,
 
         body: JSON.stringify({

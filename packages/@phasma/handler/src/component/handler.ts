@@ -269,7 +269,7 @@ import * as handler from './handler';
 import * as response from './response';
 
 /**
- * The handler namespace.
+ * Types for defining and working with handlers.
  */
 export namespace Handler {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -305,7 +305,7 @@ export namespace Handler {
 
 /*!
  * This is a developer experience namespace merge.
- * You are probably looking for the {@link HandlerDefinition} type specifically.
+ * You are probably looking for the defined type instead, keep searching for another result.
  */
 export namespace HandlerDefinition {
   /**

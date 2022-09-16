@@ -15,7 +15,7 @@ export type HttpRequestBodyValidatorContext<T> = {
 export type HttpRequestBodyValidatorMiddlewareDefinition<T> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
-    Provider.WithEventSource<'apigw:proxy:v2'>,
+    Provider.ForEvent<'apigw:proxy:v2'>,
     Middleware.Definition.Inherit.ContextInbound,
     HttpRequestBodyValidatorContext<T>,
     Middleware.Definition.Inherit.ResponseInbound,
@@ -41,7 +41,7 @@ export class HttpRequestBodyValidatorMiddleware<T> implements Middleware.Impleme
     public readonly validator: HttpValidatorFunction<Grok.Constraint.ObjectLike, unknown>,
   ) {}
 
-  public async invoke({ provider, context, next }: Middleware.Fn.Parameters<HttpRequestBodyValidatorMiddlewareDefinition<T>>): Middleware.Fn.Response<HttpRequestBodyValidatorMiddlewareDefinition<T>> {
+  public async invoke({ provider, context, next }: Middleware.Fn.Input<HttpRequestBodyValidatorMiddlewareDefinition<T>>): Middleware.Fn.Output<HttpRequestBodyValidatorMiddlewareDefinition<T>> {
     const body = provider.event?.body;
 
     if (body === undefined || body === '') {

@@ -13,7 +13,7 @@ export type HttpRequestPathValidatorContext<T> = {
 export type HttpRequestPathValidatorMiddlewareDefinition<T> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
-    Provider.WithEventSource<'apigw:proxy:v2'>,
+    Provider.ForEvent<'apigw:proxy:v2'>,
     Middleware.Definition.Inherit.ContextInbound,
     HttpRequestPathValidatorContext<T>,
     Middleware.Definition.Inherit.ResponseInbound,
@@ -35,7 +35,7 @@ export class HttpRequestPathValidatorMiddleware<T extends Grok.Constraint.Object
     public readonly validator: HttpValidatorFunction<Grok.Constraint.ObjectLike, unknown>,
   ) {}
 
-  public async invoke({ provider, context, next }: Middleware.Fn.Parameters<HttpRequestPathValidatorMiddlewareDefinition<T>>): Middleware.Fn.Response<HttpRequestPathValidatorMiddlewareDefinition<T>> {
+  public async invoke({ provider, context, next }: Middleware.Fn.Input<HttpRequestPathValidatorMiddlewareDefinition<T>>): Middleware.Fn.Output<HttpRequestPathValidatorMiddlewareDefinition<T>> {
     const path = provider.event?.pathParameters;
 
     if (path === undefined) {

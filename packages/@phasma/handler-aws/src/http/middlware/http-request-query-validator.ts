@@ -15,7 +15,7 @@ export type HttpRequestQueryValidatorContext<T> = {
 export type HttpRequesQueryValidatorMiddlewareDefinition<T> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
-    Provider.WithEventSource<'apigw:proxy:v2'>,
+    Provider.ForEvent<'apigw:proxy:v2'>,
     Middleware.Definition.Inherit.ContextInbound,
     HttpRequestQueryValidatorContext<T>,
     Middleware.Definition.Inherit.ResponseInbound,
@@ -41,7 +41,7 @@ export class HttpRequesQueryValidatorMiddleware<T extends Grok.Constraint.Object
     public readonly validator: HttpValidatorFunction<Grok.Constraint.ObjectLike, unknown>,
   ) {}
 
-  public async invoke({ provider, context, next }: Middleware.Fn.Parameters<HttpRequesQueryValidatorMiddlewareDefinition<T>>): Middleware.Fn.Response<HttpRequesQueryValidatorMiddlewareDefinition<T>> {
+  public async invoke({ provider, context, next }: Middleware.Fn.Input<HttpRequesQueryValidatorMiddlewareDefinition<T>>): Middleware.Fn.Output<HttpRequesQueryValidatorMiddlewareDefinition<T>> {
     const query = provider.event?.rawQueryString ?? '';
     const parsed = this.parser(query);
 

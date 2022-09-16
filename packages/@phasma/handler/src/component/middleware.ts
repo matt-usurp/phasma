@@ -234,6 +234,10 @@ export namespace HandlerMiddleware {
   }
 }
 
+/*!
+ * This is a developer experience namespace merge.
+ * You are probably looking for the defined type instead, keep searching for another result.
+ */
 export namespace HandlerMiddlewareDefinition {
   /**
    * Retrieve data from the {@link HandlerMiddlewareDefinition}.
