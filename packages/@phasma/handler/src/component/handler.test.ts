@@ -1,13 +1,12 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { Handler } from '../index';
-import type { HandlerClassImplementation, HandlerDefinition, HandlerDefinitionGetContext, HandlerDefinitionGetProvider, HandlerDefinitionGetResponse, HandlerDefinitionWithContext, HandlerDefinitionWithProvider, HandlerDefinitionWithResponse, HandlerFunctionInput, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from './handler';
+import type { HandlerClassImplementation, HandlerDefinition, HandlerDefinitionGetContext, HandlerDefinitionGetProvider, HandlerDefinitionGetResponse, HandlerDefinitionInheritContext, HandlerDefinitionInheritProvider, HandlerDefinitionInheritResponse, HandlerDefinitionWithContext, HandlerDefinitionWithProvider, HandlerDefinitionWithResponse, HandlerFunctionInput, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from './handler';
 import type { HandlerProvider, HandlerProviderIdentifier } from './provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from './response';
 
-it('ignored, only type tests', (): void => {
-  expect(true).toStrictEqual(true);
-});
+it('types', (): void => expect(true).toBeTruthy());
 
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 type TestProvider = HandlerProvider<HandlerProviderIdentifier<'test'>>;
@@ -17,21 +16,18 @@ type TestContextData = { case: 'context' };
 type TestResponseData = { case: 'response' };
 
 type TestDefinition = (
-/* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
     TestProvider,
     TestContextData,
     TestResponse<TestResponseData>
   >
-/* eslint-enable @typescript-eslint/indent */
 );
 
 /**
- * {@link HandlerDefinition.WithProvider}
+ * @internal {@link HandlerDefinition.WithProvider}
  */
 export namespace Test_HandlerDefinitionWithProvider {
-  type Case_WithoutPrevious = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithSameProvider_ReplaceWithProvider = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithProvider<TestProvider>,
@@ -42,11 +38,9 @@ export namespace Test_HandlerDefinitionWithProvider {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 
-  type Case_WithPreviousInherit = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithInherit_ReplaceWithProvider = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithProvider<
@@ -64,11 +58,9 @@ export namespace Test_HandlerDefinitionWithProvider {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 
-  type Case_WithPreviousDefined = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithAnotherProvider_ReplaceWithProvider = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithProvider<
@@ -86,16 +78,14 @@ export namespace Test_HandlerDefinitionWithProvider {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 }
 
 /**
- * {@link HandlerDefinition.WithContext}
+ * @internal {@link HandlerDefinition.WithContext}
  */
 export namespace Test_HandlerDefinitionWithContext {
-  type Case_WithoutPrevious = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithSameContext_ReplaceWithContext = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithContext<TestContextData>,
@@ -106,11 +96,9 @@ export namespace Test_HandlerDefinitionWithContext {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 
-  type Case_WithPreviousInherit = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithInherit_ReplaceWithContext = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithContext<
@@ -128,11 +116,9 @@ export namespace Test_HandlerDefinitionWithContext {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 
-  type Case_WithPreviousDefined = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithAnotherContext_ReplaceWithContext = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithContext<
@@ -150,16 +136,14 @@ export namespace Test_HandlerDefinitionWithContext {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 }
 
 /**
- * {@link HandlerDefinition.WithResponse}
+ * @internal {@link HandlerDefinition.WithResponse}
  */
 export namespace Test_HandlerDefinitionWithResponse {
-  type Case_WithoutPrevious = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithSameResponse_ReplaceWithResponse = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithResponse<TestResponse<TestResponseData>>,
@@ -170,11 +154,9 @@ export namespace Test_HandlerDefinitionWithResponse {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 
-  type Case_WithPreviousInherit = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithInherit_ReplaceWithResponse = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithResponse<
@@ -192,11 +174,9 @@ export namespace Test_HandlerDefinitionWithResponse {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 
-  type Case_WithPreviousDefined = (
-  /* eslint-disable @typescript-eslint/indent */
+  type Assert_WithHandlerDefinitionWithAnotherResponse_ReplaceWithResponse = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerDefinitionWithResponse<
@@ -214,118 +194,261 @@ export namespace Test_HandlerDefinitionWithResponse {
         >
       >
     >
-  /* eslint-enable @typescript-eslint/indent */
   );
 }
 
 /**
- * {@link HandlerDefinitionGetProvider}
+ * @internal {@link HandlerDefinitionGetProvider}
  */
 export namespace Test_HandlerDefinitionGetProvider {
   /**
-   * {@link HandlerDefinitionGetProvider}
+   * @internal {@link HandlerDefinitionGetProvider}
    */
   export namespace Test_HandlerDefinitionGetProvider {
-    type Case_WithProvider = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinitionGetProvider<TestDefinition>, TestProvider>>;
+    type Assert_WithTestDefinition_CanGetProvider = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerDefinitionGetProvider<TestDefinition>,
+          TestProvider
+        >
+      >
+    );
   }
 
   /**
-   * {@link HandlerDefinition.Get.Provider}
+   * @internal {@link HandlerDefinition.Get.Provider}
    */
   export namespace Test_HandlerDefinitionGetProvider_UsingAlias {
-    type Case_WithProvider = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Provider<TestDefinition>, TestProvider>>;
+    type Assert_WithTestDefinition_CanGetProvider = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Handler.Definition.Get.Provider<TestDefinition>,
+          TestProvider
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerDefinitionGetContext}
+ * @internal {@link HandlerDefinitionGetContext}
  */
 export namespace Test_HandlerDefinitionGetContext {
   /**
-   * {@link HandlerDefinitionGetContext}
+   * @internal {@link HandlerDefinitionGetContext}
    */
   export namespace Test_HandlerDefinitionGetContext {
-    type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinitionGetContext<TestDefinition>, TestContextData>>;
+    type Assert_WithTestDefinition_CanGetContext = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerDefinitionGetContext<TestDefinition>,
+          TestContextData
+        >
+      >
+    );
   }
 
   /**
-   * {@link Handler.Definition.Get.Context}
+   * @internal {@link Handler.Definition.Get.Context}
    */
   export namespace Test_HandlerDefinitionGetContext_UsingAlias {
-    type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Context<TestDefinition>, TestContextData>>;
+    type Assert_WithTestDefinition_CanGetContext = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Handler.Definition.Get.Context<TestDefinition>,
+          TestContextData
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerDefinitionGetResponse}
+ * @internal {@link HandlerDefinitionGetResponse}
  */
 export namespace Test_HandlerDefinitionGetResponse {
   /**
-   * {@link HandlerDefinitionGetResponse}
+   * @internal {@link HandlerDefinitionGetResponse}
    */
   export namespace Test_HandlerDefinitionGetResponse {
-    type Case_WithResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<HandlerDefinitionGetResponse<TestDefinition>, TestResponse<TestResponseData>>>;
+    type Assert_WithTestDefinition_CanGetResponse = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerDefinitionGetResponse<TestDefinition>,
+          TestResponse<TestResponseData>
+        >
+      >
+    );
   }
 
   /**
-   * {@link Handler.Definition.Get.Response}
+   * @internal {@link Handler.Definition.Get.Response}
    */
   export namespace Test_HandlerDefinitionGetResponse_UsingAlias {
-    type Case_WithResponse = Grok.Assert.IsTrue<Grok.Value.IsExactly<Handler.Definition.Get.Response<TestDefinition>, TestResponse<TestResponseData>>>;
+    type Assert_WithTestDefinition_CanGetResponse = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Handler.Definition.Get.Response<TestDefinition>,
+          TestResponse<TestResponseData>
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerFunctionInput}
+ * @internal {@link HandlerFunctionInput}
  */
 export namespace Test_HandlerFunctionInput {
-  type Value = HandlerFunctionInput<TestProvider, TestContextData>;
+  /**
+   * @internal {@link HandlerFunctionInput}
+   */
+  export namespace Test_HandlerFunctionInput {
+    type Value = HandlerFunctionInput<TestProvider, TestContextData>;
 
-  type Case_WithProvider = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['provider'], TestProvider>>;
-  type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['context'], TestContextData>>;
+    type Assert_WithValue_Provider = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Value['provider'],
+          TestProvider
+        >
+      >
+    );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type ValueAny = HandlerFunctionInput<any, any>;
+    type Assert_WithValue_Context = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Value['context'],
+          TestContextData
+        >
+      >
+    );
+  }
 
-  type Case_WithAnyProvider = ValueAny['provider'];
-  type Case_WithAnyContext = ValueAny['context'];
+  /**
+   * @internal {@link HandlerFunctionInput}
+   */
+  export namespace Test_HandlerFunctionInput_WithAnyValue_ResolveNever {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    type Value = HandlerFunctionInput<any, any>;
+
+    type Assert_WithValue_Provider = Grok.Assert.IsNever<Value['provider']>;
+    type Assert_WithValue_Context = Grok.Assert.IsNever<Value['context']>;
+  }
 }
 
 /**
- * {@link HandlerFunctionInputFromDefinition}
+ * @internal {@link HandlerFunctionInputFromDefinition}
  */
 export namespace Test_HandlerFunctionInputFromDefinition {
-  type Value = HandlerFunctionInputFromDefinition<TestDefinition>;
+  /**
+   * @internal {@link HandlerFunctionInputFromDefinition}
+   */
+  export namespace Test_HandlerFunctionInputFromDefinition {
+    type Value = HandlerFunctionInputFromDefinition<TestDefinition>;
 
-  type Case_WithProvider = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['provider'], TestProvider>>;
-  type Case_WithContext = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['context'], TestContextData>>;
+    type Assert_WithValue_Provider = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Value['provider'],
+          TestProvider
+        >
+      >
+    );
+
+    type Assert_WithValue_Context = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Value['context'],
+          TestContextData
+        >
+      >
+    );
+  }
+
+  /**
+   * @internal {@link HandlerFunctionInputFromDefinition}
+   */
+  export namespace Test_HandlerFunctionInputFromDefinition_WithInheritValue_ResolveNever {
+    type Value = (
+      HandlerFunctionInputFromDefinition<
+        HandlerDefinition<
+          HandlerDefinitionInheritProvider,
+          HandlerDefinitionInheritContext,
+          HandlerDefinitionInheritResponse
+        >
+      >
+    );
+
+    type Assert_WithValue_Provider = Grok.Assert.IsNever<Value['provider']>;
+    type Assert_WithValue_Context = Grok.Assert.IsNever<Value['context']>;
+  }
 }
 
 /**
- * {@link HandlerFunctionOutputFromDefinition}
+ * @internal {@link HandlerFunctionOutputFromDefinition}
  */
 export namespace Test_HandlerFunctionOutputFromDefinition {
   type Value = HandlerFunctionOutputFromDefinition<TestDefinition>;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type Case_WithPromise = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, Promise<any>>>;
+  type Assert_WithValue_IsPromise = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExactly<
+        Value,
+        Promise<any> // eslint-disable-line @typescript-eslint/no-explicit-any
+      >
+    >
+  );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  type Case_WithResponseWrapper = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, Promise<TestResponse<any>>>>;
-  type Case_WithResponseData = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, Promise<TestResponse<TestResponseData>>>>;
+  type Assert_WithValue_IsHandlerResponse = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExactly<
+        Value,
+        Promise<TestResponse<any>> // eslint-disable-line @typescript-eslint/no-explicit-any
+      >
+    >
+  );
+
+  type Assert_WithValue_IsHandlerResponse_WithTestResponseData = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExactly<
+        Value,
+        Promise<TestResponse<TestResponseData>>
+      >
+    >
+  );
 }
 
 /**
- * {@link HandlerClassImplementation}
+ * @internal {@link HandlerClassImplementation}
  */
 export namespace Test_HandlerClassImplementation {
   type Value = HandlerClassImplementation<TestDefinition>;
 
-  type Case_WithFunction = Grok.Assert.IsTrue<Grok.Value.IsExtending<Value['handle'], Grok.Constraint.FunctionLike>>;
+  type Assert_WithValue_IsFunction = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExtending<
+        Value['handle'],
+        Grok.Constraint.FunctionLike
+      >
+    >
+  );
 
-  type ValueInput = Parameters<Value['handle']>;
-  type Case_WithFunctionInput = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueInput, [HandlerFunctionInputFromDefinition<TestDefinition>]>>;
+  type Assert_WithValue_IsFunction_WithInput = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExactly<
+        Parameters<Value['handle']>,
+        [HandlerFunctionInputFromDefinition<TestDefinition>]
+      >
+    >
+  );
 
-  type ValueOutput = ReturnType<Value['handle']>;
-  type Case_WithFunctionOutput = Grok.Assert.IsTrue<Grok.Value.IsExactly<ValueOutput, HandlerFunctionOutputFromDefinition<TestDefinition>>>;
+  type Assert_WithValue_IsFunction_WithOutput = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExactly<
+        ReturnType<Value['handle']>,
+        HandlerFunctionOutputFromDefinition<TestDefinition>
+      >
+    >
+  );
 }
