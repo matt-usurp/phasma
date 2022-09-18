@@ -2,125 +2,202 @@ import type { Grok } from '@matt-usurp/grok';
 import type { Response } from '../index';
 import type { HandlerResponse, HandlerResponseGetIdentifier, HandlerResponseGetValue, HandlerResponseIdentifier, HandlerResponsePresetNothing, HandlerResponsePresetNothingIdentity } from './response';
 
-it('ignored, only type tests', (): void => {
-  expect(true).toStrictEqual(true);
-});
+it('types', (): void => expect(true).toBeTruthy());
 
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
- * {@link HandlerResponseIdentifier}
+ * @internal {@link HandlerResponseIdentifier}
  */
 export namespace Test_HandlerResponseIdentifier {
   /**
-   * {@link HandlerResponseIdentifier}
+   * @internal {@link HandlerResponseIdentifier}
    */
   export namespace Test_HandlerResponseIdentifier {
-    type Case_WithOne = Grok.Assert<HandlerResponseIdentifier<'one'>, 'response:one'>;
-    type Case_WithTwo = Grok.Assert<HandlerResponseIdentifier<'two'>, 'response:two'>;
-    type Case_WithThree = Grok.Assert<HandlerResponseIdentifier<'three'>, 'response:three'>;
+    type Assert_CompatibleWithExpectedIdentifierFormat = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerResponseIdentifier<'example'>,
+          'response:example'
+        >
+      >
+    );
   }
 
   /**
-   * {@link Response.Identifier}
+   * @internal {@link Response.Identifier}
    */
   export namespace Test_HandlerResponseIdentifier_UsingAlias {
-    type Case_WithOne = Grok.Assert<Response.Identifier<'one'>, 'response:one'>;
-    type Case_WithTwo = Grok.Assert<Response.Identifier<'two'>, 'response:two'>;
-    type Case_WithThree = Grok.Assert<Response.Identifier<'three'>, 'response:three'>;
+    type Assert_CompatibleWithExpectedIdentifierFormat = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Response.Identifier<'example'>,
+          'response:example'
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerResponse}
+ * @internal {@link HandlerResponse}
  */
 export namespace Test_HandlerResponse {
   /**
-   * {@link HandlerResponse}
+   * @internal {@link HandlerResponse}
    */
   export namespace Test_HandlerResponse {
-    type Case_WithStructureOne = Grok.Assert<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>, {
-      readonly type: 'response:one';
-      readonly value: 'value-one';
-    }>;
-
-    type Case_WithStructureTwo = Grok.Assert<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>, {
-      readonly type: 'response:two';
-      readonly value: 'value-two';
-    }>;
+    type Assert_CompatibleWithExpectedStructure = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerResponse<
+            HandlerResponseIdentifier<'one'>,
+            'response:value:one'
+          >,
+          {
+            readonly type: 'response:one';
+            readonly value: 'response:value:one';
+          }
+        >
+      >
+    );
   }
 
   /**
-   * {@link Response}
+   * @internal {@link Response}
    */
   export namespace Test_HandlerResponse_UsingAlias {
-    type Case_WithStructureOne = Grok.Assert<Response<Response.Identifier<'one'>, 'value-one'>, {
-      readonly type: 'response:one';
-      readonly value: 'value-one';
-    }>;
-
-    type Case_WithStructureTwo = Grok.Assert<Response<Response.Identifier<'two'>, 'value-two'>, {
-      readonly type: 'response:two';
-      readonly value: 'value-two';
-    }>;
+    type Assert_CompatibleWithExpectedStructure = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Response<
+            Response.Identifier<'one'>,
+            'response:value:one'
+          >,
+          {
+            readonly type: 'response:one';
+            readonly value: 'response:value:one';
+          }
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerResponseGetIdentifier}
+ * @internal {@link HandlerResponseGetIdentifier}
  */
 export namespace Test_HandlerResponseGetIdentifier {
   /**
-   * {@link HandlerResponseGetIdentifier}
+   * @internal {@link HandlerResponseGetIdentifier}
    */
   export namespace Test_HandlerResponseGetIdentifier {
-    type Case_WithOne = Grok.Assert<HandlerResponseGetIdentifier<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'response:one'>;
-    type Case_WithTwo = Grok.Assert<HandlerResponseGetIdentifier<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'response:two'>;
+    type Assert_WithHandlerResponse_CanGetIdentifier = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerResponseGetIdentifier<
+            HandlerResponse<
+              HandlerResponseIdentifier<'one'>,
+              'response:value:one'
+            >
+          >,
+          'response:one'
+        >
+      >
+    );
   }
 
   /**
-   * {@link Response.Get.Identifier}
+   * @internal {@link Response.Get.Identifier}
    */
   export namespace Test_HandlerResponseGetIdentifier_UsingAlias {
-    type Case_WithOne = Grok.Assert<Response.Get.Identifier<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'response:one'>;
-    type Case_WithTwo = Grok.Assert<Response.Get.Identifier<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'response:two'>;
+    type Assert_WithHandlerResponse_CanGetIdentifier = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Response.Get.Identifier<
+            Response<
+              Response.Identifier<'one'>,
+              'response:value:one'
+            >
+          >,
+          'response:one'
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerResponseGetValue}
+ * @internal {@link HandlerResponseGetValue}
  */
 export namespace Test_HandlerResponseGetValue {
   /**
-   * {@link HandlerResponseGetValue}
+   * @internal {@link HandlerResponseGetValue}
    */
   export namespace Test_HandlerResponseGetValue {
-    type Case_WithOne = Grok.Assert<HandlerResponseGetValue<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'value-one'>;
-    type Case_WithTwo = Grok.Assert<HandlerResponseGetValue<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'value-two'>;
+    type Assert_WithHandlerResponse_CanGetValue = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerResponseGetValue<
+            HandlerResponse<
+              HandlerResponseIdentifier<'one'>,
+              'response:value:one'
+            >
+          >,
+          'response:value:one'
+        >
+      >
+    );
   }
 
   /**
-   * {@link Response.Get.Value}
+   * @internal {@link Response.Get.Value}
    */
   export namespace Test_HandlerResponseGetValue_UsingAlias {
-    type Case_WithOne = Grok.Assert<Response.Get.Value<HandlerResponse<HandlerResponseIdentifier<'one'>, 'value-one'>>, 'value-one'>;
-    type Case_WithTwo = Grok.Assert<Response.Get.Value<HandlerResponse<HandlerResponseIdentifier<'two'>, 'value-two'>>, 'value-two'>;
+    type Assert_WithHandlerResponse_CanGetValue = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Response.Get.Value<
+            Response<
+              Response.Identifier<'one'>,
+              'response:value:one'
+            >
+          >,
+          'response:value:one'
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerResponsePresetNothingIdentity}
+ * @internal {@link HandlerResponsePresetNothingIdentity}
  */
 export namespace Test_HandlerResponsePresetNothingIdentity {
-  type Case_WithIdentifier = Grok.Assert<HandlerResponsePresetNothingIdentity, 'response:nothing'>;
+  type Assert_CompatibleWithHandlerResponseIdentifier = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExactly<
+        HandlerResponsePresetNothingIdentity,
+        HandlerResponseIdentifier<'nothing'>
+      >
+    >
+  );
 }
 
 /**
- * {@link HandlerResponsePresetNothing}
+ * @internal {@link HandlerResponsePresetNothing}
  */
 export namespace Test_HandlerResponsePresetNothing {
-  type Case_WithStructure = Grok.Assert<HandlerResponsePresetNothing, {
-    readonly type: 'response:nothing';
-    readonly value: undefined;
-  }>;
+  type Assert_CompatibleWithHandlerResponse = (
+    Grok.Assert.IsTrue<
+      Grok.Value.IsExactly<
+        HandlerResponsePresetNothing,
+        HandlerResponse<
+          HandlerResponseIdentifier<'nothing'>,
+          undefined
+        >
+      >
+    >
+  );
 }

@@ -2,62 +2,77 @@ import type { Grok } from '@matt-usurp/grok';
 import type { Provider } from '../index';
 import type { HandlerProvider, HandlerProviderIdentifier } from './provider';
 
-it('ignored, only type tests', (): void => {
-  expect(true).toStrictEqual(true);
-});
+it('types', (): void => expect(true).toBeTruthy());
 
+/* eslint-disable @typescript-eslint/indent */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 /**
- * {@link HandlerProviderIdentifier}
+ * @internal {@link HandlerProviderIdentifier}
  */
 export namespace Test_HandlerProviderIdentifier {
   /**
-   * {@link HandlerProviderIdentifier}
+   * @internal {@link HandlerProviderIdentifier}
    */
   export namespace Test_HandlerProviderIdentifier {
-    type Case_WithOne = Grok.Assert<HandlerProviderIdentifier<'one'>, 'provider:one'>;
-    type Case_WithTwo = Grok.Assert<HandlerProviderIdentifier<'two'>, 'provider:two'>;
-    type Case_WithThree = Grok.Assert<HandlerProviderIdentifier<'three'>, 'provider:three'>;
+    type Assert_CompatibleWithExpectedIdentifierFormat = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerProviderIdentifier<'example'>,
+          'provider:example'
+        >
+      >
+    );
   }
 
   /**
-   * {@link Provider.Identifier}
+   * @internal {@link Provider.Identifier}
    */
   export namespace Test_HandlerProviderIdentifier_UsingAlias {
-    type Case_WithOne = Grok.Assert<Provider.Identifier<'one'>, 'provider:one'>;
-    type Case_WithTwo = Grok.Assert<Provider.Identifier<'two'>, 'provider:two'>;
-    type Case_WithThree = Grok.Assert<Provider.Identifier<'three'>, 'provider:three'>;
+    type Assert_CompatibleWithExpectedIdentifierFormat = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Provider.Identifier<'example'>,
+          'provider:example'
+        >
+      >
+    );
   }
 }
 
 /**
- * {@link HandlerProvider}
+ * @internal {@link HandlerProvider}
  */
 export namespace Test_HandlerProvider {
   /**
-   * {@link HandlerProvider}
+   * @internal {@link HandlerProvider}
    */
   export namespace Test_HandlerProvider {
-    type Case_WithStructureOne = Grok.Assert<HandlerProvider<HandlerProviderIdentifier<'one'>>, {
-      readonly id: 'provider:one';
-    }>;
-
-    type Case_WithStructureTwo = Grok.Assert<HandlerProvider<HandlerProviderIdentifier<'two'>>, {
-      readonly id: 'provider:two';
-    }>;
+    type Assert_CompatibleWithExpectedStructure = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          HandlerProvider<
+            HandlerProviderIdentifier<'one'>
+          >,
+          { id: 'provider:one' }
+        >
+      >
+    );
   }
 
   /**
-   * {@link Provider}
+   * @internal {@link Provider}
    */
   export namespace Test_HandlerProvider_UsingAlias {
-    type Case_WithStructureOne = Grok.Assert<Provider<Provider.Identifier<'one'>>, {
-      readonly id: 'provider:one';
-    }>;
-
-    type Case_WithStructureTwo = Grok.Assert<Provider<Provider.Identifier<'two'>>, {
-      readonly id: 'provider:two';
-    }>;
+    type Assert_CompatibleWithExpectedStructure = (
+      Grok.Assert.IsTrue<
+        Grok.Value.IsExactly<
+          Provider<
+            Provider.Identifier<'one'>
+          >,
+          { id: 'provider:one' }
+        >
+      >
+    );
   }
 }
