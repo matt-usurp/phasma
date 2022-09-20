@@ -1,6 +1,6 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { Handler } from '../index';
-import type { HandlerClassImplementation, HandlerDefinition, HandlerDefinitionGetContext, HandlerDefinitionGetProvider, HandlerDefinitionGetResponse, HandlerDefinitionInheritContext, HandlerDefinitionInheritProvider, HandlerDefinitionInheritResponse, HandlerDefinitionWithContext, HandlerDefinitionWithProvider, HandlerDefinitionWithResponse, HandlerFunctionInput, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from './handler';
+import type { HandlerClassImplementation, HandlerDefinition, HandlerDefinitionGetContext, HandlerDefinitionGetProvider, HandlerDefinitionGetResponse, HandlerDefinitionUseAnyContext, HandlerDefinitionUseAnyProvider, HandlerDefinitionUseAnyResponse, HandlerDefinitionWithContext, HandlerDefinitionWithProvider, HandlerDefinitionWithResponse, HandlerFunctionInput, HandlerFunctionInputFromDefinition, HandlerFunctionOutputFromDefinition } from './handler';
 import type { HandlerProvider, HandlerProviderIdentifier } from './provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from './response';
 
@@ -27,174 +27,330 @@ type TestDefinition = (
  * @internal {@link HandlerDefinition.WithProvider}
  */
 export namespace Test_HandlerDefinitionWithProvider {
-  type Assert_WithHandlerDefinitionWithSameProvider_ReplaceWithProvider = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithProvider<TestProvider>,
-        HandlerDefinition<
-          TestProvider,
-          Grok.Inherit,
-          Grok.Inherit
-        >
-      >
-    >
-  );
+  /**
+   * @internal {@link HandlerDefinition.WithProvider}
+   */
+  export namespace Test_HandlerDefinitionWithProvider_WithDefaultSecondParameter {
+    type Value = (
+      HandlerDefinitionWithProvider<TestProvider>
+    );
 
-  type Assert_WithHandlerDefinitionWithInherit_ReplaceWithProvider = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithProvider<
-          TestProvider,
-          HandlerDefinition<
-            Grok.Inherit,
-            TestContextData,
-            TestResponse<TestResponseData>
-          >
-        >,
-        HandlerDefinition<
-          TestProvider,
-          TestContextData,
-          TestResponse<TestResponseData>
-        >
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        TestProvider,
+        HandlerDefinitionUseAnyContext,
+        HandlerDefinitionUseAnyResponse
       >
-    >
-  );
+    );
 
-  type Assert_WithHandlerDefinitionWithAnotherProvider_ReplaceWithProvider = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithProvider<
-          TestProvider,
-          HandlerDefinition<
-            HandlerProvider<HandlerProviderIdentifier<'test:another'>>,
-            TestContextData,
-            TestResponse<TestResponseData>
-          >
-        >,
+    type Assert_WithInherit_ReplaceWithProvider = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithProvider}
+   */
+  export namespace Test_HandlerDefinitionWithProvider_WithInheritProvider {
+    type Value = (
+      HandlerDefinitionWithProvider<
+        TestProvider,
         HandlerDefinition<
-          TestProvider,
-          TestContextData,
-          TestResponse<TestResponseData>
+          HandlerDefinitionUseAnyProvider,
+          HandlerDefinitionUseAnyContext,
+          HandlerDefinitionUseAnyResponse
         >
       >
-    >
-  );
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        TestProvider,
+        HandlerDefinitionUseAnyContext,
+        HandlerDefinitionUseAnyResponse
+      >
+    );
+
+    type Assert_WithInherit_ReplaceWithProvider = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithProvider}
+   */
+  export namespace Test_HandlerDefinitionWithProvider_WithSameProvider {
+    type Value = (
+      HandlerDefinitionWithProvider<
+        TestProvider,
+        HandlerDefinition<
+          TestProvider,
+          HandlerDefinitionUseAnyContext,
+          HandlerDefinitionUseAnyResponse
+        >
+      >
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        TestProvider,
+        HandlerDefinitionUseAnyContext,
+        HandlerDefinitionUseAnyResponse
+      >
+    );
+
+    type Assert_WithProvider_ReplaceWithSameProvider = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithProvider}
+   */
+  export namespace Test_HandlerDefinitionWithProvider_WithAnotherProvider {
+    type Value = (
+      HandlerDefinitionWithProvider<
+        TestProvider,
+        HandlerDefinition<
+          HandlerProvider<HandlerProviderIdentifier<'test:another'>>,
+          HandlerDefinitionUseAnyContext,
+          HandlerDefinitionUseAnyResponse
+        >
+      >
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        TestProvider,
+        HandlerDefinitionUseAnyContext,
+        HandlerDefinitionUseAnyResponse
+      >
+    );
+
+    type Assert_WithInherit_ReplaceWithProvider = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
 }
 
 /**
  * @internal {@link HandlerDefinition.WithContext}
  */
 export namespace Test_HandlerDefinitionWithContext {
-  type Assert_WithHandlerDefinitionWithSameContext_ReplaceWithContext = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithContext<TestContextData>,
-        HandlerDefinition<
-          Grok.Inherit,
-          TestContextData,
-          Grok.Inherit
-        >
-      >
-    >
-  );
+  /**
+   * @internal {@link HandlerDefinition.WithContext}
+   */
+  export namespace Test_HandlerDefinitionWithContext_WithDefaultSecondParameter {
+    type Value = (
+      HandlerDefinitionWithContext<TestContextData>
+    );
 
-  type Assert_WithHandlerDefinitionWithInherit_ReplaceWithContext = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithContext<
-          TestContextData,
-          HandlerDefinition<
-            TestProvider,
-            Grok.Inherit,
-            TestResponse<TestResponseData>
-          >
-        >,
-        HandlerDefinition<
-          TestProvider,
-          TestContextData,
-          TestResponse<TestResponseData>
-        >
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        TestContextData,
+        HandlerDefinitionUseAnyResponse
       >
-    >
-  );
+    );
 
-  type Assert_WithHandlerDefinitionWithAnotherContext_ReplaceWithContext = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithContext<
-          TestContextData,
-          HandlerDefinition<
-            TestProvider,
-            { something: unknown },
-            TestResponse<TestResponseData>
-          >
-        >,
+    type Assert_WithInherit_ReplaceWithContext = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithContext}
+   */
+  export namespace Test_HandlerDefinitionWithContext_WithInheritContext {
+    type Value = (
+      HandlerDefinitionWithContext<
+        TestContextData,
         HandlerDefinition<
-          TestProvider,
-          TestContextData,
-          TestResponse<TestResponseData>
+          HandlerDefinitionUseAnyProvider,
+          HandlerDefinitionUseAnyContext,
+          HandlerDefinitionUseAnyResponse
         >
       >
-    >
-  );
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        TestContextData,
+        HandlerDefinitionUseAnyResponse
+      >
+    );
+
+    type Assert_WithInherit_ReplaceWithContext = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithContext}
+   */
+  export namespace Test_HandlerDefinitionWithContext_WithSameContext {
+    type Value = (
+      HandlerDefinitionWithContext<
+        TestContextData,
+        HandlerDefinition<
+          HandlerDefinitionUseAnyProvider,
+          TestContextData,
+          HandlerDefinitionUseAnyResponse
+        >
+      >
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        TestContextData,
+        HandlerDefinitionUseAnyResponse
+      >
+    );
+
+    type Assert_WithContext_ReplaceWithSameProvider = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithContext}
+   */
+  export namespace Test_HandlerDefinitionWithContext_WithAnotherContext {
+    type Value = (
+      HandlerDefinitionWithContext<
+        TestContextData,
+        HandlerDefinition<
+          HandlerDefinitionUseAnyProvider,
+          { context: 'test:context:another' },
+          HandlerDefinitionUseAnyResponse
+        >
+      >
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        TestContextData,
+        HandlerDefinitionUseAnyResponse
+      >
+    );
+
+    type Assert_WithInherit_ReplaceWithContext = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
 }
 
 /**
  * @internal {@link HandlerDefinition.WithResponse}
  */
 export namespace Test_HandlerDefinitionWithResponse {
-  type Assert_WithHandlerDefinitionWithSameResponse_ReplaceWithResponse = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithResponse<TestResponse<TestResponseData>>,
-        HandlerDefinition<
-          Grok.Inherit,
-          Grok.Inherit,
-          TestResponse<TestResponseData>
-        >
-      >
-    >
-  );
+  /**
+   * @internal {@link HandlerDefinition.WithResponse}
+   */
+  export namespace Test_HandlerDefinitionWithResponse_WithDefaultSecondParameter {
+    type Value = (
+      HandlerDefinitionWithResponse<TestResponse<TestResponseData>>
+    );
 
-  type Assert_WithHandlerDefinitionWithInherit_ReplaceWithResponse = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithResponse<
-          TestResponse<TestResponseData>,
-          HandlerDefinition<
-            TestProvider,
-            TestContextData,
-            Grok.Inherit
-          >
-        >,
-        HandlerDefinition<
-          TestProvider,
-          TestContextData,
-          TestResponse<TestResponseData>
-        >
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        HandlerDefinitionUseAnyContext,
+        TestResponse<TestResponseData>
       >
-    >
-  );
+    );
 
-  type Assert_WithHandlerDefinitionWithAnotherResponse_ReplaceWithResponse = (
-    Grok.Assert.IsTrue<
-      Grok.Value.IsExactly<
-        HandlerDefinitionWithResponse<
-          TestResponse<TestResponseData>,
-          HandlerDefinition<
-            TestProvider,
-            TestContextData,
-            TestResponse<{ something: unknown }>
-          >
-        >,
+    type Assert_WithInherit_ReplaceWithResponse = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithResponse}
+   */
+  export namespace Test_HandlerDefinitionWithResponse_WithInheritResponse {
+    type Value = (
+      HandlerDefinitionWithResponse<
+        TestResponse<TestResponseData>,
         HandlerDefinition<
-          TestProvider,
-          TestContextData,
+          HandlerDefinitionUseAnyProvider,
+          HandlerDefinitionUseAnyContext,
+          HandlerDefinitionUseAnyResponse
+        >
+      >
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        HandlerDefinitionUseAnyContext,
+        TestResponse<TestResponseData>
+      >
+    );
+
+    type Assert_WithInherit_ReplaceWithResponse = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithResponse}
+   */
+  export namespace Test_HandlerDefinitionWithResponse_WithSameContext {
+    type Value = (
+      HandlerDefinitionWithResponse<
+        TestResponse<TestResponseData>,
+        HandlerDefinition<
+          HandlerDefinitionUseAnyProvider,
+          HandlerDefinitionUseAnyContext,
           TestResponse<TestResponseData>
         >
       >
-    >
-  );
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        HandlerDefinitionUseAnyContext,
+        TestResponse<TestResponseData>
+      >
+    );
+
+    type Assert_WithResponse_ReplaceWithSameProvider = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
+
+  /**
+   * @internal {@link HandlerDefinition.WithResponse}
+   */
+  export namespace Test_HandlerDefinitionWithResponse_WithAnotherResponse {
+    type Value = (
+      HandlerDefinitionWithResponse<
+        TestResponse<TestResponseData>,
+        HandlerDefinition<
+          HandlerDefinitionUseAnyProvider,
+          HandlerDefinitionUseAnyContext,
+          TestResponse<{ response: 'response:another' }>
+        >
+      >
+    );
+
+    type ValueAssertAgainst = (
+      HandlerDefinition<
+        HandlerDefinitionUseAnyProvider,
+        HandlerDefinitionUseAnyContext,
+        TestResponse<TestResponseData>
+      >
+    );
+
+    type Assert_WithInherit_ReplaceWithResponse = (
+      Grok.Assert.IsTrue<Grok.Value.IsExactly<Value, ValueAssertAgainst>>
+    );
+  }
 }
 
 /**
@@ -373,9 +529,9 @@ export namespace Test_HandlerFunctionInputFromDefinition {
     type Value = (
       HandlerFunctionInputFromDefinition<
         HandlerDefinition<
-          HandlerDefinitionInheritProvider,
-          HandlerDefinitionInheritContext,
-          HandlerDefinitionInheritResponse
+          HandlerDefinitionUseAnyProvider,
+          HandlerDefinitionUseAnyContext,
+          HandlerDefinitionUseAnyResponse
         >
       >
     );

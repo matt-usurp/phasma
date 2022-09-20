@@ -12,11 +12,11 @@ import type { HandlerResponseConstraint } from './response';
  * These types can be satisfied through implementing middleware or are provided as a base from the {@link Provider}.
  */
 export type HandlerMiddlewareDefinition<
-  Provider extends HandlerProviderConstraint | Grok.Inherit,
-  ContextInbound extends HandlerContextConstraint | Grok.Inherit,
-  ContextOutbound extends HandlerContextConstraint | Grok.Inherit,
-  ResponseInbound extends HandlerResponseConstraint | Grok.Inherit,
-  ResponseOutbound extends HandlerResponseConstraint | Grok.Inherit,
+  Provider extends HandlerProviderConstraint | HandlerMiddlewareDefinitionUseAnyProvider,
+  ContextInbound extends HandlerContextConstraint | HandlerMiddlewareDefinitionUseAnyContextInbound,
+  ContextOutbound extends HandlerContextConstraint | HandlerMiddlewareDefinitionUseAnyContextOutbound,
+  ResponseInbound extends HandlerResponseConstraint | HandlerMiddlewareDefinitionUseAnyResponseInbound,
+  ResponseOutbound extends HandlerResponseConstraint | HandlerMiddlewareDefinitionUseAnyResponseOutbound,
 > = {
   readonly MP: Provider;
   readonly MCI: ContextInbound;
@@ -26,18 +26,18 @@ export type HandlerMiddlewareDefinition<
 };
 
 /**
- * A middleware definition with all {@link Grok.Inherit} values.
+ * A middleware definition with all "any" or "inherit" values.
  *
  * This means all values are unused and should inherit from the composition chain.
  */
 export type HandlerMiddlewareDefinitionBase = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerMiddlewareDefinition<
-    HandlerMiddlewareDefinitionInheritProvider,
-    HandlerMiddlewareDefinitionInheritContextInbound,
-    HandlerMiddlewareDefinitionInheritContextOutbound,
-    HandlerMiddlewareDefinitionInheritResponseInbound,
-    HandlerMiddlewareDefinitionInheritResponseOutbound
+    HandlerMiddlewareDefinitionUseAnyProvider,
+    HandlerMiddlewareDefinitionUseAnyContextInbound,
+    HandlerMiddlewareDefinitionUseAnyContextOutbound,
+    HandlerMiddlewareDefinitionUseAnyResponseInbound,
+    HandlerMiddlewareDefinitionUseAnyResponseOutbound
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -83,29 +83,59 @@ export type HandlerMiddlewareDefinitionGetResponseInbound<Definition extends Han
 export type HandlerMiddlewareDefinitionGetResponseOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRO'];
 
 /**
+ * A unique symbol used for type purposes to indicate "any provider"
+ * This could also be considered "inherit from parent".
+ */
+const HandlerMiddlewareDefinitionAnyProviderMarker = Symbol();
+
+/**
  * Indicate the provider should be inheritted.
  */
-export type HandlerMiddlewareDefinitionInheritProvider = Grok.Inherit;
+export type HandlerMiddlewareDefinitionUseAnyProvider = typeof HandlerMiddlewareDefinitionAnyProviderMarker;
+
+/**
+ * A unique symbol used for type purposes to indicate "any context inbound"
+ * This could also be considered "inherit from parent".
+ */
+const HandlerMiddlewareDefinitionAnyContextInboundMarker = Symbol();
 
 /**
  * Indicate the context inbound should be inheritted.
  */
-export type HandlerMiddlewareDefinitionInheritContextInbound = Grok.Inherit;
+export type HandlerMiddlewareDefinitionUseAnyContextInbound = typeof HandlerMiddlewareDefinitionAnyContextInboundMarker;
+
+/**
+ * A unique symbol used for type purposes to indicate "any context outbound"
+ * This could also be considered "inherit from parent".
+ */
+const HandlerMiddlewareDefinitionAnyContextOutboundMarker = Symbol();
 
 /**
  * Indicate the context outbound should be inheritted.
  */
-export type HandlerMiddlewareDefinitionInheritContextOutbound = Grok.Inherit;
+export type HandlerMiddlewareDefinitionUseAnyContextOutbound = typeof HandlerMiddlewareDefinitionAnyContextOutboundMarker;
+
+/**
+ * A unique symbol used for type purposes to indicate "any respond inbound"
+ * This could also be considered "inherit from parent".
+ */
+const HandlerMiddlewareDefinitionAnyResponseInboundMarker = Symbol();
 
 /**
  * Indicate the response inbound should be inheritted.
  */
-export type HandlerMiddlewareDefinitionInheritResponseInbound = Grok.Inherit;
+export type HandlerMiddlewareDefinitionUseAnyResponseInbound = typeof HandlerMiddlewareDefinitionAnyResponseInboundMarker;
+
+/**
+ * A unique symbol used for type purposes to indicate "any respond outbound"
+ * This could also be considered "inherit from parent".
+ */
+const HandlerMiddlewareDefinitionAnyResponseOutboundMarker = Symbol();
 
 /**
  * Indicate the response outbound should be inheritted.
  */
-export type HandlerMiddlewareDefinitionInheritResponseOutbound = Grok.Inherit;
+export type HandlerMiddlewareDefinitionUseAnyResponseOutbound = typeof HandlerMiddlewareDefinitionAnyResponseOutboundMarker;
 
 /**
  * The next function that resumes the composition chain, invoking either the next middleware or the handler.
@@ -136,11 +166,30 @@ export namespace HandlerMiddlewareFunctionInputFromDefinition {
   export type WithHandlerInput<Definition extends HandlerMiddlewareDefinitionConstraint> = (
   /* eslint-disable @typescript-eslint/indent */
     HandlerFunctionInput<
-      HandlerMiddlewareDefinition.Get.Provider<Definition>,
-      Grok.If.IsInherit<
-        Grok.Inherit.Normalise<HandlerMiddlewareDefinition.Get.ContextInbound<Definition>>,
+      Grok.If<
+        Grok.Or<[
+          Grok.Value.IsAny<HandlerMiddlewareDefinition.Get.Provider<Definition>>,
+          Grok.Value.IsExactly<
+            HandlerMiddlewareDefinition.Get.Provider<Definition>,
+            HandlerMiddlewareDefinitionUseAnyProvider
+          >,
+        ]>,
+        never,
+        HandlerMiddlewareDefinition.Get.Provider<Definition>
+      >,
+      Grok.If<
+        Grok.Or<[
+          Grok.Value.IsAny<HandlerMiddlewareDefinition.Get.ContextInbound<Definition>>,
+          Grok.Value.IsExactly<
+            HandlerMiddlewareDefinition.Get.ContextInbound<Definition>,
+            HandlerMiddlewareDefinitionUseAnyContextInbound
+          >,
+        ]>,
         HandlerMiddlewareContextPassThrough,
-        Grok.Merge<HandlerMiddlewareDefinition.Get.ContextInbound<Definition>, HandlerMiddlewareContextPassThrough>
+        Grok.Merge<
+          HandlerMiddlewareDefinition.Get.ContextInbound<Definition>,
+          HandlerMiddlewareContextPassThrough
+        >
       >
     >
   /* eslint-enable @typescript-eslint/indent */
@@ -162,15 +211,33 @@ export namespace HandlerMiddlewareFunctionInputFromDefinition {
     readonly next: (
     /* eslint-disable @typescript-eslint/indent */
       HandlerMiddlewareNextFunction<
-        Grok.If.IsInherit<
-          Grok.Inherit.Normalise<HandlerMiddlewareDefinition.Get.ContextOutbound<Definition>>,
+        Grok.If<
+          Grok.Or<[
+            Grok.Value.IsAny<HandlerMiddlewareDefinition.Get.ContextOutbound<Definition>>,
+            Grok.Value.IsExactly<
+              HandlerMiddlewareDefinition.Get.ContextOutbound<Definition>,
+              HandlerMiddlewareDefinitionUseAnyContextOutbound
+            >,
+          ]>,
           HandlerMiddlewareContextPassThrough,
-          Grok.Merge<HandlerMiddlewareDefinition.Get.ContextOutbound<Definition>, HandlerMiddlewareContextPassThrough>
+          Grok.Merge<
+            HandlerMiddlewareDefinition.Get.ContextOutbound<Definition>,
+            HandlerMiddlewareContextPassThrough
+          >
         >,
-        Grok.If.IsInherit<
-          Grok.Inherit.Normalise<HandlerMiddlewareDefinition.Get.ResponseInbound<Definition>>,
+        Grok.If<
+          Grok.Or<[
+            Grok.Value.IsAny<HandlerMiddlewareDefinition.Get.ResponseInbound<Definition>>,
+            Grok.Value.IsExactly<
+              HandlerMiddlewareDefinition.Get.ResponseInbound<Definition>,
+              HandlerMiddlewareDefinitionUseAnyResponseInbound
+            >,
+          ]>,
           HandlerMiddlewareResponsePassThrough,
-          Grok.Union<HandlerMiddlewareDefinition.Get.ResponseInbound<Definition>, HandlerMiddlewareResponsePassThrough>
+          Grok.Union<
+            HandlerMiddlewareDefinition.Get.ResponseInbound<Definition>,
+            HandlerMiddlewareResponsePassThrough
+          >
         >
       >
     /* eslint-enable @typescript-eslint/indent */
@@ -184,9 +251,19 @@ export namespace HandlerMiddlewareFunctionInputFromDefinition {
 export type HandlerMiddlewareFunctionOutputFromDefinition<Definition extends HandlerMiddlewareDefinitionConstraint> = (
 /* eslint-disable @typescript-eslint/indent */
   Promise<
-    Grok.Inherit.Union<
-      HandlerMiddlewareDefinition.Get.ResponseOutbound<Definition>,
-      HandlerMiddlewareResponsePassThrough
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<HandlerMiddlewareDefinition.Get.ResponseOutbound<Definition>>,
+        Grok.Value.IsExactly<
+          HandlerMiddlewareDefinition.Get.ResponseOutbound<Definition>,
+          HandlerMiddlewareDefinitionUseAnyResponseOutbound
+        >,
+      ]>,
+      HandlerMiddlewareResponsePassThrough,
+      Grok.Union<
+        HandlerMiddlewareDefinition.Get.ResponseOutbound<Definition>,
+        HandlerMiddlewareResponsePassThrough
+      >
     >
   >
 /* eslint-enable @typescript-eslint/indent */
@@ -260,22 +337,23 @@ export namespace HandlerMiddlewareDefinition {
   }
 
   /**
-   * Types that indicate a value should be inheritted.
+   * Types that indicate a value within {@link HandlerMiddlewareDefinition} should be inheritted.
+   * This is typically used when your code doesn't care about a value.
    */
-  export namespace Inherit {
+  export namespace Any {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Provider = middleware.HandlerMiddlewareDefinitionInheritProvider;
+    export import Provider = middleware.HandlerMiddlewareDefinitionUseAnyProvider;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import ContextInbound = middleware.HandlerMiddlewareDefinitionInheritContextInbound;
+    export import ContextInbound = middleware.HandlerMiddlewareDefinitionUseAnyContextInbound;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import ContextOutbound = middleware.HandlerMiddlewareDefinitionInheritContextOutbound;
+    export import ContextOutbound = middleware.HandlerMiddlewareDefinitionUseAnyContextOutbound;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import ResponseInbound = middleware.HandlerMiddlewareDefinitionInheritResponseInbound;
+    export import ResponseInbound = middleware.HandlerMiddlewareDefinitionUseAnyResponseInbound;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import ResponseOutbound = middleware.HandlerMiddlewareDefinitionInheritResponseOutbound;
+    export import ResponseOutbound = middleware.HandlerMiddlewareDefinitionUseAnyResponseOutbound;
   }
 }

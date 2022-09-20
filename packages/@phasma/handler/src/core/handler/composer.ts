@@ -1,7 +1,7 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextConstraint } from '../../component/context';
 import type { HandlerClassImplementation, HandlerComposition, HandlerDefinition } from '../../component/handler';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareNextFunction } from '../../component/middleware';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionUseAnyContextOutbound, HandlerMiddlewareDefinitionUseAnyResponseInbound, HandlerMiddlewareNextFunction } from '../../component/middleware';
 import type { HandlerMiddlewareResponsePassThrough } from '../../component/middleware/inherit';
 import type { HandlerProviderConstraint } from '../../component/provider';
 import type { HandlerResponseConstraint } from '../../component/response';
@@ -44,7 +44,7 @@ export type HandlerMiddlewareClassImplementationForCurrentUsageConstraint<
  *
  * The defined context should be merged with the current available context.
  * The defined response will be added to the available responses.
- * If either of the above are {@link Grok.Inherit} then their values are ignored, they will have no effect.
+ * If either of the above are an inherit value then their values are ignored, they will have no effect.
  */
 export type HandlerComposerWithMiddlware<
   Provider extends HandlerProviderConstraint,
@@ -99,7 +99,7 @@ export type HandlerComposerWithMiddlware<
 
 export namespace HandlerComposerWithMiddlware {
   /**
-   * A utility type to assist with resolving the context for the {@link HandlerComposer}.
+   * A utility type to assist with resolving the context (outbound) for the {@link HandlerComposer}.
    *
    * The {@link Current} is always expected to be a valid context type.
    * The {@link Value} is unknown, and thus we need to validate it before using it.
@@ -107,8 +107,11 @@ export namespace HandlerComposerWithMiddlware {
    */
   export type ResolveContext<Current extends HandlerContextConstraint, Value> = (
   /* eslint-disable @typescript-eslint/indent */
-    Grok.If.IsInherit<
-      Grok.Inherit.Normalise<Value>,
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<Value>,
+        Grok.Value.IsExactly<Value, HandlerMiddlewareDefinitionUseAnyContextOutbound>,
+      ]>,
       Current,
       Grok.Merge<Current, Value>
     >
@@ -116,7 +119,7 @@ export namespace HandlerComposerWithMiddlware {
   );
 
   /**
-   * A utility type to assist with resolving the response for the {@link HandlerComposer}.
+   * A utility type to assist with resolving the response (inbound) for the {@link HandlerComposer}.
    *
    * The {@link Current} is always expected to be a valid response type.
    * The {@link Value} is unknown, and thus we need to validate it before using it.
@@ -124,8 +127,11 @@ export namespace HandlerComposerWithMiddlware {
    */
   export type ResolveResponse<Current extends HandlerResponseConstraint, Value> = (
   /* eslint-disable @typescript-eslint/indent */
-    Grok.If.IsInherit<
-      Grok.Inherit.Normalise<Value>,
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<Value>,
+        Grok.Value.IsExactly<Value, HandlerMiddlewareDefinitionUseAnyResponseInbound>,
+      ]>,
       Current,
       Grok.Union<Current, Value>
     >

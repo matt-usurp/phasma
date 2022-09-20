@@ -1,6 +1,6 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { Middleware } from '../index';
-import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionBase, HandlerMiddlewareDefinitionGetContextInbound, HandlerMiddlewareDefinitionGetContextOutbound, HandlerMiddlewareDefinitionGetProvider, HandlerMiddlewareDefinitionGetResponseInbound, HandlerMiddlewareDefinitionGetResponseOutbound, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition, HandlerMiddlewareNextFunction } from './middleware';
+import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionBase, HandlerMiddlewareDefinitionGetContextInbound, HandlerMiddlewareDefinitionGetContextOutbound, HandlerMiddlewareDefinitionGetProvider, HandlerMiddlewareDefinitionGetResponseInbound, HandlerMiddlewareDefinitionGetResponseOutbound, HandlerMiddlewareDefinitionUseAnyContextInbound, HandlerMiddlewareDefinitionUseAnyContextOutbound, HandlerMiddlewareDefinitionUseAnyProvider, HandlerMiddlewareDefinitionUseAnyResponseInbound, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition, HandlerMiddlewareNextFunction } from './middleware';
 import type { HandlerMiddlewareContextPassThrough, HandlerMiddlewareResponsePassThrough } from './middleware/inherit';
 import type { HandlerProvider, HandlerProviderIdentifier } from './provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from './response';
@@ -305,15 +305,15 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
      */
     export namespace Test_HandlerMiddlewareFunctionInputFromDefinition_WithHandlerInput_WithoutProvider {
       type Value = (
-        HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<(
+        HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<
           HandlerMiddlewareDefinition<
-            Grok.Inherit,
+            HandlerMiddlewareDefinitionUseAnyProvider,
             TestContextInbound,
             TestContextOutbound,
             TestResponse<TestResponseInbound>,
             TestResponse<TestResponseOutbound>
           >
-        )>
+        >
       );
 
       type Assert_WithValue_Provider = Grok.Assert.IsNever<Value['provider']>;
@@ -332,15 +332,15 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
      */
     export namespace Test_HandlerMiddlewareFunctionInputFromDefinition_WithHandlerInput_WithoutContext {
       type Value = (
-        HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<(
+        HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<
           HandlerMiddlewareDefinition<
             TestProvider,
-            Grok.Inherit,
+            HandlerMiddlewareDefinitionUseAnyContextInbound,
             TestContextOutbound,
             TestResponse<TestResponseInbound>,
             TestResponse<TestResponseOutbound>
           >
-        )>
+        >
       );
 
       type Assert_WithValue_Provider = (
@@ -367,15 +367,15 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
      */
     export namespace Test_HandlerMiddlewareFunctionInputFromDefinition_WithHandlerInput_WithoutProviderAndContext {
       type Value = (
-        HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<(
+        HandlerMiddlewareFunctionInputFromDefinition.WithHandlerInput<
           HandlerMiddlewareDefinition<
-            Grok.Inherit,
-            Grok.Inherit,
+            HandlerMiddlewareDefinitionUseAnyProvider,
+            HandlerMiddlewareDefinitionUseAnyContextInbound,
             TestContextOutbound,
             TestResponse<TestResponseInbound>,
             TestResponse<TestResponseOutbound>
           >
-        )>
+        >
       );
 
       type Assert_WithValue_Provider = Grok.Assert.IsNever<Value['provider']>;
@@ -433,15 +433,15 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
      */
     export namespace Test_HandlerMiddlewareFunctionInputFromDefinition_WithNextFunction_WithoutContext {
       type Value = (
-        HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<(
+        HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<
           HandlerMiddlewareDefinition<
             TestProvider,
             TestContextInbound,
-            Grok.Inherit,
+            HandlerMiddlewareDefinitionUseAnyContextOutbound,
             TestResponse<TestResponseInbound>,
             TestResponse<TestResponseOutbound>
           >
-        )>
+        >
       );
 
       type Assert_IsFunction = (
@@ -476,15 +476,15 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
      * @internal {@link HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction}
      */
     export namespace Test_HandlerMiddlewareFunctionInputFromDefinition_WithNextFunction_WithoutResponse {
-      type Value = HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<(
+      type Value = HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<
         HandlerMiddlewareDefinition<
           TestProvider,
           TestContextInbound,
           TestContextOutbound,
-          Grok.Inherit,
+          HandlerMiddlewareDefinitionUseAnyResponseInbound,
           TestResponse<TestResponseOutbound>
         >
-      )>;
+      >;
 
       type Assert_IsFunction = (
         Grok.Assert.IsTrue<
@@ -519,15 +519,15 @@ export namespace Test_HandlerMiddlewareFunctionInputFromDefinition {
      */
     export namespace Test_HandlerMiddlewareFunctionInputFromDefinition_WithNextFunction_WithoutContextAndResponse {
       type Value = (
-        HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<(
+        HandlerMiddlewareFunctionInputFromDefinition.WithNextFunction<
           HandlerMiddlewareDefinition<
             TestProvider,
             TestContextInbound,
-            Grok.Inherit,
-            Grok.Inherit,
+            HandlerMiddlewareDefinitionUseAnyContextOutbound,
+            HandlerMiddlewareDefinitionUseAnyResponseInbound,
             TestResponse<TestResponseOutbound>
           >
-        )>
+        >
       );
 
       type Assert_IsFunction = (
