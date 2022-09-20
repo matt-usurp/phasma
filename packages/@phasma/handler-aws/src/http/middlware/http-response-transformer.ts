@@ -9,9 +9,9 @@ export type HttpResponseEncodedTransport = HttpResponseTransport<number, string>
 export type HttpResponseTransformerMiddlewareDefinition<R extends HttpResponseEncodedTransport> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
-    Middleware.Definition.Inherit.Provider,
-    Middleware.Definition.Inherit.ContextInbound,
-    Middleware.Definition.Inherit.ContextOutbound,
+    Middleware.Definition.Any.Provider,
+    Middleware.Definition.Any.ContextInbound,
+    Middleware.Definition.Any.ContextOutbound,
     HttpResponse<R>,
     HttpResponseLambdaProxy
   >

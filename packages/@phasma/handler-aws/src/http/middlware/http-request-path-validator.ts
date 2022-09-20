@@ -14,9 +14,9 @@ export type HttpRequestPathValidatorMiddlewareDefinition<T> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Provider.ForEvent<'apigw:proxy:v2'>,
-    Middleware.Definition.Inherit.ContextInbound,
+    Middleware.Definition.Any.ContextInbound,
     HttpRequestPathValidatorContext<T>,
-    Middleware.Definition.Inherit.ResponseInbound,
+    Middleware.Definition.Any.ResponseInbound,
     HttpResponse<HttpResponseTransportKind>
   >
 /* eslint-enable @typescript-eslint/indent */

@@ -10,9 +10,9 @@ import type { HandlerResponseConstraint } from './response';
  * These types can be satisfied through implementing middleware or are provided as a base from the {@link Provider}.
  */
 export type HandlerDefinition<
-  Provider extends HandlerProviderConstraint | Grok.Inherit,
-  Context extends HandlerContextConstraint | Grok.Inherit,
-  Response extends HandlerResponseConstraint | Grok.Inherit,
+  Provider extends HandlerProviderConstraint | HandlerDefinitionUseAnyProvider,
+  Context extends HandlerContextConstraint | HandlerDefinitionUseAnyContext,
+  Response extends HandlerResponseConstraint | HandlerDefinitionUseAnyResponse,
 > = {
   readonly HP: Provider;
   readonly HC: Context;
@@ -20,16 +20,16 @@ export type HandlerDefinition<
 };
 
 /**
- * A handler definition with all {@link Grok.Inherit} values.
+ * A handler definition with all "any" or "inherit" values.
  *
  * This means all values are unused and should inherit from the composition chain.
  */
 export type HandlerDefinitionBase = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerDefinition<
-    HandlerDefinitionInheritProvider,
-    HandlerDefinitionInheritContext,
-    HandlerDefinitionInheritResponse
+    HandlerDefinitionUseAnyProvider,
+    HandlerDefinitionUseAnyContext,
+    HandlerDefinitionUseAnyResponse
   >
 /* eslint-enable @typescript-eslint/indent */
 );
@@ -63,14 +63,18 @@ export type HandlerDefinitionWithProvider<
   Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
 > = (
 /* eslint-disable @typescript-eslint/indent */
- Grok.Inherit.Merge<
-   HandlerDefinition<
-     Provider,
-     HandlerDefinitionInheritContext,
-     HandlerDefinitionInheritResponse
-   >,
-   Definition
- >
+  HandlerDefinition<
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<Provider>,
+        Grok.Value.IsExactly<Provider, HandlerDefinitionUseAnyProvider>,
+      ]>,
+      HandlerDefinitionGetProvider<Definition>,
+      Provider
+    >,
+    HandlerDefinitionGetContext<Definition>,
+    HandlerDefinitionGetResponse<Definition>
+  >
 /* eslint-enable @typescript-eslint/indent */
 );
 
@@ -82,14 +86,18 @@ export type HandlerDefinitionWithContext<
   Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
 > = (
 /* eslint-disable @typescript-eslint/indent */
- Grok.Inherit.Merge<
-   HandlerDefinition<
-     HandlerDefinitionInheritProvider,
-     Context,
-     HandlerDefinitionInheritResponse
-   >,
-   Definition
- >
+  HandlerDefinition<
+    HandlerDefinitionGetProvider<Definition>,
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<Context>,
+        Grok.Value.IsExactly<Context, HandlerDefinitionUseAnyContext>,
+      ]>,
+      HandlerDefinitionGetContext<Definition>,
+      Context
+    >,
+    HandlerDefinitionGetResponse<Definition>
+  >
 /* eslint-enable @typescript-eslint/indent */
 );
 
@@ -101,14 +109,18 @@ export type HandlerDefinitionWithResponse<
   Definition extends HandlerDefinitionConstraint = HandlerDefinitionBase,
 > = (
 /* eslint-disable @typescript-eslint/indent */
- Grok.Inherit.Merge<
-   HandlerDefinition<
-     HandlerDefinitionInheritProvider,
-     HandlerDefinitionInheritContext,
-     Response
-   >,
-   Definition
- >
+  HandlerDefinition<
+    HandlerDefinitionGetProvider<Definition>,
+    HandlerDefinitionGetContext<Definition>,
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<Response>,
+        Grok.Value.IsExactly<Response, HandlerDefinitionUseAnyResponse>,
+      ]>,
+      HandlerDefinitionGetResponse<Definition>,
+      Response
+    >
+  >
 /* eslint-enable @typescript-eslint/indent */
 );
 
@@ -128,19 +140,37 @@ export type HandlerDefinitionGetContext<Definition extends HandlerDefinitionCons
 export type HandlerDefinitionGetResponse<Definition extends HandlerDefinitionConstraint> = Definition['HR'];
 
 /**
- * Indicate the provider should be inheritted.
+ * A unique symbol used for type purposes to indicate "any provider"
+ * This could also be considered "inherit from parent".
  */
-export type HandlerDefinitionInheritProvider = Grok.Inherit;
+const HandlerDefinitionAnyProviderMarker = Symbol();
 
 /**
- * Indicate the context should be inheritted.
+ * A type that indicates "any provider" or "inherit from parent".
  */
-export type HandlerDefinitionInheritContext = Grok.Inherit;
+export type HandlerDefinitionUseAnyProvider = typeof HandlerDefinitionAnyProviderMarker;
 
 /**
- * Indicate the response should be inheritted.
+ * A unique symbol used for type purposes to indicate "any context"
+ * This could also be considered "inherit from parent".
  */
-export type HandlerDefinitionInheritResponse = Grok.Inherit;
+const HandlerDefinitionAnyContextMarker = Symbol();
+
+/**
+ * A type that indicates "any context" or "inherit from parent".
+ */
+export type HandlerDefinitionUseAnyContext = typeof HandlerDefinitionAnyContextMarker;
+
+/**
+ * A unique symbol used for type purposes to indicate "any response"
+ * This could also be considered "inherit from parent".
+ */
+const HandlerDefinitionAnyResponseMarker = Symbol();
+
+/**
+ * A type that indicates "any response" or "inherit from parent".
+ */
+export type HandlerDefinitionUseAnyResponse = typeof HandlerDefinitionAnyResponseMarker;
 
 /**
  * The handler function input parameters defining {@link Provider} and {@link Context}.
@@ -155,7 +185,18 @@ export type HandlerFunctionInput<
    * This value will only be available should {@link Provider} not be mentioned in the {@link HandlerDefinition}.
    * In that case this will be `never` and should not be used.
    */
-  readonly provider: Grok.If.IsInherit<Grok.Inherit.Normalise<Provider>, never, Provider>;
+  readonly provider: (
+  /* eslint-disable @typescript-eslint/indent */
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<Provider>,
+        Grok.Value.IsExactly<Provider, HandlerDefinitionUseAnyProvider>,
+      ]>,
+      never,
+      Provider
+    >
+  /* eslint-enable @typescript-eslint/indent */
+  );
 
   /**
    * The {@link Context} that has been available through middleware and the base context from the {@link Provider}.
@@ -163,7 +204,18 @@ export type HandlerFunctionInput<
    * This value will only be available should {@link Context} not be mentioned in the {@link HandlerDefinition}.
    * In that case this will be `never` and should not be used.
    */
-  readonly context: Grok.If.IsInherit<Grok.Inherit.Normalise<Context>, never, Context>;
+  readonly context: (
+  /* eslint-disable @typescript-eslint/indent */
+    Grok.If<
+      Grok.Or<[
+        Grok.Value.IsAny<Context>,
+        Grok.Value.IsExactly<Context, HandlerDefinitionUseAnyContext>,
+      ]>,
+      never,
+      Context
+    >
+  /* eslint-enable @typescript-eslint/indent */
+  );
 };
 
 /**
@@ -323,16 +375,17 @@ export namespace HandlerDefinition {
   }
 
   /**
-   * Types that indicate a value within {@link Handler.Definition} should be inheritted.
+   * Types that indicate a value within {@link HandlerDefinition} should be inheritted.
+   * This is typically used when your code doesn't care about a value.
    */
   export namespace Inherit {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Provider = handler.HandlerDefinitionInheritProvider;
+    export import Provider = handler.HandlerDefinitionUseAnyProvider;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Context = handler.HandlerDefinitionInheritContext;
+    export import Context = handler.HandlerDefinitionUseAnyContext;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Response = handler.HandlerDefinitionInheritResponse;
+    export import Response = handler.HandlerDefinitionUseAnyResponse;
   }
 }
