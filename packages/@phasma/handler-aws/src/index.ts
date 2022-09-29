@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-export type { Middleware, Response } from '@phasma/handler/src/index';
+export type { Http, Middleware, Response } from '@phasma/handler/src/index';
 export { entrypoint as awse, factory as aws, id } from './core/provider';
 import * as event from './component/event';
 import * as handler from './component/handler';

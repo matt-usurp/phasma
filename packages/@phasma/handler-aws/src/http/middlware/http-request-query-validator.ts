@@ -1,70 +1,83 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HttpQueryParser } from '@phasma/handler/src/http/query';
 import { parse as query } from '@phasma/handler/src/http/query';
-import { http, HttpResponse, HttpResponseTransport, HttpResponseTransportKind } from '@phasma/handler/src/http/response';
+import { error } from '@phasma/handler/src/http/response';
 import type { HttpValidatorFunction } from '@phasma/handler/src/http/validator';
-import { validate, ZodSchema } from '@phasma/handler/src/http/validator/zod';
-import type { Middleware, Provider } from '../../index';
+import { validate, ZodIssue, ZodSchema } from '@phasma/handler/src/http/validator/zod';
+import type { Http, Middleware, Provider } from '../../index';
 
-export type HttpRequestQueryValidatorErrorResponse = HttpResponse<HttpResponseTransport<400, unknown>>;
+export type HttpRequestQueryValidatorResponseError<Error> = (
+  | HttpRequestQueryValidatorResponseError.QueryStringMalformed
+  | HttpRequestQueryValidatorResponseError.QueryValidationFailure<Error>
+);
 
-export type HttpRequestQueryValidatorContext<T> = {
-  readonly query: T;
+export namespace HttpRequestQueryValidatorResponseError {
+  export type QueryStringMalformed = Http.Response.Error<'query', 'malformed', undefined>;
+  export type QueryValidationFailure<Error> = Http.Response.Error<'query', 'validation', Error>;
+}
+
+export type HttpRequestQueryValidatorContext<Query> = {
+  /**
+   * Query parameters parsed and made available via {@link HttpRequestQueryValidatorMiddleware}.
+   */
+  readonly query: Query;
 };
 
-export type HttpRequesQueryValidatorMiddlewareDefinition<T> = (
+/**
+ * A {@link HttpRequestQueryValidatorMiddleware} type definition.
+ */
+export type HttpRequestQueryValidatorMiddlewareDefinition<Query extends Grok.Constraint.ObjectLike, ValidationError> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Provider.ForEvent<'apigw:proxy:v2'>,
     Middleware.Definition.Any.ContextInbound,
-    HttpRequestQueryValidatorContext<T>,
+    HttpRequestQueryValidatorContext<Query>,
     Middleware.Definition.Any.ResponseInbound,
-    HttpResponse<HttpResponseTransportKind>
+    HttpRequestQueryValidatorResponseError<ValidationError>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
-export class HttpRequesQueryValidatorMiddleware<T extends Grok.Constraint.ObjectLike> implements Middleware.Implementation<HttpRequesQueryValidatorMiddlewareDefinition<T>> {
-  public static zod<T extends Grok.Constraint.ObjectLike>(schema: ZodSchema): HttpRequesQueryValidatorMiddleware<T> {
-    return new HttpRequesQueryValidatorMiddleware(query, validate(schema));
-  }
-
-  public static create<T extends Grok.Constraint.ObjectLike>(
-    parser: HttpQueryParser<Grok.Constraint.ObjectLike>,
-    validator: HttpValidatorFunction<Grok.Constraint.ObjectLike, unknown>,
-  ): HttpRequesQueryValidatorMiddleware<T> {
-    return new HttpRequesQueryValidatorMiddleware(parser, validator);
-  }
-
-  protected constructor(
+export class HttpRequestQueryValidatorMiddleware<Query extends Grok.Constraint.ObjectLike, ValidationError> implements Middleware.Implementation<HttpRequestQueryValidatorMiddlewareDefinition<Query, ValidationError>> {
+  public constructor(
     public readonly parser: HttpQueryParser<Grok.Constraint.ObjectLike>,
-    public readonly validator: HttpValidatorFunction<Grok.Constraint.ObjectLike, unknown>,
+    public readonly validator: HttpValidatorFunction<Grok.Constraint.ObjectLike, ValidationError>,
   ) {}
 
-  public async invoke({ provider, context, next }: Middleware.Fn.Input<HttpRequesQueryValidatorMiddlewareDefinition<T>>): Middleware.Fn.Output<HttpRequesQueryValidatorMiddlewareDefinition<T>> {
+  /**
+   * @inheritdoc
+   */
+  public async invoke({ provider, context, next }: Middleware.Fn.Input<HttpRequestQueryValidatorMiddlewareDefinition<Query, ValidationError>>): Middleware.Fn.Output<HttpRequestQueryValidatorMiddlewareDefinition<Query, ValidationError>> {
     const query = provider.event?.rawQueryString ?? '';
     const parsed = this.parser(query);
 
     if (parsed === undefined) {
-      return http({
-        status: 400,
-        body: undefined,
-      });
+      return error<HttpRequestQueryValidatorResponseError.QueryStringMalformed>(
+        'query',
+        'malformed',
+      );
     }
 
     const result = this.validator(parsed);
 
     if (result.success === false) {
-      return http({
-        status: 400,
-        body: result.errors,
-      });
+      return error<HttpRequestQueryValidatorResponseError.QueryValidationFailure<ValidationError>>(
+        'query',
+        'validation',
+        result.errors,
+      );
     }
 
     return next({
       ...context,
 
-      query: result.data as unknown as T,
+      query: result.data as unknown as Query,
     });
+  }
+}
+
+export class HttpRequestQueryValidatorMiddlewareUsingZod<Query extends Grok.Constraint.ObjectLike> extends HttpRequestQueryValidatorMiddleware<Query, ZodIssue[]> {
+  public constructor(schema: ZodSchema) {
+    super(query, validate(schema));
   }
 }
