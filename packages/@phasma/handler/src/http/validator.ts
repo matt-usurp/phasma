@@ -1,16 +1,16 @@
-export type HttpValidatorFunctionResultSuccess<T> = {
+export type HttpValidatorFunctionResultSuccess<Data> = {
   success: true;
-  data: T;
+  data: Data;
 };
 
-export type HttpValidatorFunctionResultFailure<E> = {
+export type HttpValidatorFunctionResultFailure<Error> = {
   success: false;
-  errors: E;
+  errors: Error;
 };
 
-export type HttpValidatorFunctionResult<T, E> = (
-  | HttpValidatorFunctionResultSuccess<T>
-  | HttpValidatorFunctionResultFailure<E>
+export type HttpValidatorFunctionResult<Data, Error> = (
+  | HttpValidatorFunctionResultSuccess<Data>
+  | HttpValidatorFunctionResultFailure<Error>
 );
 
-export type HttpValidatorFunction<T, E> = (value: Partial<T>) => HttpValidatorFunctionResult<T, E>;
+export type HttpValidatorFunction<Data, Error> = (value: Partial<Data>) => HttpValidatorFunctionResult<Data, Error>;

@@ -1,8 +1,7 @@
-import { HttpRequestBodyValidatorContext, HttpRequestBodyValidatorMiddleware } from '@phasma/handler-aws/src/http/middlware/http-request-body-validator';
+import { HttpRequestBodyTransformerMiddleware, HttpRequestBodyValidatorContext } from '@phasma/handler-aws/src/http/middlware/http-request-body-transformer';
 import { HttpRequestPathValidatorContext, HttpRequestPathValidatorMiddleware } from '@phasma/handler-aws/src/http/middlware/http-request-path-validator';
-import { HttpRequesQueryValidatorMiddleware, HttpRequestQueryValidatorContext } from '@phasma/handler-aws/src/http/middlware/http-request-query-validator';
-import { HttpResponseBodyEncoderMiddleware } from '@phasma/handler-aws/src/http/middlware/http-response-body-encoder';
-import { HttpResponseTransformerMiddleware } from '@phasma/handler-aws/src/http/middlware/http-response-transformer';
+import { HttpRequestQueryValidatorContext, HttpRequestQueryValidatorMiddleware } from '@phasma/handler-aws/src/http/middlware/http-request-query-validator';
+import { HttpResponseTransformerMiddlewareUsingJsonEncoding } from '@phasma/handler-aws/src/http/middlware/http-response-transformer';
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import * as json from '@phasma/handler/src/http/body/json';
 import * as query from '@phasma/handler/src/http/query';
@@ -64,24 +63,31 @@ export class ExampleHandler implements Handler.Implementation<Definition> {
 
 export const target = aws<EventSourceIdentifier>(async (application) => (
   application
-    .use(HttpResponseTransformerMiddleware.create())
-    .use(HttpResponseBodyEncoderMiddleware.create(json.encode))
-    .use(HttpRequestPathValidatorMiddleware.create<ExampleRequestPath>(zod.validate<ExampleRequestPath>(
-      z.object<zod.FromType<ExampleRequestPath>>({
-        user: z.string().uuid(),
-      }),
-    )))
-    .use(HttpRequesQueryValidatorMiddleware.create<ExampleRequestQuery>(query.parse, zod.validate<ExampleRequestQuery>(
-      z.object<zod.FromType<ExampleRequestQuery>>({
-        page: z.number(),
-        limit: z.number(),
-      }),
-    )))
-    .use(HttpRequestBodyValidatorMiddleware.create<ExampleRequestBody>(json.decode, zod.validate<ExampleRequestBody>(
-      z.object<zod.FromType<ExampleRequestBody>>({
-        name: z.string().nonempty(),
-      }),
-    )))
+    .use(new HttpResponseTransformerMiddlewareUsingJsonEncoding())
+    .use(new HttpRequestPathValidatorMiddleware<ExampleRequestPath, zod.ZodIssue[]>(
+      zod.validate<ExampleRequestPath>(
+        z.object<zod.FromType<ExampleRequestPath>>({
+          user: z.string().uuid(),
+        }),
+      ),
+    ))
+    .use(new HttpRequestQueryValidatorMiddleware<ExampleRequestQuery, zod.ZodIssue[]>(
+      query.parse,
+      zod.validate<ExampleRequestQuery>(
+        z.object<zod.FromType<ExampleRequestQuery>>({
+          page: z.number(),
+          limit: z.number(),
+        }),
+      ),
+    ))
+    .use(new HttpRequestBodyTransformerMiddleware<ExampleRequestBody, zod.ZodIssue[]>(
+      json.decode,
+      zod.validate<ExampleRequestBody>(
+        z.object<zod.FromType<ExampleRequestBody>>({
+          name: z.string().min(1),
+        }),
+      ),
+    ))
     .handle(new ExampleHandler())
 ));
 

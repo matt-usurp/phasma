@@ -1,26 +1,25 @@
-import type { Grok } from '@matt-usurp/grok';
 import { fn, partial } from '@matt-usurp/grok/testing';
 import type { HandlerResponseConstraint } from '@phasma/handler/src/component/response';
+import { error } from '@phasma/handler/src/http/response';
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
-import { FromType } from '@phasma/handler/src/http/validator/zod';
+import type { FromType, ZodIssue } from '@phasma/handler/src/http/validator/zod';
 import { z } from 'zod';
-import { LambdaHandlerProviderWithEventFromEventSourceIdentifier } from '../../component/provider';
-import type { Event } from '../../index';
-import { HttpRequestPathValidatorContext, HttpRequestPathValidatorErrorResponse, HttpRequestPathValidatorMiddleware } from './http-request-path-validator';
+import type { Event, Provider } from '../../index';
+import { HttpRequestPathValidatorContext, HttpRequestPathValidatorMiddleware, HttpRequestPathValidatorMiddlewareUsingZod, HttpRequestPathValidatorResponseError } from './http-request-path-validator';
 
 describe(HttpRequestPathValidatorMiddleware.name, (): void => {
-  describe('create()', (): void => {
-    it('with path, undefined, return error', async (): Promise<void> => {
-      const validator = fn<HttpValidatorFunction<Grok.Constraint.Anything, unknown>>();
+  describe('constructor()', (): void => {
+    it('with path, undefined, return http error, missing', async (): Promise<void> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      const middleware = HttpRequestPathValidatorMiddleware.create(validator);
+      const middleware = new HttpRequestPathValidatorMiddleware(validator);
 
       const next = vi.fn();
 
       expect(
         await middleware.invoke({
-          // Provider is ignore for this middleware
-          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+          provider: partial<Provider.ForEvent<'apigw:proxy:v2'>>({
             id: 'provider:aws:lambda',
 
             event: partial<Event.Payload<'apigw:proxy:v2'>>({
@@ -28,132 +27,152 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
             }),
           }),
 
-          // Context is ignored for this middleware
-          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestPathValidatorErrorResponse>({
-        type: 'response:http',
-
-        value: {
-          status: 400,
-          body: undefined,
-        },
-      });
+      ).toStrictEqual<HttpRequestPathValidatorResponseError.PathMissing>(
+        error<HttpRequestPathValidatorResponseError.PathMissing>(
+          'path',
+          'missing',
+        ),
+      );
 
       expect(validator).toBeCalledTimes(0);
 
       expect(next).toBeCalledTimes(0);
     });
 
-    it('with path, validator returns error, return error', async (): Promise<void> => {
-      const validator = fn<HttpValidatorFunction<Grok.Constraint.Anything, unknown>>();
+    it('with path, validator called, returns error, return http error, validation error', async (): Promise<void> => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      validator.mockImplementationOnce((value: unknown): HttpValidatorFunctionResultFailure<unknown> => {
-        expect(value).toStrictEqual('value:provider:payload:path:invalid');
-
+      validator.mockImplementationOnce((): HttpValidatorFunctionResultFailure<string[]> => {
         return {
           success: false,
-          errors: 'test-action:validator:errors',
+          errors: [
+            'test:validator:error:a',
+            'test:validator:error:b',
+          ],
         };
       });
 
-      const middleware = HttpRequestPathValidatorMiddleware.create(validator);
+      const middleware = new HttpRequestPathValidatorMiddleware(validator);
 
       const next = vi.fn();
 
       expect(
         await middleware.invoke({
-          // Provider is ignore for this middleware
-          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+          provider: partial<Provider.ForEvent<'apigw:proxy:v2'>>({
             id: 'provider:aws:lambda',
 
             event: partial<Event.Payload<'apigw:proxy:v2'>>({
-              pathParameters: 'value:provider:payload:path:invalid' as unknown as Record<string, string>,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              pathParameters: 'test:provider:event:path:invalid' as any,
             }),
           }),
 
-          // Context is ignored for this middleware
-          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestPathValidatorErrorResponse>({
-        type: 'response:http',
-
-        value: {
-          status: 400,
-          body: 'test-action:validator:errors',
-        },
-      });
+      ).toStrictEqual<HttpRequestPathValidatorResponseError.PathValidationFailure<string[]>>(
+        error<HttpRequestPathValidatorResponseError.PathValidationFailure<string[]>>(
+          'path',
+          'validation',
+          [
+            'test:validator:error:a',
+            'test:validator:error:b',
+          ],
+        ),
+      );
 
       expect(validator).toBeCalledTimes(1);
+      expect(validator).toBeCalledWith<[string]>('test:provider:event:path:invalid');
 
       expect(next).toBeCalledTimes(0);
     });
 
-    it('with path, validates, calls next with context', async (): Promise<void> => {
-      const validator = fn<HttpValidatorFunction<Grok.Constraint.Anything, unknown>>();
+    it('with path, validator called, passes, next called, with path context', async (): Promise<void> => {
+      type TestPathMapping = {
+        readonly a: string;
+        readonly b: string;
+      };
 
-      validator.mockImplementationOnce((value: unknown): HttpValidatorFunctionResultSuccess<unknown> => {
-        expect(value).toStrictEqual({
-          foo: 'bar',
-        });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const validator = fn<HttpValidatorFunction<any, unknown>>();
 
+      validator.mockImplementationOnce((): HttpValidatorFunctionResultSuccess<string[]> => {
         return {
           success: true,
-          data: 'test-action:validator:success',
+          data: [
+            'test:validator:data:a',
+            'test:validator:data:b',
+          ],
         };
       });
 
-      const middleware = HttpRequestPathValidatorMiddleware.create(validator);
+      const middleware = new HttpRequestPathValidatorMiddleware(validator);
 
       const next = vi.fn();
 
-      next.mockImplementationOnce(async (context: HttpRequestPathValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
-        expect(context.path).toStrictEqual('test-action:validator:success');
-
+      next.mockImplementationOnce(async (): Promise<HandlerResponseConstraint> => {
         return {
           type: 'response:example',
-          value: 'test-action:middleware:next:success',
+          value: 'test:middleware:next:response',
         };
       });
 
       expect(
         await middleware.invoke({
-          // Provider is ignore for this middleware
-          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+          provider: partial<Provider.ForEvent<'apigw:proxy:v2'>>({
             id: 'provider:aws:lambda',
 
             event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: {
-                foo: 'bar',
+                a: 'test:path:a',
+                b: 'test:path:b',
               },
             }),
           }),
 
-          // Context is ignored for this middleware
-          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          context: {
+            inherit: 'test:context:inherit',
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+
           next,
         }),
       ).toStrictEqual<HandlerResponseConstraint>({
         type: 'response:example',
-        value: 'test-action:middleware:next:success',
+        value: 'test:middleware:next:response',
       });
 
       expect(validator).toBeCalledTimes(1);
+      expect(validator).toBeCalledWith<[TestPathMapping]>({
+        a: 'test:path:a',
+        b: 'test:path:b',
+      });
 
       expect(next).toBeCalledTimes(1);
+      expect(next).toBeCalledWith<[HttpRequestPathValidatorContext<string[]> & { inherit: string }]>({
+        inherit: 'test:context:inherit',
+
+        path: [
+          'test:validator:data:a',
+          'test:validator:data:b',
+        ],
+      });
     });
   });
+});
 
-  describe('zod()', (): void => {
-    it('with body, zod schema invalid, returns error', async (): Promise<void> => {
+describe(HttpRequestPathValidatorMiddlewareUsingZod.name, (): void => {
+  describe('constructor()', (): void => {
+    it('with path, validator called, schema invalid, returns http error, validation error', async (): Promise<void> => {
       type TestPathMapping = {
-        user: string;
-        session: string;
+        readonly user: string;
+        readonly session: string;
       };
 
-      const middleware = HttpRequestPathValidatorMiddleware.zod<TestPathMapping>(
+      const middleware = new HttpRequestPathValidatorMiddlewareUsingZod<TestPathMapping>(
         z.object<FromType<TestPathMapping>>({
           user: z.string(),
           session: z.string(),
@@ -164,25 +183,24 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
 
       expect(
         await middleware.invoke({
-          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+          provider: partial<Provider.ForEvent<'apigw:proxy:v2'>>({
             id: 'provider:aws:lambda',
 
             event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: {
-                user: 'some-user',
+                user: 'test:path:user',
               },
             }),
           }),
 
-          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestPathValidatorErrorResponse>({
-        type: 'response:http',
-
-        value: {
-          status: 400,
-          body: [
+      ).toStrictEqual<HttpRequestPathValidatorResponseError.PathValidationFailure<ZodIssue[]>>(
+        error<HttpRequestPathValidatorResponseError.PathValidationFailure<ZodIssue[]>>(
+          'path',
+          'validation',
+          [
             expect.objectContaining({
               code: 'invalid_type',
               message: 'Required',
@@ -190,19 +208,19 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
               path: ['session'],
             }),
           ],
-        },
-      });
+        ),
+      );
 
       expect(next).toBeCalledTimes(0);
     });
 
-    it('with body, zod schema validates, invokes next with context', async (): Promise<void> => {
+    it('with path, validator called, schema validates, next called, with path context', async (): Promise<void> => {
       type TestPathMapping = {
-        user: string;
-        session: string;
+        readonly user: string;
+        readonly session: string;
       };
 
-      const middleware = HttpRequestPathValidatorMiddleware.zod<TestPathMapping>(
+      const middleware = new HttpRequestPathValidatorMiddlewareUsingZod<TestPathMapping>(
         z.object<FromType<TestPathMapping>>({
           user: z.string(),
           session: z.string(),
@@ -211,40 +229,46 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
 
       const next = vi.fn();
 
-      next.mockImplementationOnce(async (context: HttpRequestPathValidatorContext<unknown>): Promise<HandlerResponseConstraint> => {
-        expect(context.path).toStrictEqual<TestPathMapping>({
-          user: 'some-user',
-          session: 'some-session',
-        });
-
+      next.mockImplementationOnce(async (): Promise<HandlerResponseConstraint> => {
         return {
           type: 'response:example',
-          value: 'test-action:middleware:next:success',
+          value: 'test:middleware:next:response',
         };
       });
 
       expect(
         await middleware.invoke({
-          provider: partial<LambdaHandlerProviderWithEventFromEventSourceIdentifier<'apigw:proxy:v2'>>({
+          provider: partial<Provider.ForEvent<'apigw:proxy:v2'>>({
             id: 'provider:aws:lambda',
 
             event: partial<Event.Payload<'apigw:proxy:v2'>>({
               pathParameters: {
-                user: 'some-user',
-                session: 'some-session',
+                user: 'test:path:user',
+                session: 'test:path:session',
               },
             }),
           }),
 
-          context: 'given-context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          context: {
+            inherit: 'test:context:inherit',
+          } as any, // eslint-disable-line @typescript-eslint/no-explicit-any
+
           next,
         }),
       ).toStrictEqual<HandlerResponseConstraint>({
         type: 'response:example',
-        value: 'test-action:middleware:next:success',
+        value: 'test:middleware:next:response',
       });
 
       expect(next).toBeCalledTimes(1);
+      expect(next).toBeCalledWith<[HttpRequestPathValidatorContext<TestPathMapping> & { inherit: string }]>({
+        inherit: 'test:context:inherit',
+
+        path: {
+          user: 'test:path:user',
+          session: 'test:path:session',
+        },
+      });
     });
   });
 });

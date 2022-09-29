@@ -1,4 +1,6 @@
-import { http, HttpResponse, HttpResponseTransport, HttpResponseTransportKind } from './response';
+import type { Grok } from '@matt-usurp/grok';
+import type { HttpResponseHeaderMapping } from './header';
+import { http, HttpFactoryPartialTransport, HttpResponse, HttpResponseTransport, HttpResponseTransportKind } from './response';
 
 type TestOkayResponse = HttpResponseTransport<200, {
   name: string;
@@ -12,6 +14,7 @@ describe('http()', (): void => {
     expect(
       http<TestOkayResponse>({
         status: 200,
+
         body: {
           name: 'fanta',
           age: 30,
@@ -19,8 +22,10 @@ describe('http()', (): void => {
       }),
     ).toStrictEqual<HttpResponse<HttpResponseTransportKind>>({
       type: 'response:http',
+
       value: {
         status: 200,
+        headers: undefined,
         body: {
           name: 'fanta',
           age: 30,
@@ -39,8 +44,232 @@ describe('http()', (): void => {
       type: 'response:http',
       value: {
         status: 201,
+        headers: undefined,
         body: undefined,
       },
     });
   });
 });
+
+/* eslint-disable @typescript-eslint/indent */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
+type TestHttpHeaderMapping = {
+  readonly 'header:key:a': 'header:value:a';
+  readonly 'header:key:b': 'header:value:b';
+};
+
+/**
+ * @internal {@link HttpFactoryPartialTransport}
+ */
+export namespace Test_HttpFactoryPartialTransport {
+  /**
+   * @internal {@link HttpFactoryPartialTransport}
+   */
+  export namespace Test_HttpFactoryPartialTransport_DefaultState {
+    export type Value = (
+      HttpFactoryPartialTransport<
+        HttpResponseTransport<200>
+      >
+    );
+
+    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 200>>;
+    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+
+    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
+    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+
+    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], HttpResponseHeaderMapping | undefined>>;
+    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+
+    const implementation: Value = {
+      status: 200,
+    };
+  }
+
+  /**
+   * @internal {@link HttpFactoryPartialTransport}
+   */
+  export namespace Test_HttpFactoryPartialTransport_WithHeaders_SetUndefined {
+    export type Value = (
+      HttpFactoryPartialTransport<
+        HttpResponseTransport<
+          202,
+          'test:body',
+          undefined
+        >
+      >
+    );
+
+    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+
+    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
+    export type Assert_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
+
+    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], undefined>>;
+    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+
+    const implementation: Value = {
+      status: 202,
+      body: 'test:body',
+    };
+  }
+
+  /**
+   * @internal {@link HttpFactoryPartialTransport}
+   */
+  export namespace Test_HttpFactoryPartialTransport_WithBody_SetUndefined {
+    export type Value = (
+      HttpFactoryPartialTransport<
+        HttpResponseTransport<
+          202,
+          undefined,
+          TestHttpHeaderMapping
+        >
+      >
+    );
+
+    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+
+    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
+    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+
+    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
+    export type Assert_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+
+    const implementation: Value = {
+      status: 202,
+
+      headers: {
+        'header:key:a': 'header:value:a',
+        'header:key:b': 'header:value:b',
+      },
+    };
+  }
+
+  /**
+   * @internal {@link HttpFactoryPartialTransport}
+   */
+  export namespace Test_HttpFactoryPartialTransport_WithBodyAndHeaders_SetUndefined {
+    export type Value = (
+      HttpFactoryPartialTransport<
+        HttpResponseTransport<
+          202,
+          undefined,
+          undefined
+        >
+      >
+    );
+
+    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+
+    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
+    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+
+    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], undefined>>;
+    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+
+    const implementation: Value = {
+      status: 202,
+    };
+  }
+
+  /**
+   * @internal {@link HttpFactoryPartialTransport}
+   */
+  export namespace Test_HttpFactoryPartialTransport_WithAllValuesDefined {
+    export type Value = (
+      HttpFactoryPartialTransport<
+        HttpResponseTransport<
+          202,
+          'test:body',
+          TestHttpHeaderMapping
+        >
+      >
+    );
+
+    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+
+    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
+    export type Assert_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
+
+    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
+    export type Assert_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+
+    const implementation: Value = {
+      status: 202,
+      body: 'test:body',
+
+      headers: {
+        'header:key:a': 'header:value:a',
+        'header:key:b': 'header:value:b',
+      },
+    };
+  }
+
+  /**
+   * @internal {@link HttpFactoryPartialTransport}
+   */
+  export namespace Test_HttpFactoryPartialTransport_WithBody_SetAny {
+    export type Value = (
+      HttpFactoryPartialTransport<
+        HttpResponseTransport<
+          202,
+          any, // eslint-disable-line @typescript-eslint/no-explicit-any
+          TestHttpHeaderMapping
+        >
+      >
+    );
+
+    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+
+    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsAny<Value['body']>>;
+    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+
+    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
+    export type Assert_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+
+    const implementation: Value = {
+      status: 202,
+
+      headers: {
+        'header:key:a': 'header:value:a',
+        'header:key:b': 'header:value:b',
+      },
+    };
+  }
+
+  /**
+   * @internal {@link HttpFactoryPartialTransport}
+   */
+  export namespace Test_HttpFactoryPartialTransport_WithHeaders_SetAny {
+    export type Value = (
+      HttpFactoryPartialTransport<
+        HttpResponseTransport<
+          202,
+          'test:body',
+          any // eslint-disable-line @typescript-eslint/no-explicit-any
+        >
+      >
+    );
+
+    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+
+    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
+    export type Assert_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
+
+    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsAny<Value['headers']>>;
+    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+
+    const implementation: Value = {
+      status: 202,
+      body: 'test:body',
+    };
+  }
+}

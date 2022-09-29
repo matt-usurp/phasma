@@ -1,21 +1,21 @@
-import type { HandlerResponseConstraint, HandlerResponsePresetNothing } from './component/response';
+import type { HandlerResponseConstraint, HandlerResponseGetIdentifier, HandlerResponseGetValue, HandlerResponsePresetNothing } from './component/response';
 
 /**
- * Unwrap the response and return its containedd value.
+ * Unwrap the {@link Response} and return its contained value.
  */
-export const unwrap = <T extends HandlerResponseConstraint>(response: T): T['value'] => response.value;
+export const unwrap = <Response extends HandlerResponseConstraint>(response: Response): HandlerResponseGetValue<Response> => response.value;
 
 /**
- * Create a response of given type {@link T}.
+ * Create {@link Response} with its type and value.
  */
-export const create = <T extends HandlerResponseConstraint>(type: T['type'], value: T['value']): T => {
+export const create = <Response extends HandlerResponseConstraint>(type: HandlerResponseGetIdentifier<Response>, value: HandlerResponseGetValue<Response>): Response => {
   return {
     type,
     value,
-  } as T;
+  } as Response;
 };
 
 /**
- * Return a preset nothing response type.
+ * Return a {@link HandlerResponsePresetNothing} instance.
  */
 export const nothing = (): HandlerResponsePresetNothing => create('response:nothing', undefined);
