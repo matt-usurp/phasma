@@ -2,8 +2,8 @@ import { fn, partial } from '@matt-usurp/grok/testing';
 import type { HandlerResponseConstraint } from '@phasma/handler/src/component/response';
 import { error } from '@phasma/handler/src/http/response';
 import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
-import type { FromType, ZodIssue } from '@phasma/handler/src/http/validator/zod';
-import { z } from 'zod';
+import type { FromType } from '@phasma/handler/src/http/validator/zod';
+import { z, ZodIssue } from 'zod';
 import type { Event, Provider } from '../../index';
 import { HttpRequestPathValidatorContext, HttpRequestPathValidatorMiddleware, HttpRequestPathValidatorMiddlewareUsingZod, HttpRequestPathValidatorResponseError } from './http-request-path-validator';
 

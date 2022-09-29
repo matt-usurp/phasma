@@ -1,8 +1,6 @@
 import type { ZodBoolean, ZodIssue, ZodNumber, ZodObject, ZodSchema, ZodString, ZodTypeAny } from 'zod';
 import type { HttpValidatorFunction } from '../validator';
 
-export type { ZodIssue, ZodSchema } from 'zod';
-
 export type FromType<T> = (
   T extends string
     ? ZodString

@@ -3,7 +3,8 @@ import type { HttpBodyDecoder } from '@phasma/handler/src/http/body';
 import { decode as json } from '@phasma/handler/src/http/body/json';
 import { error } from '@phasma/handler/src/http/response';
 import type { HttpValidatorFunction } from '@phasma/handler/src/http/validator';
-import { validate, ZodIssue, ZodSchema } from '@phasma/handler/src/http/validator/zod';
+import { validate } from '@phasma/handler/src/http/validator/zod';
+import type { ZodIssue, ZodSchema } from 'zod';
 import type { Http, Middleware, Provider } from '../../index';
 
 export type HttpRequestBodyValidatorResponseError<Error> = (

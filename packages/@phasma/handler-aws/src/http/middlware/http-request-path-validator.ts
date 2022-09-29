@@ -1,7 +1,8 @@
 import type { Grok } from '@matt-usurp/grok';
 import { error } from '@phasma/handler/src/http/response';
 import type { HttpValidatorFunction } from '@phasma/handler/src/http/validator';
-import { validate, ZodIssue, ZodSchema } from '@phasma/handler/src/http/validator/zod';
+import { validate } from '@phasma/handler/src/http/validator/zod';
+import type { ZodIssue, ZodSchema } from 'zod';
 import type { Http, Middleware, Provider } from '../../index';
 
 export type HttpRequestPathValidatorResponseError<Error> = (

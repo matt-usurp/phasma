@@ -6,8 +6,8 @@ import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import * as json from '@phasma/handler/src/http/body/json';
 import * as query from '@phasma/handler/src/http/query';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
-import * as zod from '@phasma/handler/src/http/validator/zod';
-import { z } from 'zod';
+import { FromType, validate } from '@phasma/handler/src/http/validator/zod';
+import { z, ZodIssue } from 'zod';
 
 type EventSourceIdentifier = Event.Identifier<'apigw:proxy:v2'>;
 
@@ -64,26 +64,26 @@ export class ExampleHandler implements Handler.Implementation<Definition> {
 export const target = aws<EventSourceIdentifier>(async (application) => (
   application
     .use(new HttpResponseTransformerMiddlewareUsingJsonEncoding())
-    .use(new HttpRequestPathValidatorMiddleware<ExampleRequestPath, zod.ZodIssue[]>(
-      zod.validate<ExampleRequestPath>(
-        z.object<zod.FromType<ExampleRequestPath>>({
+    .use(new HttpRequestPathValidatorMiddleware<ExampleRequestPath, ZodIssue[]>(
+      validate<ExampleRequestPath>(
+        z.object<FromType<ExampleRequestPath>>({
           user: z.string().uuid(),
         }),
       ),
     ))
-    .use(new HttpRequestQueryValidatorMiddleware<ExampleRequestQuery, zod.ZodIssue[]>(
+    .use(new HttpRequestQueryValidatorMiddleware<ExampleRequestQuery, ZodIssue[]>(
       query.parse,
-      zod.validate<ExampleRequestQuery>(
-        z.object<zod.FromType<ExampleRequestQuery>>({
+      validate<ExampleRequestQuery>(
+        z.object<FromType<ExampleRequestQuery>>({
           page: z.number(),
           limit: z.number(),
         }),
       ),
     ))
-    .use(new HttpRequestBodyTransformerMiddleware<ExampleRequestBody, zod.ZodIssue[]>(
+    .use(new HttpRequestBodyTransformerMiddleware<ExampleRequestBody, ZodIssue[]>(
       json.decode,
-      zod.validate<ExampleRequestBody>(
-        z.object<zod.FromType<ExampleRequestBody>>({
+      validate<ExampleRequestBody>(
+        z.object<FromType<ExampleRequestBody>>({
           name: z.string().min(1),
         }),
       ),
