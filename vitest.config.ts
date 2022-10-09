@@ -33,7 +33,7 @@ export default configure({
       ],
 
       reportsDirectory: 'build/coverage',
-      reporter: ['text', 'html-spa'],
+      reporter: ['text', 'html'],
 
       lines: 80,
       functions: 80,
