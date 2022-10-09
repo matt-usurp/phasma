@@ -18,8 +18,18 @@ export interface LambdaHandlerEventSources {
   /* eslint-disable @typescript-eslint/indent */
     LambdaHandlerEventSource<
       'apigw:authorizer:request',
-      AwsLambda.APIGatewayRequestAuthorizerEvent,
+      AwsLambda.APIGatewayRequestAuthorizerEventV2,
       LambdaHandlerResponse<AwsLambda.APIGatewayAuthorizerResult>
+    >
+  /* eslint-enable @typescript-eslint/indent */
+  );
+
+  readonly 'apigw:authorizer:request:simple': (
+  /* eslint-disable @typescript-eslint/indent */
+    LambdaHandlerEventSource<
+      'apigw:authorizer:request',
+      AwsLambda.APIGatewayRequestAuthorizerEventV2,
+      LambdaHandlerResponse<AwsLambda.APIGatewaySimpleAuthorizerWithContextResult<unknown>>
     >
   /* eslint-enable @typescript-eslint/indent */
   );
