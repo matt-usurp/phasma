@@ -27,7 +27,7 @@
     }
   ],
   "dependencies": {
-    "@matt-usurp/grok": "^0.7.1"
+    "@matt-usurp/grok": "^1.0.1"
   },
   "peerDependencies": {
     "reflect-metadata": "^0.1.13"

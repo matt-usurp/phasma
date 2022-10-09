@@ -28,7 +28,7 @@
     }
   ],
   "dependencies": {
-    "@matt-usurp/grok": "^0.8.7",
+    "@matt-usurp/grok": "^1.0.1",
     "tslib": "^2.4.0"
   },
   "peerDependencies": {
