@@ -1,4 +1,3 @@
-import type { Grok } from '@matt-usurp/grok';
 import type { HandlerContextBase } from '@phasma/handler/src/component/context';
 import type { HandlerClassImplementation, HandlerComposition, HandlerEntrypoint } from '@phasma/handler/src/component/handler';
 import type { HandlerProvider, HandlerProviderIdentifier } from '@phasma/handler/src/component/provider';
@@ -65,7 +64,7 @@ export type ExampleHandlerComposer = (
 export type ExampleHandlerComposition = (
 /* eslint-disable @typescript-eslint/indent */
   HandlerComposition<
-    HandlerClassImplementation<Grok.Constraint.Anything>,
+    HandlerClassImplementation<any>, // eslint-disable-line @typescript-eslint/no-explicit-any
     ExampleProviderWithPayload,
     ExampleHandlerContextBase,
     ExampleHandlerResponse
