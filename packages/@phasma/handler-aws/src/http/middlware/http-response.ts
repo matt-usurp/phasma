@@ -5,15 +5,15 @@ import { unwrap } from '@phasma/handler/src/response';
 import type { Event, Http, Middleware } from '../../index';
 import { result } from '../../response';
 
-export type HttpResponseTransformerErrorPayload = {
+export type WithHttpResponseErrorPayload = {
   readonly origin: string;
   readonly errors: unknown;
 };
 
 /**
- * A {@link HttpResponseTransformerMiddleware} type definition.
+ * A {@link WithHttpResponse} type definition.
  */
-export type HttpResponseTransformerMiddlewareDefinition<Transport extends Http.Response.AnyTransport> = (
+export type WithHttpResponseDefinition<Transport extends Http.Response.AnyTransport> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Middleware.Definition.Any.Provider,
@@ -32,9 +32,9 @@ export type HttpResponseTransformerMiddlewareDefinition<Transport extends Http.R
  * This allows inbound responses of type {@link Http.Response.Error}.
  * This outputs API Gateway V2 compatible responses for use with the provider.
  */
-export class HttpResponseTransformerMiddleware<Transport extends Http.Response.AnyTransport> implements Middleware.Implementation<HttpResponseTransformerMiddlewareDefinition<Transport>> {
+export class WithHttpResponse<Transport extends Http.Response.AnyTransport> implements Middleware.Implementation<WithHttpResponseDefinition<Transport>> {
   /**
-   * Create an instance of {@link HttpResponseTransformerMiddleware} supporting the response {@link Transport}.
+   * Create an instance of {@link WithHttpResponse} supporting the response {@link Transport}.
    * All response bodies will be encoded using the {@link encoder} provided before returning to the provider.
    */
   public constructor(
@@ -44,7 +44,7 @@ export class HttpResponseTransformerMiddleware<Transport extends Http.Response.A
   /**
    * @inheritdoc
    */
-  public async invoke({ context, next }: Middleware.Fn.Input<HttpResponseTransformerMiddlewareDefinition<Transport>>): Middleware.Fn.Output<HttpResponseTransformerMiddlewareDefinition<Transport>> {
+  public async invoke({ context, next }: Middleware.Fn.Input<WithHttpResponseDefinition<Transport>>): Middleware.Fn.Output<WithHttpResponseDefinition<Transport>> {
     const value = await next(context);
 
     if (value.type === 'response:http') {
@@ -68,7 +68,7 @@ export class HttpResponseTransformerMiddleware<Transport extends Http.Response.A
     if (value.type ==='response:http-error') {
       const transport = unwrap(value);
 
-      const payload: HttpResponseTransformerErrorPayload = {
+      const payload: WithHttpResponseErrorPayload = {
         origin: transport.origin,
         errors: transport.errors,
       };
@@ -95,14 +95,14 @@ export class HttpResponseTransformerMiddleware<Transport extends Http.Response.A
 }
 
 /**
- * A {@link HttpResponseTransformerMiddleware} that uses JSON encoding to encode response bodies.
+ * A {@link WithHttpResponse} that uses JSON encoding to encode response bodies.
  *
  * This provides the `Content-Type` header as `application/json` automatically.
  * This provides the `Content-Length` header automatically.
  */
-export class HttpResponseTransformerMiddlewareUsingJsonEncoding<Transport extends Http.Response.AnyTransport> extends HttpResponseTransformerMiddleware<Transport> {
+export class WithHttpResponseUsingJsonEncoding<Transport extends Http.Response.AnyTransport> extends WithHttpResponse<Transport> {
   /**
-   * Create an instance of {@link HttpResponseTransformerMiddlewareUsingJsonEncoding}.
+   * Create an instance of {@link WithHttpResponseUsingJsonEncoding}.
    */
   public constructor () {
     super(json);

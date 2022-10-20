@@ -4,9 +4,9 @@ import type { HttpBodyEncoder, HttpBodyEncoderResult } from '@phasma/handler/src
 import { error, http, HttpResponse, HttpResponseError, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import type { Event } from '../../index';
 import { result } from '../../response';
-import { HttpResponseTransformerErrorPayload, HttpResponseTransformerMiddleware, HttpResponseTransformerMiddlewareUsingJsonEncoding } from './http-response-transformer';
+import { WithHttpResponse, WithHttpResponseErrorPayload, WithHttpResponseUsingJsonEncoding } from './http-response';
 
-describe(HttpResponseTransformerMiddleware.name, (): void => {
+describe(WithHttpResponse.name, (): void => {
   describe('constructor()', (): void => {
     it('with next, returns http response, encoder called, with value, composes lambda response', async (): Promise<void> => {
       type TestHttpResponse = HttpResponse<HttpResponseTransport<201, 'test:response:value'>>;
@@ -20,7 +20,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
         };
       });
 
-      const middleware = new HttpResponseTransformerMiddleware(encoder);
+      const middleware = new WithHttpResponse(encoder);
 
       const next = vi.fn();
 
@@ -69,7 +69,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
         };
       });
 
-      const middleware = new HttpResponseTransformerMiddleware(encoder);
+      const middleware = new WithHttpResponse(encoder);
 
       const next = vi.fn();
 
@@ -104,7 +104,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
       );
 
       expect(encoder).toBeCalledTimes(1);
-      expect(encoder).toBeCalledWith<[HttpResponseTransformerErrorPayload]>({
+      expect(encoder).toBeCalledWith<[WithHttpResponseErrorPayload]>({
         origin: 'test:error:origin',
         errors: 'test:error:value',
       });
@@ -118,7 +118,7 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
 
       const encoder = fn<HttpBodyEncoder>();
 
-      const middleware = new HttpResponseTransformerMiddleware(encoder);
+      const middleware = new WithHttpResponse(encoder);
 
       const next = vi.fn();
 
@@ -148,12 +148,12 @@ describe(HttpResponseTransformerMiddleware.name, (): void => {
   });
 });
 
-describe(HttpResponseTransformerMiddlewareUsingJsonEncoding.name, (): void => {
+describe(WithHttpResponseUsingJsonEncoding.name, (): void => {
   describe('constructor()', (): void => {
     it('with next, returns http response, encoder called, with value, composes lambda response', async (): Promise<void> => {
       type TestHttpResponse = HttpResponse<HttpResponseTransport<202, { a: string; b: string }>>;
 
-      const middleware = new HttpResponseTransformerMiddlewareUsingJsonEncoding();
+      const middleware = new WithHttpResponseUsingJsonEncoding();
 
       const next = vi.fn();
 
@@ -194,7 +194,7 @@ describe(HttpResponseTransformerMiddlewareUsingJsonEncoding.name, (): void => {
     it('with next, returns http error response, encoder called, with value, composes lambda response', async (): Promise<void> => {
       type TestHttpError = HttpResponseError<'test:error:origin', 'test:error:hint', 'test:error:value'>;
 
-      const middleware = new HttpResponseTransformerMiddlewareUsingJsonEncoding();
+      const middleware = new WithHttpResponseUsingJsonEncoding();
 
       const next = vi.fn();
 
@@ -235,7 +235,7 @@ describe(HttpResponseTransformerMiddlewareUsingJsonEncoding.name, (): void => {
     it('with next, returns unknown response, encoder not called, response passes through', async (): Promise<void> => {
       type TestUnknownResponse = HandlerResponse<HandlerResponseIdentifier<'unknown'>, 'test:response:unknown:value'>;
 
-      const middleware = new HttpResponseTransformerMiddlewareUsingJsonEncoding();
+      const middleware = new WithHttpResponseUsingJsonEncoding();
 
       const next = vi.fn();
 

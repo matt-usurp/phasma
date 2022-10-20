@@ -6,9 +6,9 @@ import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpVal
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z, ZodIssue } from 'zod';
 import type { Event, Provider } from '../../index';
-import { HttpRequestQueryValidatorContext, HttpRequestQueryValidatorMiddleware, HttpRequestQueryValidatorMiddlewareUsingZod, HttpRequestQueryValidatorResponseError } from './http-request-query-validator';
+import { WithHttpRequestQuery, WithHttpRequestQueryContext, WithHttpRequestQueryResponseError, WithHttpRequestQueryUsingZod } from './http-request-query';
 
-describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
+describe(WithHttpRequestQuery.name, (): void => {
   describe('constructor()', (): void => {
     it('with query, undefined, parser called, returns undefined, return http error, malformed request', async (): Promise<void> => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,7 +22,7 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const middleware = new HttpRequestQueryValidatorMiddleware<any, unknown>(parser, validator);
+      const middleware = new WithHttpRequestQuery<any, unknown>(parser, validator);
 
       const next = vi.fn();
 
@@ -39,8 +39,8 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestQueryValidatorResponseError.QueryStringMalformed>(
-        error<HttpRequestQueryValidatorResponseError.QueryStringMalformed>(
+      ).toStrictEqual<WithHttpRequestQueryResponseError.QueryStringMalformed>(
+        error<WithHttpRequestQueryResponseError.QueryStringMalformed>(
           'query',
           'malformed',
         ),
@@ -66,7 +66,7 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const middleware = new HttpRequestQueryValidatorMiddleware<any, unknown>(parser, validator);
+      const middleware = new WithHttpRequestQuery<any, unknown>(parser, validator);
 
       const next = vi.fn();
 
@@ -83,8 +83,8 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestQueryValidatorResponseError.QueryStringMalformed>(
-        error<HttpRequestQueryValidatorResponseError.QueryStringMalformed>(
+      ).toStrictEqual<WithHttpRequestQueryResponseError.QueryStringMalformed>(
+        error<WithHttpRequestQueryResponseError.QueryStringMalformed>(
           'query',
           'malformed',
         ),
@@ -121,7 +121,7 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
       });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const middleware = new HttpRequestQueryValidatorMiddleware<any, unknown>(parser, validator);
+      const middleware = new WithHttpRequestQuery<any, unknown>(parser, validator);
 
       const next = vi.fn();
 
@@ -138,8 +138,8 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestQueryValidatorResponseError.QueryValidationFailure<string[]>>(
-        error<HttpRequestQueryValidatorResponseError.QueryValidationFailure<string[]>>(
+      ).toStrictEqual<WithHttpRequestQueryResponseError.QueryValidationFailure<string[]>>(
+        error<WithHttpRequestQueryResponseError.QueryValidationFailure<string[]>>(
           'query',
           'validation',
           [
@@ -182,7 +182,7 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
       });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const middleware = new HttpRequestQueryValidatorMiddleware<any, unknown>(parser, validator);
+      const middleware = new WithHttpRequestQuery<any, unknown>(parser, validator);
 
       const next = vi.fn();
 
@@ -221,7 +221,7 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
       expect(validator).toBeCalledWith<[string]>('test:parser:success');
 
       expect(next).toBeCalledTimes(1);
-      expect(next).toBeCalledWith<[HttpRequestQueryValidatorContext<string[]> & { inherit: string }]>({
+      expect(next).toBeCalledWith<[WithHttpRequestQueryContext<string[]> & { inherit: string }]>({
         inherit: 'test:context:inherit',
 
         query: [
@@ -234,7 +234,7 @@ describe(HttpRequestQueryValidatorMiddleware.name, (): void => {
   });
 });
 
-describe(HttpRequestQueryValidatorMiddlewareUsingZod.name, (): void => {
+describe(WithHttpRequestQueryUsingZod.name, (): void => {
   describe('constructor()', (): void => {
     it('with query, invalid, parser called, returns empty object, validate called, schema invalid, return http error, validation error', async (): Promise<void> => {
       type TestQueryMapping = {
@@ -243,7 +243,7 @@ describe(HttpRequestQueryValidatorMiddlewareUsingZod.name, (): void => {
       };
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const middleware = new HttpRequestQueryValidatorMiddlewareUsingZod<any>(
+      const middleware = new WithHttpRequestQueryUsingZod<any>(
         z.object<FromType<TestQueryMapping>>({
           a: z.string(),
           b: z.string(),
@@ -265,8 +265,8 @@ describe(HttpRequestQueryValidatorMiddlewareUsingZod.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestQueryValidatorResponseError.QueryValidationFailure<ZodIssue[]>>(
-        error<HttpRequestQueryValidatorResponseError.QueryValidationFailure<ZodIssue[]>>(
+      ).toStrictEqual<WithHttpRequestQueryResponseError.QueryValidationFailure<ZodIssue[]>>(
+        error<WithHttpRequestQueryResponseError.QueryValidationFailure<ZodIssue[]>>(
           'query',
           'validation',
           [
@@ -295,7 +295,7 @@ describe(HttpRequestQueryValidatorMiddlewareUsingZod.name, (): void => {
         readonly b: string;
       };
 
-      const middleware = new HttpRequestQueryValidatorMiddlewareUsingZod<TestQueryMapping>(
+      const middleware = new WithHttpRequestQueryUsingZod<TestQueryMapping>(
         z.object<FromType<TestQueryMapping>>({
           a: z.string(),
           b: z.string(),
@@ -317,8 +317,8 @@ describe(HttpRequestQueryValidatorMiddlewareUsingZod.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestQueryValidatorResponseError.QueryValidationFailure<ZodIssue[]>>(
-        error<HttpRequestQueryValidatorResponseError.QueryValidationFailure<ZodIssue[]>>(
+      ).toStrictEqual<WithHttpRequestQueryResponseError.QueryValidationFailure<ZodIssue[]>>(
+        error<WithHttpRequestQueryResponseError.QueryValidationFailure<ZodIssue[]>>(
           'query',
           'validation',
           [
@@ -347,7 +347,7 @@ describe(HttpRequestQueryValidatorMiddlewareUsingZod.name, (): void => {
         readonly b: string;
       };
 
-      const middleware = new HttpRequestQueryValidatorMiddlewareUsingZod<TestQueryMapping>(
+      const middleware = new WithHttpRequestQueryUsingZod<TestQueryMapping>(
         z.object<FromType<TestQueryMapping>>({
           a: z.string(),
           b: z.string(),
@@ -385,7 +385,7 @@ describe(HttpRequestQueryValidatorMiddlewareUsingZod.name, (): void => {
       });
 
       expect(next).toBeCalledTimes(1);
-      expect(next).toBeCalledWith<[HttpRequestQueryValidatorContext<TestQueryMapping> & { inherit: string }]>({
+      expect(next).toBeCalledWith<[WithHttpRequestQueryContext<TestQueryMapping> & { inherit: string }]>({
         inherit: 'test:context:inherit',
 
         query: {

@@ -6,9 +6,9 @@ import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpVal
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z, ZodIssue } from 'zod';
 import type { Event, Provider } from '../../index';
-import { HttpRequestBodyTransformerMiddleware, HttpRequestBodyTransformerMiddlewareUsingZod, HttpRequestBodyValidatorContext, HttpRequestBodyValidatorResponseError } from './http-request-body-transformer';
+import { WithHttpRequestBody, WithHttpRequestBodyContext, WithHttpRequestBodyResponseError, WithHttpRequestBodyUsingZod } from './http-request-body';
 
-describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
+describe(WithHttpRequestBody.name, (): void => {
   describe('constructor()', (): void => {
     it('with payload, undefined, return http error, body missing', async (): Promise<void> => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -17,7 +17,7 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      const middleware = new HttpRequestBodyTransformerMiddleware(decoder, validator);
+      const middleware = new WithHttpRequestBody(decoder, validator);
 
       const next = vi.fn();
 
@@ -34,8 +34,8 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestBodyValidatorResponseError.BodyMissing>(
-        error<HttpRequestBodyValidatorResponseError.BodyMissing>(
+      ).toStrictEqual<WithHttpRequestBodyResponseError.BodyMissing>(
+        error<WithHttpRequestBodyResponseError.BodyMissing>(
           'body',
           'missing',
         ),
@@ -55,7 +55,7 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      const middleware = new HttpRequestBodyTransformerMiddleware(decoder, validator);
+      const middleware = new WithHttpRequestBody(decoder, validator);
 
       const next = vi.fn();
 
@@ -72,8 +72,8 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestBodyValidatorResponseError.BodyMissing>(
-        error<HttpRequestBodyValidatorResponseError.BodyMissing>(
+      ).toStrictEqual<WithHttpRequestBodyResponseError.BodyMissing>(
+        error<WithHttpRequestBodyResponseError.BodyMissing>(
           'body',
           'missing',
         ),
@@ -97,7 +97,7 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      const middleware = new HttpRequestBodyTransformerMiddleware(decoder, validator);
+      const middleware = new WithHttpRequestBody(decoder, validator);
 
       const next = vi.fn();
 
@@ -114,8 +114,8 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestBodyValidatorResponseError.BodyMalformed>(
-        error<HttpRequestBodyValidatorResponseError.BodyMalformed>(
+      ).toStrictEqual<WithHttpRequestBodyResponseError.BodyMalformed>(
+        error<WithHttpRequestBodyResponseError.BodyMalformed>(
           'body',
           'malformed',
         ),
@@ -152,7 +152,7 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
         };
       });
 
-      const middleware = new HttpRequestBodyTransformerMiddleware(decoder, validator);
+      const middleware = new WithHttpRequestBody(decoder, validator);
 
       const next = vi.fn();
 
@@ -169,8 +169,8 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestBodyValidatorResponseError.BodyValidationFailure<string[]>>(
-        error<HttpRequestBodyValidatorResponseError.BodyValidationFailure<string[]>>(
+      ).toStrictEqual<WithHttpRequestBodyResponseError.BodyValidationFailure<string[]>>(
+        error<WithHttpRequestBodyResponseError.BodyValidationFailure<string[]>>(
           'body',
           'validation',
           [
@@ -214,7 +214,7 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
         };
       });
 
-      const middleware = new HttpRequestBodyTransformerMiddleware(decoder, validator);
+      const middleware = new WithHttpRequestBody(decoder, validator);
 
       const next = vi.fn();
 
@@ -253,7 +253,7 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
       expect(validator).toBeCalledWith<[string]>('test:decoder:success');
 
       expect(next).toBeCalledTimes(1);
-      expect(next).toBeCalledWith<[HttpRequestBodyValidatorContext<string[]> & { inherit: string }]>({
+      expect(next).toBeCalledWith<[WithHttpRequestBodyContext<string[]> & { inherit: string }]>({
         inherit: 'test:context:inherit',
 
         body: [
@@ -267,7 +267,7 @@ describe(HttpRequestBodyTransformerMiddleware.name, (): void => {
   });
 });
 
-describe(HttpRequestBodyTransformerMiddlewareUsingZod.name, (): void => {
+describe(WithHttpRequestBodyUsingZod.name, (): void => {
   describe('zod()', (): void => {
     it('with body, json malformed, returns http error, malformed', async (): Promise<void> => {
       type TestBodyMapping = {
@@ -275,7 +275,7 @@ describe(HttpRequestBodyTransformerMiddlewareUsingZod.name, (): void => {
         readonly age: number;
       };
 
-      const middleware = new HttpRequestBodyTransformerMiddlewareUsingZod<TestBodyMapping>(
+      const middleware = new WithHttpRequestBodyUsingZod<TestBodyMapping>(
         z.object<FromType<TestBodyMapping>>({
           name: z.string(),
           age: z.number(),
@@ -297,8 +297,8 @@ describe(HttpRequestBodyTransformerMiddlewareUsingZod.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestBodyValidatorResponseError.BodyMalformed>(
-        error<HttpRequestBodyValidatorResponseError.BodyMalformed>(
+      ).toStrictEqual<WithHttpRequestBodyResponseError.BodyMalformed>(
+        error<WithHttpRequestBodyResponseError.BodyMalformed>(
           'body',
           'malformed',
         ),
@@ -313,7 +313,7 @@ describe(HttpRequestBodyTransformerMiddlewareUsingZod.name, (): void => {
         readonly age: number;
       };
 
-      const middleware = new HttpRequestBodyTransformerMiddlewareUsingZod<TestBodyMapping>(
+      const middleware = new WithHttpRequestBodyUsingZod<TestBodyMapping>(
         z.object<FromType<TestBodyMapping>>({
           name: z.string(),
           age: z.number(),
@@ -335,8 +335,8 @@ describe(HttpRequestBodyTransformerMiddlewareUsingZod.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestBodyValidatorResponseError.BodyValidationFailure<ZodIssue[]>>(
-        error<HttpRequestBodyValidatorResponseError.BodyValidationFailure<ZodIssue[]>>(
+      ).toStrictEqual<WithHttpRequestBodyResponseError.BodyValidationFailure<ZodIssue[]>>(
+        error<WithHttpRequestBodyResponseError.BodyValidationFailure<ZodIssue[]>>(
           'body',
           'validation',
           [
@@ -365,7 +365,7 @@ describe(HttpRequestBodyTransformerMiddlewareUsingZod.name, (): void => {
         readonly age: number;
       };
 
-      const middleware = new HttpRequestBodyTransformerMiddlewareUsingZod<TestBodyMapping>(
+      const middleware = new WithHttpRequestBodyUsingZod<TestBodyMapping>(
         z.object<FromType<TestBodyMapping>>({
           name: z.string(),
           age: z.number(),
@@ -406,7 +406,7 @@ describe(HttpRequestBodyTransformerMiddlewareUsingZod.name, (): void => {
       });
 
       expect(next).toBeCalledTimes(1);
-      expect(next).toBeCalledWith<[HttpRequestBodyValidatorContext<TestBodyMapping> & { inherit: string }]>({
+      expect(next).toBeCalledWith<[WithHttpRequestBodyContext<TestBodyMapping> & { inherit: string }]>({
         inherit: 'test:context:inherit',
 
         body: {

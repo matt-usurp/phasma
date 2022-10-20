@@ -5,15 +5,15 @@ import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpVal
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z, ZodIssue } from 'zod';
 import type { Event, Provider } from '../../index';
-import { HttpRequestPathValidatorContext, HttpRequestPathValidatorMiddleware, HttpRequestPathValidatorMiddlewareUsingZod, HttpRequestPathValidatorResponseError } from './http-request-path-validator';
+import { WithHttpRequestPath, WithHttpRequestPathContext, WithHttpRequestPathResponseError, WithHttpRequestPathUsingZod } from './http-request-path';
 
-describe(HttpRequestPathValidatorMiddleware.name, (): void => {
+describe(WithHttpRequestPath.name, (): void => {
   describe('constructor()', (): void => {
     it('with path, undefined, return http error, missing', async (): Promise<void> => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      const middleware = new HttpRequestPathValidatorMiddleware(validator);
+      const middleware = new WithHttpRequestPath(validator);
 
       const next = vi.fn();
 
@@ -30,8 +30,8 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestPathValidatorResponseError.PathMissing>(
-        error<HttpRequestPathValidatorResponseError.PathMissing>(
+      ).toStrictEqual<WithHttpRequestPathResponseError.PathMissing>(
+        error<WithHttpRequestPathResponseError.PathMissing>(
           'path',
           'missing',
         ),
@@ -56,7 +56,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
         };
       });
 
-      const middleware = new HttpRequestPathValidatorMiddleware(validator);
+      const middleware = new WithHttpRequestPath(validator);
 
       const next = vi.fn();
 
@@ -74,8 +74,8 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestPathValidatorResponseError.PathValidationFailure<string[]>>(
-        error<HttpRequestPathValidatorResponseError.PathValidationFailure<string[]>>(
+      ).toStrictEqual<WithHttpRequestPathResponseError.PathValidationFailure<string[]>>(
+        error<WithHttpRequestPathResponseError.PathValidationFailure<string[]>>(
           'path',
           'validation',
           [
@@ -110,7 +110,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
         };
       });
 
-      const middleware = new HttpRequestPathValidatorMiddleware(validator);
+      const middleware = new WithHttpRequestPath(validator);
 
       const next = vi.fn();
 
@@ -152,7 +152,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
       });
 
       expect(next).toBeCalledTimes(1);
-      expect(next).toBeCalledWith<[HttpRequestPathValidatorContext<string[]> & { inherit: string }]>({
+      expect(next).toBeCalledWith<[WithHttpRequestPathContext<string[]> & { inherit: string }]>({
         inherit: 'test:context:inherit',
 
         path: [
@@ -164,7 +164,7 @@ describe(HttpRequestPathValidatorMiddleware.name, (): void => {
   });
 });
 
-describe(HttpRequestPathValidatorMiddlewareUsingZod.name, (): void => {
+describe(WithHttpRequestPathUsingZod.name, (): void => {
   describe('constructor()', (): void => {
     it('with path, validator called, schema invalid, returns http error, validation error', async (): Promise<void> => {
       type TestPathMapping = {
@@ -172,7 +172,7 @@ describe(HttpRequestPathValidatorMiddlewareUsingZod.name, (): void => {
         readonly session: string;
       };
 
-      const middleware = new HttpRequestPathValidatorMiddlewareUsingZod<TestPathMapping>(
+      const middleware = new WithHttpRequestPathUsingZod<TestPathMapping>(
         z.object<FromType<TestPathMapping>>({
           user: z.string(),
           session: z.string(),
@@ -196,8 +196,8 @@ describe(HttpRequestPathValidatorMiddlewareUsingZod.name, (): void => {
           context: 'test:middleware:context' as any, // eslint-disable-line @typescript-eslint/no-explicit-any
           next,
         }),
-      ).toStrictEqual<HttpRequestPathValidatorResponseError.PathValidationFailure<ZodIssue[]>>(
-        error<HttpRequestPathValidatorResponseError.PathValidationFailure<ZodIssue[]>>(
+      ).toStrictEqual<WithHttpRequestPathResponseError.PathValidationFailure<ZodIssue[]>>(
+        error<WithHttpRequestPathResponseError.PathValidationFailure<ZodIssue[]>>(
           'path',
           'validation',
           [
@@ -220,7 +220,7 @@ describe(HttpRequestPathValidatorMiddlewareUsingZod.name, (): void => {
         readonly session: string;
       };
 
-      const middleware = new HttpRequestPathValidatorMiddlewareUsingZod<TestPathMapping>(
+      const middleware = new WithHttpRequestPathUsingZod<TestPathMapping>(
         z.object<FromType<TestPathMapping>>({
           user: z.string(),
           session: z.string(),
@@ -261,7 +261,7 @@ describe(HttpRequestPathValidatorMiddlewareUsingZod.name, (): void => {
       });
 
       expect(next).toBeCalledTimes(1);
-      expect(next).toBeCalledWith<[HttpRequestPathValidatorContext<TestPathMapping> & { inherit: string }]>({
+      expect(next).toBeCalledWith<[WithHttpRequestPathContext<TestPathMapping> & { inherit: string }]>({
         inherit: 'test:context:inherit',
 
         path: {
