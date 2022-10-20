@@ -1,4 +1,4 @@
-import { HttpResponseTransformerMiddlewareUsingJsonEncoding } from '@phasma/handler-aws/src/http/middlware/http-response-transformer';
+import { WithHttpResponseUsingJsonEncoding } from '@phasma/handler-aws/src/http/middlware/http-response';
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 
@@ -26,7 +26,7 @@ export class ExampleHandler implements Handler.Implementation<Definition> {
 
 export const target = aws<EventSourceIdentifier>(async (application) => (
   application
-    .use(new HttpResponseTransformerMiddlewareUsingJsonEncoding())
+    .use(new WithHttpResponseUsingJsonEncoding())
     .handle(new ExampleHandler())
 ));
 

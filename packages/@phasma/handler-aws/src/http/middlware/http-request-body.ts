@@ -7,38 +7,38 @@ import { validate } from '@phasma/handler/src/http/validator/zod';
 import type { ZodIssue, ZodSchema } from 'zod';
 import type { Http, Middleware, Provider } from '../../index';
 
-export type HttpRequestBodyValidatorResponseError<Error> = (
-  | HttpRequestBodyValidatorResponseError.BodyMissing
-  | HttpRequestBodyValidatorResponseError.BodyMalformed
-  | HttpRequestBodyValidatorResponseError.BodyValidationFailure<Error>
+export type WithHttpRequestBodyResponseError<Error> = (
+  | WithHttpRequestBodyResponseError.BodyMissing
+  | WithHttpRequestBodyResponseError.BodyMalformed
+  | WithHttpRequestBodyResponseError.BodyValidationFailure<Error>
 );
 
-export namespace HttpRequestBodyValidatorResponseError {
+export namespace WithHttpRequestBodyResponseError {
   export type BodyMissing = Http.Response.Error<'body', 'missing', undefined>;
   export type BodyMalformed = Http.Response.Error<'body', 'malformed', undefined>;
   export type BodyValidationFailure<Error> = Http.Response.Error<'body', 'validation', Error>;
 }
 
-export type HttpRequestBodyValidatorContext<Body> = {
+export type WithHttpRequestBodyContext<Body> = {
   /**
-   * The request body parsed, validated and made available via {@link HttpRequestBodyTransformerMiddleware}.
+   * The request body parsed, validated and made available via {@link WithHttpRequestBody}.
    */
   readonly body: Body;
 };
 
-export type HttpRequestBodyValidatorMiddlewareDefinition<Body, ValidationError> = (
+export type WithHttpRequestBodyDefinition<Body, ValidationError> = (
 /* eslint-disable @typescript-eslint/indent */
   Middleware.Definition<
     Provider.ForEvent<'apigw:proxy:v2'>,
     Middleware.Definition.Any.ContextInbound,
-    HttpRequestBodyValidatorContext<Body>,
+    WithHttpRequestBodyContext<Body>,
     Middleware.Definition.Any.ResponseInbound,
-    HttpRequestBodyValidatorResponseError<ValidationError>
+    WithHttpRequestBodyResponseError<ValidationError>
   >
 /* eslint-enable @typescript-eslint/indent */
 );
 
-export class HttpRequestBodyTransformerMiddleware<Body, ValidationError> implements Middleware.Implementation<HttpRequestBodyValidatorMiddlewareDefinition<Body, ValidationError>> {
+export class WithHttpRequestBody<Body, ValidationError> implements Middleware.Implementation<WithHttpRequestBodyDefinition<Body, ValidationError>> {
   public constructor(
     public readonly decoder: HttpBodyDecoder<Grok.Constraint.ObjectLike>,
     public readonly validator: HttpValidatorFunction<Grok.Constraint.ObjectLike, ValidationError>,
@@ -47,11 +47,11 @@ export class HttpRequestBodyTransformerMiddleware<Body, ValidationError> impleme
   /**
    * @inheritdoc
    */
-  public async invoke({ provider, context, next }: Middleware.Fn.Input<HttpRequestBodyValidatorMiddlewareDefinition<Body, ValidationError>>): Middleware.Fn.Output<HttpRequestBodyValidatorMiddlewareDefinition<Body, ValidationError>> {
+  public async invoke({ provider, context, next }: Middleware.Fn.Input<WithHttpRequestBodyDefinition<Body, ValidationError>>): Middleware.Fn.Output<WithHttpRequestBodyDefinition<Body, ValidationError>> {
     const body = provider.event?.body;
 
     if (body === undefined || body === '') {
-      return error<HttpRequestBodyValidatorResponseError.BodyMissing>(
+      return error<WithHttpRequestBodyResponseError.BodyMissing>(
         'body',
         'missing',
       );
@@ -60,7 +60,7 @@ export class HttpRequestBodyTransformerMiddleware<Body, ValidationError> impleme
     const payload = this.decoder(body);
 
     if (payload === undefined) {
-      return error<HttpRequestBodyValidatorResponseError.BodyMalformed>(
+      return error<WithHttpRequestBodyResponseError.BodyMalformed>(
         'body',
         'malformed',
       );
@@ -69,7 +69,7 @@ export class HttpRequestBodyTransformerMiddleware<Body, ValidationError> impleme
     const result = this.validator(payload);
 
     if (result.success === false) {
-      return error<HttpRequestBodyValidatorResponseError.BodyValidationFailure<ValidationError>>(
+      return error<WithHttpRequestBodyResponseError.BodyValidationFailure<ValidationError>>(
         'body',
         'validation',
         result.errors,
@@ -84,7 +84,7 @@ export class HttpRequestBodyTransformerMiddleware<Body, ValidationError> impleme
   }
 }
 
-export class HttpRequestBodyTransformerMiddlewareUsingZod<Body> extends HttpRequestBodyTransformerMiddleware<Body, ZodIssue[]> {
+export class WithHttpRequestBodyUsingZod<Body> extends WithHttpRequestBody<Body, ZodIssue[]> {
   public constructor(schema: ZodSchema) {
     super(json, validate(schema));
   }

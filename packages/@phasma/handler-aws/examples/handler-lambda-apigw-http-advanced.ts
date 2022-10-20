@@ -1,7 +1,7 @@
-import { HttpRequestBodyTransformerMiddlewareUsingZod, HttpRequestBodyValidatorContext } from '@phasma/handler-aws/src/http/middlware/http-request-body-transformer';
-import { HttpRequestPathValidatorContext, HttpRequestPathValidatorMiddlewareUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-path-validator';
-import { HttpRequestQueryValidatorContext, HttpRequestQueryValidatorMiddlewareUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-query-validator';
-import { HttpResponseTransformerMiddlewareUsingJsonEncoding } from '@phasma/handler-aws/src/http/middlware/http-response-transformer';
+import { WithHttpRequestBodyContext, WithHttpRequestBodyUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-body';
+import { WithHttpRequestPathContext, WithHttpRequestPathUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-path';
+import { WithHttpRequestQueryContext, WithHttpRequestQueryUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-query';
+import { WithHttpResponseUsingJsonEncoding } from '@phasma/handler-aws/src/http/middlware/http-response';
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
@@ -29,9 +29,9 @@ type ExampleResponseBody = {
 type ExampleResponse = HttpResponseTransport<200, ExampleResponseBody>;
 
 type Context = (
-  & HttpRequestPathValidatorContext<ExampleRequestPath>
-  & HttpRequestQueryValidatorContext<ExampleRequestQuery>
-  & HttpRequestBodyValidatorContext<ExampleRequestBody>
+  & WithHttpRequestPathContext<ExampleRequestPath>
+  & WithHttpRequestQueryContext<ExampleRequestQuery>
+  & WithHttpRequestBodyContext<ExampleRequestBody>
 );
 
 type Definition = Handler.Definition<EventSourceIdentifier, Context, HttpResponse<ExampleResponse>>;
@@ -61,19 +61,19 @@ export class ExampleHandler implements Handler.Implementation<Definition> {
 
 export const target = aws<EventSourceIdentifier>(async (application) => (
   application
-    .use(new HttpResponseTransformerMiddlewareUsingJsonEncoding())
-    .use(new HttpRequestPathValidatorMiddlewareUsingZod<ExampleRequestPath>(
+    .use(new WithHttpResponseUsingJsonEncoding())
+    .use(new WithHttpRequestPathUsingZod<ExampleRequestPath>(
       z.object<FromType<ExampleRequestPath>>({
         user: z.string().uuid(),
       }),
     ))
-    .use(new HttpRequestQueryValidatorMiddlewareUsingZod<ExampleRequestQuery>(
+    .use(new WithHttpRequestQueryUsingZod<ExampleRequestQuery>(
       z.object<FromType<ExampleRequestQuery>>({
         page: z.number(),
         limit: z.number(),
       }),
     ))
-    .use(new HttpRequestBodyTransformerMiddlewareUsingZod<ExampleRequestBody>(
+    .use(new WithHttpRequestBodyUsingZod<ExampleRequestBody>(
       z.object<FromType<ExampleRequestBody>>({
         name: z.string().min(1),
       }),
