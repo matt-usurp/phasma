@@ -1,16 +1,16 @@
-import { ensure, HttpResponseHeaderMapping } from './header';
+import { ensure, HttpHeaderMapping } from './header';
 
 describe('ensure()', (): void => {
   it('with undefined, return empty header object', (): void => {
     expect(
       ensure(undefined),
-    ).toStrictEqual<HttpResponseHeaderMapping>({});
+    ).toStrictEqual<HttpHeaderMapping>({});
   });
 
   it('with null, return empty header object', (): void => {
     expect(
       ensure(null),
-    ).toStrictEqual<HttpResponseHeaderMapping>({});
+    ).toStrictEqual<HttpHeaderMapping>({});
   });
 
   it('with header object, return same header object', (): void => {
@@ -18,7 +18,7 @@ describe('ensure()', (): void => {
       ensure({
         foo: 'bar',
       }),
-    ).toStrictEqual<HttpResponseHeaderMapping>({
+    ).toStrictEqual<HttpHeaderMapping>({
       foo: 'bar',
     });
   });

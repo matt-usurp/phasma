@@ -1,6 +1,6 @@
 import { Grok } from '@matt-usurp/grok';
 import { z, ZodBoolean, ZodIssue, ZodNumber, ZodObject, ZodString } from 'zod';
-import type { HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '../validator';
+import type { HttpValidatorFunctionResult } from '../validator';
 import { FromType, validate } from './zod';
 
 describe('validate()', (): void => {
@@ -9,7 +9,7 @@ describe('validate()', (): void => {
 
     const parsed = validate(schema)('something');
 
-    expect(parsed).toStrictEqual<HttpValidatorFunctionResultSuccess<string>>({
+    expect(parsed).toStrictEqual<HttpValidatorFunctionResult.ValidatorSuccess<string>>({
       success: true,
       data: 'something',
     });
@@ -26,7 +26,7 @@ describe('validate()', (): void => {
       age: 300,
     });
 
-    expect(parsed).toStrictEqual<HttpValidatorFunctionResultSuccess<unknown>>({
+    expect(parsed).toStrictEqual<HttpValidatorFunctionResult.ValidatorSuccess<unknown>>({
       success: true,
       data: {
         name: 'foobar',
@@ -40,7 +40,7 @@ describe('validate()', (): void => {
 
     const parsed = validate(schema)(123 as unknown as string);
 
-    expect(parsed).toStrictEqual<HttpValidatorFunctionResultFailure<ZodIssue[]>>({
+    expect(parsed).toStrictEqual<HttpValidatorFunctionResult.ValidatorFailure<ZodIssue[]>>({
       success: false,
       errors: [
         expect.objectContaining({
@@ -61,7 +61,7 @@ describe('validate()', (): void => {
       age: 31,
     });
 
-    expect(parsed).toStrictEqual<HttpValidatorFunctionResultFailure<ZodIssue[]>>({
+    expect(parsed).toStrictEqual<HttpValidatorFunctionResult.ValidatorFailure<ZodIssue[]>>({
       success: false,
       errors: [
         expect.objectContaining({
