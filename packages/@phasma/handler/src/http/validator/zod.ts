@@ -1,6 +1,9 @@
 import type { ZodBoolean, ZodIssue, ZodNumber, ZodObject, ZodSchema, ZodString } from 'zod';
 import type { HttpValidatorFunction } from '../validator';
 
+/**
+ * A type helper that can help assert all values of {@link T} are validated.
+ */
 export type FromType<T> = (
   T extends Record<string, unknown>
     // the first level object for zod is not expected to be a `ZodObject` when used as the generic parameter to `z.object()`.

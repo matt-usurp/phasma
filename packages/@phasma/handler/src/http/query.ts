@@ -1,9 +1,15 @@
 import { parse as qsparse } from 'qs';
 
-export type HttpQueryParser<T> = (value: string) => T | undefined;
+/**
+ * A function that can parse the given {@link querystring} into {@link T}.
+ */
+export type HttpQueryParser<T> = (querystring: string) => T | undefined;
 
-export const parse = <T>(value: string): T => {
-  return qsparse(value, {
+/**
+ * A {@link HttpQueryParser} implementation using the `qs` package.
+ */
+export const parse = <T>(querystring: string): T => {
+  return qsparse(querystring, {
     allowDots: true,
     comma: true,
   }) as unknown as T;
