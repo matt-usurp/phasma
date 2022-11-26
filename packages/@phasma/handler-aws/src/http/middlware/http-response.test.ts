@@ -4,7 +4,7 @@ import type { HttpBodyEncoder, HttpBodyEncoderResult } from '@phasma/handler/src
 import { error, http, HttpResponse, HttpResponseError, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import type { Event } from '../../index';
 import { result } from '../../response';
-import { WithHttpResponse, WithHttpResponseErrorPayload, WithHttpResponseUsingJsonEncoding } from './http-response';
+import { WithHttpResponse, WithHttpResponseErrorPayload, WithHttpResponseUsingJson } from './http-response';
 
 describe(WithHttpResponse.name, (): void => {
   describe('constructor()', (): void => {
@@ -148,12 +148,12 @@ describe(WithHttpResponse.name, (): void => {
   });
 });
 
-describe(WithHttpResponseUsingJsonEncoding.name, (): void => {
+describe(WithHttpResponseUsingJson.name, (): void => {
   describe('constructor()', (): void => {
     it('with next, returns http response, encoder called, with value, composes lambda response', async (): Promise<void> => {
       type TestHttpResponse = HttpResponse<HttpResponseTransport<202, { a: string; b: string }>>;
 
-      const middleware = new WithHttpResponseUsingJsonEncoding();
+      const middleware = new WithHttpResponseUsingJson();
 
       const next = vi.fn();
 
@@ -194,7 +194,7 @@ describe(WithHttpResponseUsingJsonEncoding.name, (): void => {
     it('with next, returns http error response, encoder called, with value, composes lambda response', async (): Promise<void> => {
       type TestHttpError = HttpResponseError<'test:error:origin', 'test:error:hint', 'test:error:value'>;
 
-      const middleware = new WithHttpResponseUsingJsonEncoding();
+      const middleware = new WithHttpResponseUsingJson();
 
       const next = vi.fn();
 
@@ -235,7 +235,7 @@ describe(WithHttpResponseUsingJsonEncoding.name, (): void => {
     it('with next, returns unknown response, encoder not called, response passes through', async (): Promise<void> => {
       type TestUnknownResponse = HandlerResponse<HandlerResponseIdentifier<'unknown'>, 'test:response:unknown:value'>;
 
-      const middleware = new WithHttpResponseUsingJsonEncoding();
+      const middleware = new WithHttpResponseUsingJson();
 
       const next = vi.fn();
 

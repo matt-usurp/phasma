@@ -1,7 +1,7 @@
 import { WithHttpRequestBodyContext, WithHttpRequestBodyUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-body';
 import { WithHttpRequestPathContext, WithHttpRequestPathUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-path';
 import { WithHttpRequestQueryContext, WithHttpRequestQueryUsingZod } from '@phasma/handler-aws/src/http/middlware/http-request-query';
-import { WithHttpResponseUsingJsonEncoding } from '@phasma/handler-aws/src/http/middlware/http-response';
+import { WithHttpResponseUsingJson } from '@phasma/handler-aws/src/http/middlware/http-response';
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import { http, HttpResponse, HttpResponseTransport } from '@phasma/handler/src/http/response';
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
@@ -61,7 +61,7 @@ export class ExampleHandler implements Handler.Implementation<Definition> {
 
 export const target = aws<EventSourceIdentifier>(async (application) => (
   application
-    .use(new WithHttpResponseUsingJsonEncoding())
+    .use(new WithHttpResponseUsingJson())
     .use(new WithHttpRequestPathUsingZod<ExampleRequestPath>(
       z.object<FromType<ExampleRequestPath>>({
         user: z.string().uuid(),

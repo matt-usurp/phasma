@@ -1,6 +1,6 @@
 export type HttpBodyEncoderResult = {
-  mime: string;
-  value: string;
+  readonly mime: string;
+  readonly value: string;
 };
 
 export type HttpBodyEncoder = (value: unknown) => HttpBodyEncoderResult;
