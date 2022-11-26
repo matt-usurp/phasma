@@ -1,4 +1,4 @@
-import { parse } from './query';
+import { parse, stringify } from './query';
 
 describe('parse()', (): void => {
   it('with malformed string, does not throw error', (): void => {
@@ -111,5 +111,64 @@ describe('parse()', (): void => {
     ).toStrictEqual({
       a: 'b c',
     });
+  });
+
+  it('with boolean', (): void => {
+    expect(
+      parse('a=true'),
+    ).toStrictEqual({
+      a: 'true',
+    });
+  });
+});
+
+describe('stringify()', (): void => {
+  it('with undefined', (): void => {
+    expect(
+      stringify(undefined),
+    ).toStrictEqual('');
+  });
+
+  it('with null', (): void => {
+    expect(
+      stringify(null),
+    ).toStrictEqual('');
+  });
+
+  it('with object, empty', (): void => {
+    expect(
+      stringify({}),
+    ).toStrictEqual('');
+  });
+
+  it('with object, simple strings', (): void => {
+    expect(
+      stringify({
+        a: 'a',
+        b: 'b',
+      }),
+    ).toStrictEqual('a=a&b=b');
+  });
+
+  it('with object, simple multi-value', (): void => {
+    expect(
+      stringify({
+        a: 'a',
+        b: 2,
+        c: false,
+      }),
+    ).toStrictEqual('a=a&b=2&c=false');
+  });
+
+  it('with object, simple array', (): void => {
+    expect(
+      stringify({
+        a: [
+          'a',
+          'b',
+          'c',
+        ],
+      }),
+    ).toStrictEqual('a=a,b,c');
   });
 });
