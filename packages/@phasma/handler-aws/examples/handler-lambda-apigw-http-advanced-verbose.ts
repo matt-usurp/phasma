@@ -1,7 +1,7 @@
 import { WithHttpRequestBody, WithHttpRequestBodyContext } from '@phasma/handler-aws/src/http/middlware/http-request-body';
 import { WithHttpRequestPath, WithHttpRequestPathContext } from '@phasma/handler-aws/src/http/middlware/http-request-path';
 import { WithHttpRequestQuery, WithHttpRequestQueryContext } from '@phasma/handler-aws/src/http/middlware/http-request-query';
-import { WithHttpResponseUsingJsonEncoding } from '@phasma/handler-aws/src/http/middlware/http-response';
+import { WithHttpResponse } from '@phasma/handler-aws/src/http/middlware/http-response';
 import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
 import * as json from '@phasma/handler/src/http/body/json';
 import * as query from '@phasma/handler/src/http/query';
@@ -63,7 +63,7 @@ export class ExampleHandler implements Handler.Implementation<Definition> {
 
 export const target = aws<EventSourceIdentifier>(async (application) => (
   application
-    .use(new WithHttpResponseUsingJsonEncoding())
+    .use(new WithHttpResponse(json.encoder))
     .use(new WithHttpRequestPath<ExampleRequestPath, ZodIssue[]>(
       validate<ExampleRequestPath>(
         z.object<FromType<ExampleRequestPath>>({
@@ -81,7 +81,7 @@ export const target = aws<EventSourceIdentifier>(async (application) => (
       ),
     ))
     .use(new WithHttpRequestBody<ExampleRequestBody, ZodIssue[]>(
-      json.decode,
+      json.decoder,
       validate<ExampleRequestBody>(
         z.object<FromType<ExampleRequestBody>>({
           name: z.string().min(1),

@@ -1,12 +1,12 @@
 import type { HttpBodyEncoder } from '../body';
 
 /**
- * Encod the given value to a JSON string.
+ * Encode the given value to a JSON string.
  *
  * Helper function to encode json values for use with http responses.
  * This will ignore all values that could mean "empty response".
  */
-export const encode: HttpBodyEncoder = (value) => {
+export const encoder: HttpBodyEncoder = (value) => {
   if (value === undefined || value === null || value === '') {
     return {
       mime: 'application/json',
@@ -23,7 +23,7 @@ export const encode: HttpBodyEncoder = (value) => {
 /**
  * Decode the given JSON string.
  */
-export const decode = <T>(value: string): T | undefined => {
+export const decoder = <T>(value: string): T | undefined => {
   try {
     return JSON.parse(value);
   } catch (_: unknown) {

@@ -1,5 +1,5 @@
 import type { HttpBodyEncoder } from '@phasma/handler/src/http/body';
-import { encode as json } from '@phasma/handler/src/http/body/json';
+import { encoder as json } from '@phasma/handler/src/http/body/json';
 import { ensure } from '@phasma/handler/src/http/header';
 import { unwrap } from '@phasma/handler/src/response';
 import type { Event, Http, Middleware } from '../../index';
@@ -28,9 +28,9 @@ export type WithHttpResponseDefinition<Transport extends Http.Response.AnyTransp
 /**
  * A http response tranformer middleware that transforms {@link Http.Response} into the expected format for use with Lambda and API Gateway V2.
  *
- * This allows inbound responses of type {@link Http.Response} with the provided {@link Trasnport} type.
- * This allows inbound responses of type {@link Http.Response.Error}.
- * This outputs API Gateway V2 compatible responses for use with the provider.
+ * * This allows inbound responses of type {@link Http.Response}.
+ * * This allows inbound responses of type {@link Http.Response.Error}.
+ * * This outputs API Gateway V2 compatible responses.
  */
 export class WithHttpResponse<Transport extends Http.Response.AnyTransport> implements Middleware.Implementation<WithHttpResponseDefinition<Transport>> {
   /**
@@ -97,12 +97,12 @@ export class WithHttpResponse<Transport extends Http.Response.AnyTransport> impl
 /**
  * A {@link WithHttpResponse} that uses JSON encoding to encode response bodies.
  *
- * This provides the `Content-Type` header as `application/json` automatically.
- * This provides the `Content-Length` header automatically.
+ * * This provides the `Content-Type` header as `application/json`.
+ * * This provides the `Content-Length` header.
  */
-export class WithHttpResponseUsingJsonEncoding<Transport extends Http.Response.AnyTransport> extends WithHttpResponse<Transport> {
+export class WithHttpResponseUsingJson<Transport extends Http.Response.AnyTransport> extends WithHttpResponse<Transport> {
   /**
-   * Create an instance of {@link WithHttpResponseUsingJsonEncoding}.
+   * Create an instance of {@link WithHttpResponseUsingJson}.
    */
   public constructor () {
     super(json);

@@ -1,6 +1,6 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HttpBodyDecoder } from '@phasma/handler/src/http/body';
-import { decode as json } from '@phasma/handler/src/http/body/json';
+import { decoder as json } from '@phasma/handler/src/http/body/json';
 import { error } from '@phasma/handler/src/http/response';
 import type { HttpValidatorFunction } from '@phasma/handler/src/http/validator';
 import { validate } from '@phasma/handler/src/http/validator/zod';
