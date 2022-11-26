@@ -15,7 +15,7 @@ export namespace Test_HandlerResponseIdentifier {
    * @internal {@link HandlerResponseIdentifier}
    */
   export namespace Test_HandlerResponseIdentifier {
-    type Assert_CompatibleWithExpectedIdentifierFormat = (
+    type Case_CompatibleWithExpectedIdentifierFormat = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           HandlerResponseIdentifier<'example'>,
@@ -29,7 +29,7 @@ export namespace Test_HandlerResponseIdentifier {
    * @internal {@link Response.Identifier}
    */
   export namespace Test_HandlerResponseIdentifier_UsingAlias {
-    type Assert_CompatibleWithExpectedIdentifierFormat = (
+    type Case_CompatibleWithExpectedIdentifierFormat = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           Response.Identifier<'example'>,
@@ -48,7 +48,7 @@ export namespace Test_HandlerResponse {
    * @internal {@link HandlerResponse}
    */
   export namespace Test_HandlerResponse {
-    type Assert_CompatibleWithExpectedStructure = (
+    type Case_CompatibleWithExpectedStructure = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           HandlerResponse<
@@ -68,7 +68,7 @@ export namespace Test_HandlerResponse {
    * @internal {@link Response}
    */
   export namespace Test_HandlerResponse_UsingAlias {
-    type Assert_CompatibleWithExpectedStructure = (
+    type Case_CompatibleWithExpectedStructure = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           Response<
@@ -93,7 +93,7 @@ export namespace Test_HandlerResponseGetIdentifier {
    * @internal {@link HandlerResponseGetIdentifier}
    */
   export namespace Test_HandlerResponseGetIdentifier {
-    type Assert_WithHandlerResponse_CanGetIdentifier = (
+    type Case_WithHandlerResponse_CanGetIdentifier = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           HandlerResponseGetIdentifier<
@@ -112,7 +112,7 @@ export namespace Test_HandlerResponseGetIdentifier {
    * @internal {@link Response.Get.Identifier}
    */
   export namespace Test_HandlerResponseGetIdentifier_UsingAlias {
-    type Assert_WithHandlerResponse_CanGetIdentifier = (
+    type Case_WithHandlerResponse_CanGetIdentifier = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           Response.Get.Identifier<
@@ -136,7 +136,7 @@ export namespace Test_HandlerResponseGetValue {
    * @internal {@link HandlerResponseGetValue}
    */
   export namespace Test_HandlerResponseGetValue {
-    type Assert_WithHandlerResponse_CanGetValue = (
+    type Case_WithHandlerResponse_CanGetValue = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           HandlerResponseGetValue<
@@ -155,7 +155,7 @@ export namespace Test_HandlerResponseGetValue {
    * @internal {@link Response.Get.Value}
    */
   export namespace Test_HandlerResponseGetValue_UsingAlias {
-    type Assert_WithHandlerResponse_CanGetValue = (
+    type Case_WithHandlerResponse_CanGetValue = (
       Grok.Assert.IsTrue<
         Grok.Value.IsExactly<
           Response.Get.Value<
@@ -175,7 +175,7 @@ export namespace Test_HandlerResponseGetValue {
  * @internal {@link HandlerResponsePresetNothingIdentity}
  */
 export namespace Test_HandlerResponsePresetNothingIdentity {
-  type Assert_CompatibleWithHandlerResponseIdentifier = (
+  type Case_CompatibleWithHandlerResponseIdentifier = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerResponsePresetNothingIdentity,
@@ -189,7 +189,7 @@ export namespace Test_HandlerResponsePresetNothingIdentity {
  * @internal {@link HandlerResponsePresetNothing}
  */
 export namespace Test_HandlerResponsePresetNothing {
-  type Assert_CompatibleWithHandlerResponse = (
+  type Case_CompatibleWithHandlerResponse = (
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         HandlerResponsePresetNothing,

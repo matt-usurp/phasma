@@ -1,5 +1,5 @@
 import type { Grok } from '@matt-usurp/grok';
-import type { HttpResponseHeaderMapping } from './header';
+import type { HttpHeaderMapping } from './header';
 import { http, HttpFactoryPartialTransport, HttpResponse, HttpResponseTransport, HttpResponseTransportKind } from './response';
 
 type TestOkayResponse = HttpResponseTransport<200, {
@@ -73,14 +73,14 @@ export namespace Test_HttpFactoryPartialTransport {
       >
     );
 
-    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 200>>;
-    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+    export type Case_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 200>>;
+    export type Case_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
 
-    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
-    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+    export type Case_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
+    export type Case_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
 
-    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], HttpResponseHeaderMapping | undefined>>;
-    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+    export type Case_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], HttpHeaderMapping | undefined>>;
+    export type Case_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
 
     const implementation: Value = {
       status: 200,
@@ -101,14 +101,14 @@ export namespace Test_HttpFactoryPartialTransport {
       >
     );
 
-    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
-    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+    export type Case_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Case_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
 
-    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
-    export type Assert_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
+    export type Case_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
+    export type Case_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
 
-    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], undefined>>;
-    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+    export type Case_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], undefined>>;
+    export type Case_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
 
     const implementation: Value = {
       status: 202,
@@ -130,14 +130,14 @@ export namespace Test_HttpFactoryPartialTransport {
       >
     );
 
-    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
-    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+    export type Case_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Case_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
 
-    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
-    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+    export type Case_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
+    export type Case_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
 
-    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
-    export type Assert_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+    export type Case_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
+    export type Case_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
 
     const implementation: Value = {
       status: 202,
@@ -163,14 +163,14 @@ export namespace Test_HttpFactoryPartialTransport {
       >
     );
 
-    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
-    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+    export type Case_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Case_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
 
-    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
-    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+    export type Case_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], undefined>>;
+    export type Case_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
 
-    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], undefined>>;
-    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+    export type Case_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], undefined>>;
+    export type Case_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
 
     const implementation: Value = {
       status: 202,
@@ -191,14 +191,14 @@ export namespace Test_HttpFactoryPartialTransport {
       >
     );
 
-    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
-    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+    export type Case_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Case_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
 
-    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
-    export type Assert_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
+    export type Case_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
+    export type Case_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
 
-    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
-    export type Assert_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+    export type Case_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
+    export type Case_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
 
     const implementation: Value = {
       status: 202,
@@ -225,14 +225,14 @@ export namespace Test_HttpFactoryPartialTransport {
       >
     );
 
-    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
-    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+    export type Case_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Case_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
 
-    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsAny<Value['body']>>;
-    export type Assert_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
+    export type Case_WithBody = Grok.Assert.IsTrue<Grok.Value.IsAny<Value['body']>>;
+    export type Case_WithBodyOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'body'>>;
 
-    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
-    export type Assert_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+    export type Case_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['headers'], TestHttpHeaderMapping>>;
+    export type Case_WithHeadersOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'headers'>>;
 
     const implementation: Value = {
       status: 202,
@@ -258,14 +258,14 @@ export namespace Test_HttpFactoryPartialTransport {
       >
     );
 
-    export type Assert_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
-    export type Assert_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
+    export type Case_WithStatusCode = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['status'], 202>>;
+    export type Case_WithStatusCodeOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'status'>>;
 
-    export type Assert_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
-    export type Assert_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
+    export type Case_WithBody = Grok.Assert.IsTrue<Grok.Value.IsExactly<Value['body'], 'test:body'>>;
+    export type Case_WithBodyOptional = Grok.Assert.IsFalse<Grok.Record.IsKeyOptional<Value, 'body'>>;
 
-    export type Assert_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsAny<Value['headers']>>;
-    export type Assert_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
+    export type Case_WithHeaders = Grok.Assert.IsTrue<Grok.Value.IsAny<Value['headers']>>;
+    export type Case_WithHeadersOptional = Grok.Assert.IsTrue<Grok.Record.IsKeyOptional<Value, 'headers'>>;
 
     const implementation: Value = {
       status: 202,
