@@ -1,16 +1,30 @@
-export type HttpValidatorFunctionResultSuccess<Data> = {
-  success: true;
-  data: Data;
-};
+export namespace HttpValidatorFunctionResult {
+  /**
+   * A {@link HttpValidatorFunction} success result with data of type {@link T}.
+   */
+  export type ValidatorSuccess<T> = {
+    success: true;
+    data: T;
+  };
 
-export type HttpValidatorFunctionResultFailure<Error> = {
-  success: false;
-  errors: Error;
-};
+  /**
+   * A {@link HttpValidatorFunction} failure result with error of type {@link E}.
+   */
+  export type ValidatorFailure<E> = {
+    success: false;
+    errors: E;
+  };
+}
 
-export type HttpValidatorFunctionResult<Data, Error> = (
-  | HttpValidatorFunctionResultSuccess<Data>
-  | HttpValidatorFunctionResultFailure<Error>
+/**
+ * A union of possible results a {@link HttpValidatorFunction} implementation.
+ */
+export type HttpValidatorFunctionResult<T, E> = (
+  | HttpValidatorFunctionResult.ValidatorSuccess<T>
+  | HttpValidatorFunctionResult.ValidatorFailure<E>
 );
 
-export type HttpValidatorFunction<Data, Error> = (value: Partial<Data>) => HttpValidatorFunctionResult<Data, Error>;
+/**
+ * A function that can validate the given {@link value}.
+ */
+export type HttpValidatorFunction<T, E> = (value: Partial<T>) => HttpValidatorFunctionResult<T, E>;

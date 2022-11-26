@@ -1,7 +1,7 @@
 import type { Grok } from '@matt-usurp/grok';
 
 /**
- * A context base.
+ * A base context.
  *
  * This is expected to be implemented by all providers at the least.
  * This is considered the minimal information a handler will required (if any).
@@ -9,7 +9,7 @@ import type { Grok } from '@matt-usurp/grok';
 export type HandlerContextBase = {
   /**
    * The invocation id, this is a unique identity that is assigned by a provider.
-   * If a provider has one it will be used, otherwise this should fallback to a uuid.
+   * If a provider has one it will be used, otherwise this should fallback to something unique (a uuid ideally).
    */
   readonly id: string;
 };

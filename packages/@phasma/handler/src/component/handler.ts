@@ -248,8 +248,8 @@ export type HandlerClassImplementation<Definition extends HandlerDefinitionConst
    *
    * You have access to the following input data, resolved from the {@link Definition}.
    *
-   * - `input.context` which is the context requested.
-   * - `input.provider` which should denote the provider that called the handler.
+   * - `input.context` is the context requested.
+   * - `input.provider` is provider that called the handler.
    */
   handle(
     input: ( //

@@ -278,9 +278,9 @@ export type HandlerMiddlewareClassImplementation<Definition extends HandlerMiddl
    *
    * You have access to the following input data, resolved from the {@link Definition}.
    *
-   * - `input.context` which is the context requested.
-   * - `input.provider` which should denote the provider that called the handler.
-   * - `input.next()` which resumes the composition chain. This function is described {@link HandlerMiddlewareNextFunction here}.
+   * - `input.context` is the context requested.
+   * - `input.provider` is the provider that called the handler.
+   * - `input.next()` will resume the composition chain. This function is described {@link HandlerMiddlewareNextFunction here}.
    */
   invoke(input: HandlerMiddlewareFunctionInputFromDefinition<Definition>): HandlerMiddlewareFunctionOutputFromDefinition<Definition>;
 };

@@ -1,7 +1,7 @@
 import type { Grok } from '@matt-usurp/grok';
 import type { HandlerResponse, HandlerResponseGetValue, HandlerResponseIdentifier } from '../component/response';
 import { create } from '../response';
-import type { HttpResponseHeaderMapping } from './header';
+import type { HttpHeaderMapping } from './header';
 
 export type HttpResponseTransportWithStatusCode<Value> = { readonly status: Value };
 export type HttpResponseTransportWithHeaders<Value> = { readonly headers: Value };
@@ -13,7 +13,7 @@ export type HttpResponseTransportWithBody<Value> = { readonly body: Value };
 export type HttpResponseTransport<
   StatusCode extends number,
   Body = undefined,
-  Headers extends (HttpResponseHeaderMapping | undefined) = (HttpResponseHeaderMapping | undefined),
+  Headers extends (HttpHeaderMapping | undefined) = (HttpHeaderMapping | undefined),
 > = (
   & HttpResponseTransportWithStatusCode<StatusCode>
   & HttpResponseTransportWithHeaders<Headers>
