@@ -2,7 +2,7 @@ import { fn, partial } from '@matt-usurp/grok/testing';
 import type { HandlerResponseConstraint } from '@phasma/handler/src/component/response';
 import type { HttpQueryParser } from '@phasma/handler/src/http/query';
 import { error } from '@phasma/handler/src/http/response';
-import type { HttpValidatorFunction, HttpValidatorFunctionResultFailure, HttpValidatorFunctionResultSuccess } from '@phasma/handler/src/http/validator';
+import type { HttpValidatorFunction, HttpValidatorFunctionResult } from '@phasma/handler/src/http/validator';
 import type { FromType } from '@phasma/handler/src/http/validator/zod';
 import { z, ZodIssue } from 'zod';
 import type { Event, Provider } from '../../index';
@@ -109,7 +109,7 @@ describe(WithHttpRequestQuery.name, (): void => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      validator.mockImplementationOnce((): HttpValidatorFunctionResultFailure<string[]> => {
+      validator.mockImplementationOnce((): HttpValidatorFunctionResult.ValidatorFailure<string[]> => {
         return {
           success: false,
           errors: [
@@ -170,7 +170,7 @@ describe(WithHttpRequestQuery.name, (): void => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const validator = fn<HttpValidatorFunction<any, unknown>>();
 
-      validator.mockImplementationOnce((): HttpValidatorFunctionResultSuccess<string[]> => {
+      validator.mockImplementationOnce((): HttpValidatorFunctionResult.ValidatorSuccess<string[]> => {
         return {
           success: true,
           data: [
