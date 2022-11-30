@@ -50,3 +50,38 @@ export namespace LambdaHandler {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   export import Response = phasma.Handler.Response;
 }
+
+/*!
+ * This is a developer experience namespace merge.
+ * You are probably looking for the defined type instead, keep searching for another result.
+ */
+export namespace LambdaHandlerDefinition {
+  /**
+   * Retrieve data from {@link LambdaHandlerDefinition}.
+   */
+  export namespace Get {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Provider = phasma.Handler.Definition.Get.Provider;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Context = phasma.Handler.Definition.Get.Context;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Response = phasma.Handler.Definition.Get.Response;
+  }
+
+  /**
+   * Types that indicate a value within {@link LambdaHandlerDefinition} should be inheritted.
+   * This is typically used when your code doesn't care about a value.
+   */
+  export namespace Inherit {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Provider = phasma.Handler.Definition.Inherit.Provider;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Context = phasma.Handler.Definition.Inherit.Context;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    export import Response = phasma.Handler.Definition.Inherit.Response;
+  }
+}

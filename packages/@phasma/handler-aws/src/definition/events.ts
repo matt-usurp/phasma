@@ -58,7 +58,7 @@ export interface LambdaHandlerEventSources {
   /* eslint-disable @typescript-eslint/indent */
     LambdaHandlerEventSource<
       'apigw:proxy:v2',
-      AwsLambda.APIGatewayProxyEventV2,
+      AwsLambda.APIGatewayProxyEventV2WithRequestContext<AwsLambda.APIGatewayEventRequestContextV2WithAuthorizer<unknown>>,
       LambdaHandlerResponse<AwsLambda.APIGatewayProxyStructuredResultV2>
     >
   /* eslint-enable @typescript-eslint/indent */
