@@ -1,6 +1,9 @@
 # Phasma
 
-> Working on the 1.0 release!
+It's a component first set of tools to assist with building and maintaining modern Function as a Service (FaaS) style entrypoints and applications.
 
-A series of components and utilities to assist with building maintainable entrypoints and applications.
-Either through the `phasma` ecosystem for building serverless first applications or through the various `@phasma` components that can be used independently within your existing setup.
+# Getting Started
+
+Depending on your cloud provider or use case, follow the documentation provided:
+
+- For `lambda` on `aws`, [go here for more information](./docs/handler-aws/01-overview.md)
