@@ -152,6 +152,9 @@ package.preview:
 package.publish:
 	npm publish --access public ./${DIR_BUILD_PACKAGE}
 
+package.publish.next:
+	npm publish --access public --tag next ./${DIR_BUILD_PACKAGE}
+
 # --
 # -- Versioning
 # --
