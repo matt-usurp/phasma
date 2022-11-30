@@ -28,6 +28,13 @@ export default configure({
         'packages/phasma/src/index.ts',
         'packages/create-phasma/src/index.ts',
 
+        // Package forwarding files are just type exports.
+        'packages/@phasma/handler/src/index.ts',
+        'packages/@phasma/handler-aws/src/index.ts',
+
+        // Inherit markers are unexported symbols.
+        'packages/@phasma/handler/src/component/middleware/inherit.ts',
+
         // Events file should only ever be types.
         'packages/@phasma/handler-aws/src/definition/events.ts',
       ],
