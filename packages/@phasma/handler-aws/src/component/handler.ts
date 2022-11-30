@@ -28,6 +28,7 @@ export type LambdaHandlerDefinition<
  * Here we define a series of aliases that provide better naming and a single type import.
  * This is then aliased in the root file with a better name also.
  */
+import * as basehandler from '@phasma/handler/src/component/handler';
 import * as phasma from '@phasma/handler/src/index';
 import * as handler from './handler';
 
@@ -61,13 +62,13 @@ export namespace LambdaHandlerDefinition {
    */
   export namespace Get {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Provider = phasma.Handler.Definition.Get.Provider;
+    export import Provider = basehandler.HandlerDefinitionGetProvider;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Context = phasma.Handler.Definition.Get.Context;
+    export import Context = basehandler.HandlerDefinitionGetContext;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Response = phasma.Handler.Definition.Get.Response;
+    export import Response = basehandler.HandlerDefinitionGetResponse;
   }
 
   /**
@@ -76,12 +77,12 @@ export namespace LambdaHandlerDefinition {
    */
   export namespace Inherit {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Provider = phasma.Handler.Definition.Inherit.Provider;
+    export import Provider = basehandler.HandlerDefinitionUseAnyProvider;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Context = phasma.Handler.Definition.Inherit.Context;
+    export import Context = basehandler.HandlerDefinitionUseAnyContext;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    export import Response = phasma.Handler.Definition.Inherit.Response;
+    export import Response = basehandler.HandlerDefinitionUseAnyResponse;
   }
 }
