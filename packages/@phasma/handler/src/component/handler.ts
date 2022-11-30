@@ -361,7 +361,7 @@ export namespace Handler {
  */
 export namespace HandlerDefinition {
   /**
-   * Retrieve data from {@link Handler.Definition}.
+   * Retrieve data from {@link HandlerDefinition}.
    */
   export namespace Get {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
