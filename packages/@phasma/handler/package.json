@@ -1,7 +1,7 @@
 {
   "version": "1.0.0-next.1",
   "name": "@phasma/handler",
-  "description": "A function handler implementation that provides middleware capabilities for working with cloud based architecture",
+  "description": "An agnostic handler and light-weight middleware implementation",
   "type": "commonjs",
   "repository": {
     "type": "git",

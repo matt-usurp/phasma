@@ -1,9 +1,12 @@
 # Phasma
 
-It's a component first set of tools to assist with building and maintaining modern Function as a Service (FaaS) style entrypoints and applications.
+A component first set of agnostic tools and types for working with handler based applications.
+
+> Create simplistic and maintainable entrypoint-based applications.
 
 # Getting Started
 
-Depending on your cloud provider or use case, follow the documentation provided:
+Depending on your use case you can find more information in each sub-package:
 
-- For `lambda` on `aws`, [go here for more information](./docs/handler-aws/01-overview.md)
+- The agnostic handler and middle [@phasma/handler](./packages/@phasma/handler/)
+- An implementation for [Amazon Web Services and Lambda](./packages/@phasma/handler-aws/)
