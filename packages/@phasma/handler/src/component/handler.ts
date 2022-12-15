@@ -14,9 +14,9 @@ export type HandlerDefinition<
   Context extends HandlerContextConstraint | HandlerDefinitionUseAnyContext,
   Response extends HandlerResponseConstraint | HandlerDefinitionUseAnyResponse,
 > = {
-  readonly HP: Provider;
-  readonly HC: Context;
-  readonly HR: Response;
+  readonly HandlerProvider: Provider;
+  readonly HandlerContext: Context;
+  readonly HandlerResponse: Response;
 };
 
 /**
@@ -127,17 +127,17 @@ export type HandlerDefinitionWithResponse<
 /**
  * Retrieve the handler provider from {@link Definition}.
  */
-export type HandlerDefinitionGetProvider<Definition extends HandlerDefinitionConstraint> = Definition['HP'];
+export type HandlerDefinitionGetProvider<Definition extends HandlerDefinitionConstraint> = Definition['HandlerProvider'];
 
 /**
  * Retrieve the handler context from {@link Definition}.
  */
-export type HandlerDefinitionGetContext<Definition extends HandlerDefinitionConstraint> = Definition['HC'];
+export type HandlerDefinitionGetContext<Definition extends HandlerDefinitionConstraint> = Definition['HandlerContext'];
 
 /**
  * Retrieve the handler response from {@link Definition}.
  */
-export type HandlerDefinitionGetResponse<Definition extends HandlerDefinitionConstraint> = Definition['HR'];
+export type HandlerDefinitionGetResponse<Definition extends HandlerDefinitionConstraint> = Definition['HandlerResponse'];
 
 /**
  * A unique symbol used for type purposes to indicate "any provider"
