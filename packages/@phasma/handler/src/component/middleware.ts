@@ -18,11 +18,11 @@ export type HandlerMiddlewareDefinition<
   ResponseInbound extends HandlerResponseConstraint | HandlerMiddlewareDefinitionUseAnyResponseInbound,
   ResponseOutbound extends HandlerResponseConstraint | HandlerMiddlewareDefinitionUseAnyResponseOutbound,
 > = {
-  readonly MP: Provider;
-  readonly MCI: ContextInbound;
-  readonly MCO: ContextOutbound;
-  readonly MRI: ResponseInbound;
-  readonly MRO: ResponseOutbound;
+  readonly MiddlewareProvider: Provider;
+  readonly MiddlewareContextInbound: ContextInbound;
+  readonly MiddlewareContextOutbound: ContextOutbound;
+  readonly MiddlewareResponseInbound: ResponseInbound;
+  readonly MiddlewareResponseOutbound: ResponseOutbound;
 };
 
 /**
@@ -60,27 +60,27 @@ export type HandlerMiddlewareDefinitionConstraint = (
 /**
  * Retrieve the middleware provider from {@link Definition}.
  */
-export type HandlerMiddlewareDefinitionGetProvider<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MP'];
+export type HandlerMiddlewareDefinitionGetProvider<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MiddlewareProvider'];
 
 /**
  * Retrieve the middleware inbound context from {@link Definition}.
  */
-export type HandlerMiddlewareDefinitionGetContextInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCI'];
+export type HandlerMiddlewareDefinitionGetContextInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MiddlewareContextInbound'];
 
 /**
  * Retrieve the middleware outbound context from {@link Definition}.
  */
-export type HandlerMiddlewareDefinitionGetContextOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MCO'];
+export type HandlerMiddlewareDefinitionGetContextOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MiddlewareContextOutbound'];
 
 /**
  * Retrieve the middleware inbound response from {@link Definition}.
  */
-export type HandlerMiddlewareDefinitionGetResponseInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRI'];
+export type HandlerMiddlewareDefinitionGetResponseInbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MiddlewareResponseInbound'];
 
 /**
  * Retrieve the middleware outbound response from {@link Definition}.
  */
-export type HandlerMiddlewareDefinitionGetResponseOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MRO'];
+export type HandlerMiddlewareDefinitionGetResponseOutbound<Definition extends HandlerMiddlewareDefinitionConstraint> = Definition['MiddlewareResponseOutbound'];
 
 /**
  * A unique symbol used for type purposes to indicate "any provider"
