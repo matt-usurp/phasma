@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0-next.1",
+  "version": "1.0.0",
   "name": "@phasma/handler",
   "description": "An agnostic handler and light-weight middleware implementation",
   "type": "commonjs",
