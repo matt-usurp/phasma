@@ -12,9 +12,9 @@ export type LambdaHandlerEventSource<
   Payload,
   Response extends HandlerResponseConstraint,
 > = {
-  readonly EI: Identifier;
-  readonly EP: Payload;
-  readonly ER: Response;
+  readonly EventIdentifier: Identifier;
+  readonly EventPayload: Payload;
+  readonly EventResponse: Response;
 };
 
 /**
@@ -33,17 +33,17 @@ export type LambdaHandlerEventSourceConstraint = (
 /**
  * Retrieve the event source identifier from {@link LambdaHandlerEventSource}.
  */
-export type LambdaHandlerEventSourceGetIdentifier<EventSource extends LambdaHandlerEventSourceConstraint> = EventSource['EI'];
+export type LambdaHandlerEventSourceGetIdentifier<EventSource extends LambdaHandlerEventSourceConstraint> = EventSource['EventIdentifier'];
 
 /**
  * Retrieve the event source payload from {@link LambdaHandlerEventSource}.
  */
-export type LambdaHandlerEventSourceGetPayload<EventSource extends LambdaHandlerEventSourceConstraint> = EventSource['EP'];
+export type LambdaHandlerEventSourceGetPayload<EventSource extends LambdaHandlerEventSourceConstraint> = EventSource['EventPayload'];
 
 /**
  * Retrieve the event source response from {@link LambdaHandlerEventSource}.
  */
-export type LambdaHandlerEventSourceGetResponse<EventSource extends LambdaHandlerEventSourceConstraint> = EventSource['ER'];
+export type LambdaHandlerEventSourceGetResponse<EventSource extends LambdaHandlerEventSourceConstraint> = EventSource['EventResponse'];
 
 /**
  * Retrieve the event source response value from {@link LambdaHandlerEventSource}.
