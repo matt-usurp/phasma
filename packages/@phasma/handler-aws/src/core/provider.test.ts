@@ -295,4 +295,37 @@ describe('factory()', (): void => {
       FOOBAR: 'BAZ',
     });
   });
+
+  it('with handler, with cached compisition, can be reset', async (): Promise<void> => {
+    const instrument = vi.fn();
+
+    const wrapper = factory<'cloudwatch:log'>(async (application) => {
+      instrument();
+
+      return application.handle({
+        handle: async () => nothing(),
+      });
+    });
+
+    expect(instrument).toBeCalledTimes(0);
+
+    await wrapper(partial({}), context);
+
+    expect(instrument).toBeCalledTimes(1);
+
+    await wrapper(partial({}), context);
+    await wrapper(partial({}), context);
+    await wrapper(partial({}), context);
+
+    expect(instrument).toBeCalledTimes(1);
+
+    wrapper.reset();
+
+    await wrapper(partial({}), context);
+    await wrapper(partial({}), context);
+    await wrapper(partial({}), context);
+    await wrapper(partial({}), context);
+
+    expect(instrument).toBeCalledTimes(2);
+  });
 });

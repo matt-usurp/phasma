@@ -56,13 +56,27 @@ export type LambdaHandlerEntrypoint<EventSourceIdentifier extends LambdaHandlerE
 );
 
 /**
- * Add a `withEnvironment()` function to {@link Entrypoint} that will create {@link Entrypoint} again with the environment provided.
+ * Add utilities to the {@link Entrypoint}.
+ *
+ * These can assist with testing by forcing parameters to be as given or reseting the internal cache.
  */
 export type WithLambdaHandlerEntrypointUtilities<Entrypoint> = (
   & Entrypoint
   & {
     /**
+     * Reset the internal composition cache.
+     *
+     * When the entrypoint is invoked (or any form of this entrypoint) the composition is cached.
+     * This means that services that were constructed with the environment or other inputs will not be re-created.
+     * Calling this will clear the cached composition enforcing the next execution to create the composition again.
+     */
+    reset: () => void;
+
+    /**
      * Re-create the {@link Entrypoint} with the given {@link environment} instead.
+     *
+     * This will not clear the cached composition meaning if the entrypoint was invoked the given {@link environment} will have no effect.
+     * Consider calling `.reset()` before invoking the return function to ensure your composition is created with the {@link environment} provided.
      */
     withEnvironment: (environment: EnvironmentMapping) => Entrypoint;
   }
@@ -139,7 +153,9 @@ export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceId
   // Now the builder is invoked only once on the first request.
   let invoker: LambdaHandlerEntrypoint<EventSourceIdentifier> | undefined = undefined;
 
-  // This is a proxy function that will allow for the entrypoint composition to be cached.
+  /**
+   * A handler proxy that will cache the composition.
+   */
   const proxy = (environment: EnvironmentMapping): LambdaHandlerEntrypoint<EventSourceIdentifier> => (payload, context) => {
     if (invoker === undefined) {
       invoker = entrypoint(
@@ -153,11 +169,21 @@ export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceId
     return invoker(payload, context);
   };
 
+  /**
+   * A function to reset the internal composition cache.
+   */
+  const reset = () => {
+    invoker = undefined;
+  };
+
   // A production-like entrypoint is created using a reference to the process environment.
   // This is cast to the utilities type which we add too before returning.
   const handler = proxy(process.env) as WithLambdaHandlerEntrypointUtilities<LambdaHandlerEntrypoint<EventSourceIdentifier>>;
 
-  // Attach the custom environment factory utility.
+  // Attach the cache reset function.
+  handler.reset = () => reset();
+
+  // Attach the custom environment factory.
   handler.withEnvironment = (environment: EnvironmentMapping): LambdaHandlerEntrypoint<EventSourceIdentifier> => proxy(environment);
 
   return handler;
