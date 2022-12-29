@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "@phasma/handler-aws",
   "description": "An implementation of @phasma handler designed for working with Amazon Web Services Lambda",
   "type": "commonjs",
