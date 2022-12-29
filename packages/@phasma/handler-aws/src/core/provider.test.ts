@@ -1,4 +1,5 @@
 import { NeverReachAssertionError } from '@matt-usurp/grok/core/assert-never';
+import type { EnvironmentMapping } from '@matt-usurp/grok/system/environment';
 import { partial } from '@matt-usurp/grok/testing';
 import type { HandlerContextBase } from '@phasma/handler/src/component/context';
 import type { HandlerFunctionInput } from '@phasma/handler/src/component/handler';
@@ -249,5 +250,49 @@ describe('factory()', (): void => {
     await wrapper(partial({}), context);
 
     expect(instrument).toBeCalledTimes(1);
+  });
+
+  it('with handler, using default entrypoint method, provides process environment', async (): Promise<void> => {
+    const instrument = vi.fn();
+
+    const wrapper = factory<'cloudwatch:log'>(async (application, environment) => {
+      instrument(environment);
+
+      return application.handle({
+        handle: async () => nothing(),
+      });
+    });
+
+    expect(instrument).toBeCalledTimes(0);
+
+    await wrapper(partial({}), context);
+
+    expect(instrument).toBeCalledTimes(1);
+    expect(instrument).toBeCalledWith<[EnvironmentMapping]>(process.env);
+  });
+
+  it('with handler, using custom environment method, provides custom environment', async (): Promise<void> => {
+    const instrument = vi.fn();
+
+    const wrapper = factory<'cloudwatch:log'>(async (application, environment) => {
+      instrument(environment);
+
+      return application.handle({
+        handle: async () => nothing(),
+      });
+    });
+
+    expect(instrument).toBeCalledTimes(0);
+
+    const handler = wrapper.withEnvironment({
+      FOOBAR: 'BAZ',
+    });
+
+    await handler(partial({}), context);
+
+    expect(instrument).toBeCalledTimes(1);
+    expect(instrument).toBeCalledWith<[EnvironmentMapping]>({
+      FOOBAR: 'BAZ',
+    });
   });
 });
