@@ -57,3 +57,7 @@ More details on how this works at its core can be found in the `@phasma/handler`
 ## Defining Middleware
 
 > TODO
+
+## Testing
+
+> TODO
