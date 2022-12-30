@@ -4,7 +4,7 @@ import { partial } from '@matt-usurp/grok/testing';
 import type { HandlerContextBase } from '@phasma/handler/src/component/context';
 import type { HandlerFunctionInput } from '@phasma/handler/src/component/handler';
 import { create, nothing } from '@phasma/handler/src/response';
-import * as AwsLambda from 'aws-lambda';
+import type * as AwsLambda from 'aws-lambda';
 import type { LambdaHandlerProvider, LambdaHandlerProviderWithEventFromEventSourceIdentifier } from '../component/provider';
 import { result } from '../response';
 import { entrypoint, factory } from './provider';

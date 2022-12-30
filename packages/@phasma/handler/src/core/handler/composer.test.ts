@@ -4,7 +4,8 @@ import type { HandlerClassImplementation, HandlerDefinition, HandlerFunctionInpu
 import type { HandlerMiddlewareClassImplementation, HandlerMiddlewareDefinition, HandlerMiddlewareDefinitionUseAnyContextInbound, HandlerMiddlewareDefinitionUseAnyContextOutbound, HandlerMiddlewareDefinitionUseAnyProvider, HandlerMiddlewareDefinitionUseAnyResponseInbound, HandlerMiddlewareDefinitionUseAnyResponseOutbound, HandlerMiddlewareFunctionInputFromDefinition, HandlerMiddlewareFunctionOutputFromDefinition } from '../../component/middleware';
 import type { HandlerProvider, HandlerProviderIdentifier } from '../../component/provider';
 import type { HandlerResponse, HandlerResponseIdentifier } from '../../component/response';
-import { HandlerComposer, HandlerComposerWithMiddlware } from './composer';
+import type { HandlerComposerWithMiddlware } from './composer';
+import { HandlerComposer } from './composer';
 
 type TestProvider = (
   & HandlerProvider<HandlerProviderIdentifier<'test'>>

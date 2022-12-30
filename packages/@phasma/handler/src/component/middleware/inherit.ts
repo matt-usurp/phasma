@@ -1,4 +1,4 @@
-import { HandlerResponse, HandlerResponseIdentifier } from '../response';
+import type { HandlerResponse, HandlerResponseIdentifier } from '../response';
 
 /**
  * A marker symbol that is used for types alone.

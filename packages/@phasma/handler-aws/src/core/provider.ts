@@ -121,6 +121,7 @@ export const entrypoint = <EventSourceIdentifier extends LambdaHandlerEventSourc
       return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw never(result);
   };
 
@@ -156,7 +157,7 @@ export const factory = <EventSourceIdentifier extends LambdaHandlerEventSourceId
   /**
    * A handler proxy that will cache the composition.
    */
-  const proxy = (environment: EnvironmentMapping): LambdaHandlerEntrypoint<EventSourceIdentifier> => (payload, context) => {
+  const proxy = (environment: EnvironmentMapping): LambdaHandlerEntrypoint<EventSourceIdentifier> => async (payload, context) => {
     if (invoker === undefined) {
       invoker = entrypoint(
         composition(

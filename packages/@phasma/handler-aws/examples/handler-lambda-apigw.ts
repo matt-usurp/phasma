@@ -1,4 +1,5 @@
-import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
+import type { Event, Handler } from '@phasma/handler-aws/src/index';
+import { aws } from '@phasma/handler-aws/src/index';
 
 type EventSourceIdentifier = Event.Identifier<'apigw:proxy:v2'>;
 
@@ -14,7 +15,7 @@ export class SomeHandler implements Handler.Implementation<Definition> {
 
     context.id;
 
-    throw undefined;
+    throw new Error();
   }
 }
 

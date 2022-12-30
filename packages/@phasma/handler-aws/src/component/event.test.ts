@@ -180,7 +180,7 @@ export namespace Test_LambdaHandlerEventSourceGetPayloadFromIdentifier {
     Grok.Assert.IsTrue<
       Grok.Value.IsExactly<
         LambdaHandlerEventSourceGetPayloadFromIdentifier<'cloudwatch:log'>,
-        { awslogs: { data: string }}
+        { awslogs: { data: string } }
       >
     >
   );

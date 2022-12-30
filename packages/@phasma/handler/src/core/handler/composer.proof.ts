@@ -279,7 +279,7 @@ class ExampleHandler implements HandlerClassImplementation<ExampleHandlerDefinit
    * @inheritdoc
    */
   public async handle(): HandlerFunctionOutputFromDefinition<ExampleHandlerDefinition> {
-    throw 123; // w/e
+    throw new Error();
   }
 }
 

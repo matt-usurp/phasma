@@ -1,4 +1,5 @@
-import { aws, Event, Handler } from '@phasma/handler-aws/src/index';
+import type { Event, Handler } from '@phasma/handler-aws/src/index';
+import { aws } from '@phasma/handler-aws/src/index';
 import { result } from '@phasma/handler-aws/src/response';
 
 type EventSourceIdentifier = Event.Identifier<'lex'>;
