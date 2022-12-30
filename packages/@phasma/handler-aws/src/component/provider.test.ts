@@ -2,7 +2,6 @@ import type { Grok } from '@matt-usurp/grok';
 import type { HandlerProvider, HandlerProviderIdentifier } from '@phasma/handler/src/component/provider';
 import type { LambdaHandlerProvider, LambdaHandlerProviderIdentifier } from './provider';
 
-
 it('types', (): void => expect(true).toBeTruthy());
 
 /* eslint-disable @typescript-eslint/indent */
