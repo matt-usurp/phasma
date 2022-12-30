@@ -32,8 +32,9 @@ export default configure({
         'packages/@phasma/handler/src/index.ts',
         'packages/@phasma/handler-aws/src/index.ts',
 
-        // Inherit markers are unexported symbols.
-        'packages/@phasma/handler/src/component/middleware/inherit.ts',
+        // Package component directories are intended to be only for types.
+        'packages/@phasma/handler/src/component',
+        'packages/@phasma/handler-aws/src/component',
 
         // Events file should only ever be types.
         'packages/@phasma/handler-aws/src/definition/events.ts',
