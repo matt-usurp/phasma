@@ -94,9 +94,3 @@ export const LambdaFunctionRuntime = (runtime: LambdaFunctionRuntime): ResourceC
     };
   };
 };
-
-// @LambdaFunction('example-function', [
-//   LambdaFunctionSource(S3Object('path/to/key.zip')),
-//   LambdaFunctionMemory(512),
-// ])
-// class ExampleFunction {}

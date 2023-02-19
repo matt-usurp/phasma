@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export type MetadataTarget = Object;
+export type MetadataTarget = Function;
 
 export const getMetadataKeys = (target: MetadataTarget): string[] => {
   return Reflect.getMetadataKeys(target);

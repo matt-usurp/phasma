@@ -68,4 +68,34 @@ describe('getResourceDefinitions()', (): void => {
       },
     ]);
   });
+
+  it('with class, one resource definition, with configurators, return configurator values', (): void =>  {
+    const decorator = createResourceDecorator('example-resource-definition');
+
+    @decorator('test-id', [
+      () => ({ type: 'some-configurator' }),
+    ])
+    class TestClass {}
+
+
+    expect(
+      getMetadataKeys(TestClass),
+    ).toStrictEqual<string[]>([
+      KEY_RESOURCE_DEFINITIONS,
+    ]);
+
+    expect(
+      getResourceDefinitions(TestClass),
+    ).toStrictEqual<ResourceDefinition[]>([
+      {
+        type: 'example-resource-definition',
+        id: 'test-id',
+        configs: [
+          {
+            type: 'some-configurator',
+          },
+        ],
+      },
+    ]);
+  });
 });
