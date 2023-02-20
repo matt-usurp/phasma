@@ -14,7 +14,7 @@ export type ResourceDefinitionConfig = {
   [key: string]: unknown;
 };
 
-export type ResourceConfigurator = () => ResourceDefinitionConfig;
+export type ResourceConfigurator<C extends ResourceDefinitionConfig = ResourceDefinitionConfig> = () => C;
 
 export const getResourceDefinitions = (target: MetadataTarget): ResourceDefinition[] => {
   return getMetadataValueForKey(target, KEY_RESOURCE_DEFINITIONS) ?? [];
