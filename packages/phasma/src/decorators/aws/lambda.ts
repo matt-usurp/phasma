@@ -1,3 +1,5 @@
+import { LambdaFunction as AWSLambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
+
 import type { ResourceConfigurator } from '../resource';
 import { createResourceDecorator } from '../resource';
 
@@ -8,7 +10,7 @@ export const KEY_RESOURCE_LAMBDA_FUNCTION_MEMORY = 'lambda-function:memory';
 export const KEY_RESOURCE_LAMBDA_FUNCTION_CONFIG_SOURCE = 'lambda-function:source';
 export const KEY_RESOURCE_LAMBDA_FUNCTION_ARCHITECTURES = 'lambda-function:architectures';
 
-export const LambdaFunction = createResourceDecorator(KEY_RESOURCE_LAMBDA_FUNCTION);
+export const LambdaFunction = createResourceDecorator(KEY_RESOURCE_LAMBDA_FUNCTION, AWSLambdaFunction);
 
 export const LambdaFunctionHandler = (handler: string): ResourceConfigurator => {
   return () => {

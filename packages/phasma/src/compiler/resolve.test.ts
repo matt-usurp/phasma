@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
+import { LambdaFunction as AWSLambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
 import type { DefinedStack } from '.';
 import type { ResourceDefinition } from '../decorators/resource';
 import { resolve } from './resolve';
@@ -10,6 +12,7 @@ describe('resolve()', (): void => {
     const functionResource: ResourceDefinition = {
       type: 'lambda-function',
       id: 'some-lambda-function',
+      construct: AWSLambdaFunction,
       configs: [
         {
           type: 'stack-reference',
@@ -21,6 +24,7 @@ describe('resolve()', (): void => {
     const queueResource: ResourceDefinition = {
       type: 'sqs-queue',
       id: 'some-queue',
+      construct: AWSLambdaFunction,
       configs: [],
     };
 

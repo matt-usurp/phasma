@@ -1,3 +1,5 @@
+import { TerraformStack } from 'cdktf';
+import type { Construct } from 'constructs';
 import type { MetadataTarget } from '../decorators/metadata';
 import type { ResourceDefinition } from '../decorators/resource';
 import { load } from './load';
@@ -10,7 +12,17 @@ export type DefinedStack = {
   resourcesByTargetId: Record<string, ResourceDefinition[]>;
 };
 
-export const compile = (...resources: MetadataTarget[]) => {
-  const stack = load(resources);
-  const resolvedStack = resolve(stack);
+export const createFromComposition = (stack: Construct, dirname: string, targets: MetadataTarget[]) => {
+  const resources = resolve(load(targets));
+
+  return class extends TerraformStack {
+    public constructor(scope: Construct, id: string) {
+      super(scope, id);
+
+      resources.resources.forEach((resource) => {
+        new resource.construct(scope, resource.id, resource.configs);
+      });
+    }
+  };
+
 };

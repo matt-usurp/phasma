@@ -1,3 +1,4 @@
+import { LambdaFunction as AWSLambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
 import type { ResourceDefinition } from '../resource';
 import { getResourceDefinitions } from '../resource';
 import { KEY_RESOURCE_LAMBDA_FUNCTION, KEY_RESOURCE_LAMBDA_FUNCTION_MEMORY, LambdaFunction, LambdaFunctionMemory } from './lambda';
@@ -15,6 +16,7 @@ describe('LambdaFunction', (): void => {
       {
         type: KEY_RESOURCE_LAMBDA_FUNCTION,
         id: 'test-function-id',
+        construct: AWSLambdaFunction,
         configs: [],
       },
     ]);
@@ -32,6 +34,7 @@ describe('LambdaFunction', (): void => {
       {
         type: KEY_RESOURCE_LAMBDA_FUNCTION,
         id: 'test-function-id',
+        construct: AWSLambdaFunction,
         configs: [
           {
             type: KEY_RESOURCE_LAMBDA_FUNCTION_MEMORY,

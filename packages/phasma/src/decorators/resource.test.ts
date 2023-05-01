@@ -1,3 +1,4 @@
+import { LambdaFunction as AWSLambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
 import { getMetadataKeys } from './metadata';
 import type { ResourceDefinition } from './resource';
 import { createResourceDecorator, getResourceDefinitions, KEY_RESOURCE_DEFINITIONS } from './resource';
@@ -18,7 +19,7 @@ describe('getResourceDefinitions()', (): void => {
   });
 
   it('with class, one resource definition, return single resource definition', (): void => {
-    const decorator = createResourceDecorator('example-resource-definition');
+    const decorator = createResourceDecorator('example-resource-definition', AWSLambdaFunction);
 
     @decorator('test-id')
     class TestClass {}
@@ -35,13 +36,14 @@ describe('getResourceDefinitions()', (): void => {
       {
         type: 'example-resource-definition',
         id: 'test-id',
+        construct: AWSLambdaFunction,
         configs: [],
       },
     ]);
   });
 
   it('with class, multiple resource definitions, return all resource definitions', (): void => {
-    const decorator = createResourceDecorator('another-resource-definition');
+    const decorator = createResourceDecorator('another-resource-definition', AWSLambdaFunction);
 
     @decorator('foo-id')
     @decorator('bar-id')
@@ -59,18 +61,20 @@ describe('getResourceDefinitions()', (): void => {
       {
         type: 'another-resource-definition',
         id: 'foo-id',
+        construct: AWSLambdaFunction,
         configs: [],
       },
       {
         type: 'another-resource-definition',
         id: 'bar-id',
+        construct: AWSLambdaFunction,
         configs: [],
       },
     ]);
   });
 
   it('with class, one resource definition, with configurators, return configurator values', (): void =>  {
-    const decorator = createResourceDecorator('example-resource-definition');
+    const decorator = createResourceDecorator('example-resource-definition', AWSLambdaFunction);
 
     @decorator('test-id', [
       () => ({ type: 'some-configurator' }),
@@ -90,6 +94,7 @@ describe('getResourceDefinitions()', (): void => {
       {
         type: 'example-resource-definition',
         id: 'test-id',
+        construct: AWSLambdaFunction,
         configs: [
           {
             type: 'some-configurator',

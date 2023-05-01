@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-extraneous-class */
+import { LambdaFunction as AWSLambdaFunction } from '@cdktf/provider-aws/lib/lambda-function';
 import type { DefinedStack } from '.';
 import { LambdaFunction } from '../decorators/aws/lambda';
 import type { ResourceDefinition } from '../decorators/resource';
@@ -14,6 +16,7 @@ describe('load()', (): void => {
     const expectedResource: ResourceDefinition = {
       id: 'some-function-id',
       type: 'lambda-function',
+      construct: AWSLambdaFunction,
       configs: [],
     };
 
@@ -47,12 +50,14 @@ describe('load()', (): void => {
     const expectedFooResource: ResourceDefinition = {
       id: 'some-function-id',
       type: 'lambda-function',
+      construct: AWSLambdaFunction,
       configs: [],
     };
 
     const expectedBarResource: ResourceDefinition = {
       id: 'another-function-id',
       type: 'lambda-function',
+      construct: AWSLambdaFunction,
       configs: [],
     };
 
@@ -87,11 +92,13 @@ describe('load()', (): void => {
     const expectedFirstResource: ResourceDefinition = {
       id: 'some-function-id',
       type: 'lambda-function',
+      construct: AWSLambdaFunction,
       configs: [],
     };
     const expectedSecondResource: ResourceDefinition = {
       id: 'another-function-id',
       type: 'lambda-function',
+      construct: AWSLambdaFunction,
       configs: [],
     };
 
@@ -111,6 +118,5 @@ describe('load()', (): void => {
         [targetId]: TestClass,
       },
     });
-
   });
 });
